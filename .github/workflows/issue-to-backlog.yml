@@ -37,8 +37,10 @@ jobs:
 
       # Step 4: Add "Backlog" label to the issue
       - name: Add label to issue
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
-          gh issue edit $ISSUE_NUMBER --add-label "Backlog"
+          gh issue edit ${{ github.event.issue.number }} --add-label "Backlog"
+
+      # Step TEST: Print issue number
+      - name: Authenticate with GitHub CLI
+        run: |
+          echo "${{ github.event.issue.number }}"
