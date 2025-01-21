@@ -1,0 +1,10 @@
+Backlog -> In Progress:
+- Feature branch created (manual)
+
+In Progress -> In Review:
+- Pull request into dev or main causes status to change (auto)
+
+In Review -> Pending Release:
+- Pull request is merged into dev or main (auto)
+
+Issue is closed when pull request into main is complete and issue is dragged into Released status (auto)
