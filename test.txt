@@ -1,0 +1,49 @@
+Backlog -> In Progress:
+- Feature branch created (manual)
+
+In Progress -> In Review:
+- Pull request into dev or main causes status to change (auto)
+
+In Review -> Pending Release:
+- Pull request is merged into dev or main (auto)
+
+Issue is closed when pull request into main is complete and issue is dragged into Released status (auto)
+
+
+1. Create issue
+    - Add labels if applicable
+    - Assign yourself or others
+    - Select tthe OBDADS project under projects
+    - Added to Backlog by default
+
+2. Create branch for issue
+    - Use naming scheme ISSUE_NUMBER/feature-name, ex. 10/debug
+
+3. Move issue to In Progress
+
+4. Implement feature on branch
+
+5. Create pull request to merge into dev
+    - Added to Backlog by default
+
+6. Move pull request into In Review
+    - Issue stays in In Progress
+
+7. Pull request to merge into dev is approved
+    - If not approved move pull request to In Progress,
+    and once ready, start from step 6
+
+8. Complete the pull request to merge into dev
+    - Archive the pull request if necessary
+
+9. Create pull request to merge into main
+    - Added to Backlog by default
+
+10. Move the pull request into Pending Release
+
+11. Pull request to merge into main is approved
+    - If not approved then close the pull request
+    and start from step 6
+
+12. Move issue into Released
+    - Archive the pull request if necessary
