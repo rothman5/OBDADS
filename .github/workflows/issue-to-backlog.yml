@@ -22,9 +22,19 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Uses GITHUB_TOKEN to add a label to an issue
-      - env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ISSUE_URL: ${{ github.event.issue.html_url }}
+      # Step 1: Set up the GitHub CLI
+      - name: Install GitHub CLI
+        run: sudo apt install -y gh
+
+      # Step 2: Authenticate `gh` using GITHUB_TOKEN
+      - name: Authenticate with GitHub CLI
         run: |
-          gh issue edit $ISSUE_URL --add-label "Backlog"
+          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      # Step 3: Add "Backlog" label to the issue
+      - name: Add label to issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          gh issue edit $ISSUE_NUMBER --add-label "Backlog"
