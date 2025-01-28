@@ -1,0 +1,5 @@
+# STM32 Cube IDE
+**/Debug
+**/.settings
+**/.mxproject
+**/*.launch
