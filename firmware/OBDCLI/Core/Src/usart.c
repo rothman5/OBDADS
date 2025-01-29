@@ -22,8 +22,9 @@
 
 /* USER CODE BEGIN 0 */
 
+#include "cli.h"
 #include "obd.h"
-#include "string.h"
+#include <string.h>
 
 /* USER CODE END 0 */
 
@@ -312,33 +313,30 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t size)
 {
-  if (huart == &huart1)
-  {
-    // Response received from the emulator
+  // Response received from the emulator
+  if (huart == &huart1) {
+    // Copy response into CLI TX buffer and send to CLI
     obd_rx_buffer.length = size;
-    cli_tx_buffer.length = size;
+    cli_write_dma(obd_rx_buffer.data, size);
 
-    // For now copy into CLI TX buffer and send to CLI
-    memcpy(cli_tx_buffer.data, obd_rx_buffer.data, obd_rx_buffer.length);
-
-    // Echo back to CLI
-    HAL_UART_Transmit(&huart2, cli_tx_buffer.data, cli_tx_buffer.length, HAL_MAX_DELAY);
+    // Restart listening for responses from the emulator
+    obd_listen_for_response();
   }
 
-  else if (huart == &huart2)
-  {
-    // Request received from the CLI
-    obd_tx_buffer.length = size;
+  // Request received from the CLI
+  else if (huart == &huart2) {
+    // Copy request into OBD TX buffer and send to CLI
     cli_rx_buffer.length = size;
+    obd_write((char *) cli_rx_buffer.data, cli_rx_buffer.length);
 
-    // For now copy into OBD TX buffer and send to CLI
-    memcpy(obd_tx_buffer.data, cli_rx_buffer.data, cli_rx_buffer.length);
+    // Reset the CLI reception buffer
+    memset(cli_rx_buffer.data, 0x00U, BUFFER_SIZE);
 
-    // Echo request to the emulator
-    HAL_UART_Transmit(&huart1, obd_tx_buffer.data, obd_tx_buffer.length, HAL_MAX_DELAY);
+    // obd_tx_buffer.length = size;
+    // memcpy(obd_tx_buffer.data, cli_rx_buffer.data, cli_rx_buffer.length);
+    // HAL_UART_Transmit_DMA(&huart1, obd_tx_buffer.data, obd_tx_buffer.length);
 
-    // Start listening for response
-    HAL_UARTEx_ReceiveToIdle_DMA(&huart1, obd_rx_buffer.data, OBD_BUFFER_SIZE);
+    // OBD UART SHOULD ALREADY BE LISTENING FOR RESPONSES
   }
 }
 

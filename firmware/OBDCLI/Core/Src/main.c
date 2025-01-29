@@ -25,6 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "cli.h"
 #include "obd.h"
 
 /* USER CODE END Includes */
@@ -36,6 +37,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define BLINK_PERIOD_MS 150U
 
 /* USER CODE END PD */
 
@@ -96,8 +98,11 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  if (obd_init(&huart1, &huart2) != OBD_OK)
-  {
+  if (cli_init(&huart1, &huart2) != CLI_OK) {
+    Error_Handler();
+  }
+
+  if (obd_init(&huart1, &huart2) != OBD_OK) {
     Error_Handler();
   }
 
@@ -107,10 +112,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
-	  HAL_Delay(500);
-	  HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
-	  HAL_Delay(500);
+    HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_SET);
+	  HAL_Delay(BLINK_PERIOD_MS);
+	  HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_RESET);
+	  HAL_Delay(BLINK_PERIOD_MS);
 
     /* USER CODE END WHILE */
 
