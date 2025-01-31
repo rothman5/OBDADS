@@ -26,9 +26,9 @@ buffer_t cli_tx_buffer = {0};
 /**
  * @brief  Initialize the CLI UART interfaces.
  * @param  hobd: Reference to the OBD UART peripheral handler instance.
- * @param  hcli: Reference to the OBD UART peripheral handler instance.
- * @retval obd_error_t: OBD_OK                  - Indicates a successful operation.
- * @retval obd_error_t: OBD_UART_INSTANCE_ERROR - Indicates the UART peripheral failed.
+ * @param  hcli: Reference to the CLI UART peripheral handler instance.
+ * @retval cli_error_t: CLI_OK                  - Indicates a successful operation.
+ * @retval cli_error_t: CLI_UART_INSTANCE_ERROR - Indicates the UART peripheral failed.
  */
 cli_error_t cli_init(UART_HandleTypeDef *hobd, UART_HandleTypeDef *hcli) {
   if ((hobd == NULL) || (hcli == NULL)) {
@@ -45,13 +45,17 @@ cli_error_t cli_init(UART_HandleTypeDef *hobd, UART_HandleTypeDef *hcli) {
  * @brief  Use UART to send a response to the CLI.
  * @param  rsp: Response data.
  * @param  len: Response length.
- * @retval cli_error_t: CLI_OK             - Indicates a successful operation.
- * @retval cli_error_t: CLI_UART_TX_ERROR  - Indicates the UART transmission failed.
- * @retval cli_error_t: CLI_RESPONSE_ERROR - Indicates the UART reception or emulator failed.
+ * @retval cli_error_t: CLI_OK                  - Indicates a successful operation.
+ * @retval cli_error_t: CLI_UART_TX_ERROR       - Indicates the UART transmission failed.
+ * @retval cli_error_t: CLI_RESPONSE_ERROR      - Indicates the UART reception or emulator failed.
+ * @retval cli_error_t: CLI_UART_INSTANCE_ERROR - Indicates the UART peripheral failed.
  */
 cli_error_t cli_write(uint8_t *rsp, uint16_t len) {
-  if ((rsp == NULL) || (len == 0))
-  {
+  if (CLI_UART == NULL) {
+    return CLI_UART_INSTANCE_ERROR;
+  }
+
+  if ((rsp == NULL) || (len == 0)) {
     return CLI_RESPONSE_ERROR;
   }
 
@@ -70,13 +74,17 @@ cli_error_t cli_write(uint8_t *rsp, uint16_t len) {
  * @brief  Use UART DMA to send a response to the CLI.
  * @param  rsp: Response data.
  * @param  len: Response length.
- * @retval cli_error_t: CLI_OK             - Indicates a successful operation.
- * @retval cli_error_t: CLI_UART_TX_ERROR  - Indicates the UART transmission failed.
- * @retval cli_error_t: CLI_RESPONSE_ERROR - Indicates the UART reception or emulator failed.
+ * @retval cli_error_t: CLI_OK                  - Indicates a successful operation.
+ * @retval cli_error_t: CLI_UART_TX_ERROR       - Indicates the UART transmission failed.
+ * @retval cli_error_t: CLI_RESPONSE_ERROR      - Indicates the UART reception or emulator failed.
+ * @retval cli_error_t: CLI_UART_INSTANCE_ERROR - Indicates the UART peripheral failed.
  */
 cli_error_t cli_write_dma(uint8_t *rsp, uint16_t len) {
-  if ((rsp == NULL) || (len == 0))
-  {
+  if (CLI_UART == NULL) {
+    return CLI_UART_INSTANCE_ERROR;
+  }
+
+  if ((rsp == NULL) || (len == 0)) {
     return CLI_RESPONSE_ERROR;
   }
 

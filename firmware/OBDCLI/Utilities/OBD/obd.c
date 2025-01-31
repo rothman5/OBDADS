@@ -58,7 +58,7 @@ buffer_t obd_tx_buffer = {0};
 /**
  * @brief  Initialize the OBD emulator to listen for requests.
  * @param  hobd: Reference to the OBD UART peripheral handler instance.
- * @param  hcli: Reference to the OBD UART peripheral handler instance.
+ * @param  hcli: Reference to the CLI UART peripheral handler instance.
  * @retval obd_error_t: OBD_OK                  - Indicates a successful operation.
  * @retval obd_error_t: OBD_UART_DMA_ERROR      - Indicates the UART DMA transaction failed.
  * @retval obd_error_t: OBD_UART_RX_ERROR       - Indicates the UART reception failed.
@@ -111,10 +111,15 @@ obd_error_t obd_init(UART_HandleTypeDef *hobd, UART_HandleTypeDef *hcli) {
  * @brief  Use UART to send request to the emulator.
  * @param  cmd: Command string.
  * @param  eol: Append end of line character.
- * @retval obd_error_t: OBD_OK            - Indicates a successful operation.
- * @retval obd_error_t: OBD_UART_TX_ERROR - Indicates the UART transmission failed.
+ * @retval obd_error_t: OBD_OK                  - Indicates a successful operation.
+ * @retval obd_error_t: OBD_UART_TX_ERROR       - Indicates the UART transmission failed.
+ * @retval obd_error_t: OBD_UART_INSTANCE_ERROR - Indicates the UART peripheral failed.
  */
 obd_error_t obd_write(char *cmd, bool eol) {
+  if (OBD_UART == NULL) {
+    return OBD_UART_INSTANCE_ERROR;
+  }
+
   if (eol) {
     // Append \r
     obd_tx_buffer.length = snprintf((char *) obd_tx_buffer.data, sizeof(obd_tx_buffer.data), "%s%c", cmd, EOL);
@@ -134,10 +139,15 @@ obd_error_t obd_write(char *cmd, bool eol) {
  * @brief  Use UART DMA to send request to the emulator.
  * @param  cmd: Command string.
  * @param  eol: Append end of line character.
- * @retval obd_error_t: OBD_OK            - Indicates a successful operation.
- * @retval obd_error_t: OBD_UART_TX_ERROR - Indicates the UART transmission failed.
+ * @retval obd_error_t: OBD_OK                  - Indicates a successful operation.
+ * @retval obd_error_t: OBD_UART_TX_ERROR       - Indicates the UART transmission failed.
+ * @retval obd_error_t: OBD_UART_INSTANCE_ERROR - Indicates the UART peripheral failed.
  */
 obd_error_t obd_write_dma(char *cmd, bool eol) {
+  if (OBD_UART == NULL) {
+    return OBD_UART_INSTANCE_ERROR;
+  }
+
   if (eol) {
     // Append \r
     obd_tx_buffer.length = snprintf((char *) obd_tx_buffer.data, sizeof(obd_tx_buffer.data), "%s%c", cmd, EOL);

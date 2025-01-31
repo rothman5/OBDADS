@@ -18,7 +18,7 @@ extern "C"
 
 /* Exported defines ----------------------------------------------------------*/
 
-// #define OBD_RESET_ON_INIT
+#define OBD_RESET_ON_INIT
 #define OBD_QUERY_PAYLOAD_SIZE 5U
 #define OBD_RESET_DELAY_MS     3000U
 
