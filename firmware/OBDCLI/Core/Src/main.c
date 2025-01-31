@@ -98,11 +98,11 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  if (cli_init(&huart1, &huart2) != CLI_OK) {
+  if (obd_init(&huart1, &huart2) != OBD_OK) {
     Error_Handler();
   }
 
-  if (obd_init(&huart1, &huart2) != OBD_OK) {
+  if (cli_init(&huart1, &huart2) != CLI_OK) {
     Error_Handler();
   }
 

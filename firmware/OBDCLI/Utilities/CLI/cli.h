@@ -23,6 +23,7 @@ typedef enum __CLI_ERROR_e {
   CLI_OK,                 // No error
   CLI_COMMAND_ERROR,      // Invalid CLI command or format
   CLI_RESPONSE_ERROR,     // Invalid request response
+  CLI_DATA_ERROR,         // Invalid data buffer
   CLI_UART_DMA_ERROR,     // UART DMA transaction failed
   CLI_UART_TX_ERROR,      // UART transmission failed
   CLI_UART_RX_ERROR,      // UART reception failed
@@ -31,16 +32,13 @@ typedef enum __CLI_ERROR_e {
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/
-
-extern buffer_t cli_rx_buffer;
-extern buffer_t cli_tx_buffer;
-
 /* Exported function prototypes ----------------------------------------------*/
 
 cli_error_t cli_init(UART_HandleTypeDef *hobd, UART_HandleTypeDef *hcli);
-cli_error_t cli_write(uint8_t *rsp, uint16_t len);
-cli_error_t cli_write_dma(uint8_t *rsp, uint16_t len);
+cli_error_t cli_write(uint8_t *data, uint16_t size);
+cli_error_t cli_write_dma(uint8_t *data, uint16_t size);
 cli_error_t cli_listen_for_response(void);
+void cli_process_request(uint16_t size);
 
 #ifdef __cplusplus
 }

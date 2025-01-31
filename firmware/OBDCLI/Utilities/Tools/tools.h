@@ -16,17 +16,16 @@ extern "C"
 
 /* Exported defines ----------------------------------------------------------*/
 
-#define BUFFER_SIZE 48U
-#define EOL         '\r'
+#define BUFFER_SIZE         48U
+#define RESPONSE_SOF        0x34U // '4'
+#define RESPONSE_EOF        0x0DU // '\r'
+#define RETRANSMIT_ATTEMPTS 0x03U
 
 /* Exported types ------------------------------------------------------------*/
-
-typedef struct __BUFFER_s {
-  uint16_t length;
-  uint8_t data[BUFFER_SIZE];
-} buffer_t;
-
 /* Exported macro ------------------------------------------------------------*/
+
+#define ASCII_TO_HEX(_BYTE_) (uint8_t)((_BYTE_) - '0')
+
 /* Exported variables --------------------------------------------------------*/
 /* Exported function prototypes ----------------------------------------------*/
 
