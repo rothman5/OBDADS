@@ -313,30 +313,6 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t size)
 {
-  // // Response received from the emulator
-  // if (huart == &huart1) {
-  //   // Copy response into CLI TX buffer and send to CLI
-  //   obd_rx_buffer.length = size;
-  //   cli_write(obd_rx_buffer.data, size);
-
-  //   // Restart listening for responses from the emulator
-  //   obd_listen_for_response();
-  // }
-
-  // // Request received from the CLI
-  // else if (huart == &huart2) {
-  //   // Copy request into OBD TX buffer and send to CLI
-  //   cli_rx_buffer.length = size;
-  //   cli_rx_buffer.data[cli_rx_buffer.length] = '\0';
-  //   obd_write((char *) cli_rx_buffer.data, false);
-
-  //   // Reset the CLI reception buffer
-  //   memset(cli_rx_buffer.data, 0x00U, BUFFER_SIZE);
-
-  //   // Start listening for requests from the CLI
-  //   cli_listen_for_response();
-  // }
-
   if (huart->Instance == USART1) {
     // Response received from the emulator
     obd_process_response(size);
