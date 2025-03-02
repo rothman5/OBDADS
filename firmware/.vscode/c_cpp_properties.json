@@ -1,0 +1,43 @@
+{
+    "configurations": [
+        {
+            "name": "STM32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/**/CM4/Utilities/**",
+                "${workspaceFolder}/**/CM4/OPENAMP",
+                "${workspaceFolder}/**/CM4/Core/Inc",
+                "${workspaceFolder}/**/CM4/Middlewares/Third_Party/OpenAMP/open-amp/lib/include",
+                "${workspaceFolder}/**/CM4/Middlewares/Third_Party/OpenAMP/libmetal/lib/include",
+                "${workspaceFolder}/**/CM4/Middlewares/Third_Party/OpenAMP/virtual_driver",
+                "${workspaceFolder}/**/CM4/Middlewares/Third_Party/OpenAMP/virtual_driver",
+                "${workspaceFolder}/**/CM4/Drivers/STM32MP1xx_HAL_Driver/Inc",
+                "${workspaceFolder}/**/CM4/Drivers/STM32MP1xx_HAL_Driver/Inc/Legacy",
+                "${workspaceFolder}/**/CM4/Drivers/CMSIS/Include",
+                "${workspaceFolder}/**/CM4/Drivers/CMSIS/Device/ST/STM32MP1xx/Include",
+                "${workspaceFolder}/**/Middlewares/Third_Party/OpenAMP/open-amp/lib/include",
+                "${workspaceFolder}/**/Middlewares/Third_Party/OpenAMP/libmetal/lib/include",
+                "${workspaceFolder}/**/Middlewares/Third_Party/OpenAMP/virtual_driver",
+                "${workspaceFolder}/**/Middlewares/Third_Party/OpenAMP/virtual_driver",
+                "${workspaceFolder}/**/Drivers/STM32MP1xx_HAL_Driver/Inc",
+                "${workspaceFolder}/**/Drivers/STM32MP1xx_HAL_Driver/Inc/Legacy",
+                "${workspaceFolder}/**/Drivers/CMSIS/Include",
+                "${workspaceFolder}/**/Drivers/CMSIS/Device/ST/STM32MP1xx/Include"
+            ],
+            "defines": [
+                "DEBUG",
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE",
+                "CORE_CM4",
+                "NO_ATOMIC_64_SUPPORT",
+                "METAL_INTERNAL",
+                "METAL_MAX_DEVICE_REGIONS=2",
+                "VIRTIO_SLAVE_ONLY",
+                "USE_HAL_DRIVER",
+                "STM32MP157Dxx"
+            ]
+        }
+    ],
+    "version": 4
+}
