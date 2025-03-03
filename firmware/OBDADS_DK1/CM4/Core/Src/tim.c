@@ -22,8 +22,6 @@
 
 /* USER CODE BEGIN 0 */
 
-#include "system.h"
-
 /* USER CODE END 0 */
 
 TIM_HandleTypeDef htim16;
@@ -96,11 +94,5 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* tim_baseHandle)
 }
 
 /* USER CODE BEGIN 1 */
-
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-  if (htim->Instance == TIM16) {
-    SysExec();
-  }
-}
 
 /* USER CODE END 1 */

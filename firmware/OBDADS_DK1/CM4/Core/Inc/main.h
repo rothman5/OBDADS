@@ -59,6 +59,8 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define IMU_NSS_Pin GPIO_PIN_3
 #define IMU_NSS_GPIO_Port GPIOF
+#define LED_Pin GPIO_PIN_2
+#define LED_GPIO_Port GPIOG
 #define OBD_TX_Pin GPIO_PIN_10
 #define OBD_TX_GPIO_Port GPIOB
 #define SME_Pin GPIO_PIN_6
