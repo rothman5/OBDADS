@@ -92,10 +92,6 @@ td {
   border: 1px solid #ddd;
 }
 
-th {
-  background-color: #f4f4f4;
-}
-
 button {
   cursor: pointer;
   padding: 5px 10px;

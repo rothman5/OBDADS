@@ -6,12 +6,21 @@
       <!-- Live Data (Prominent, Left) -->
       <div class="live-data-box">
         <h2>Live Data</h2>
+        <!-- Display Error Code -->
+        <p v-if="liveData.errors">
+          <strong id="error">Error: {{ liveData.errors }}</strong>
+        </p>
+        <!-- Display Live Data -->
         <p><strong>Speed:</strong> {{ liveData.speed }} km/h</p>
         <p><strong>RPM:</strong> {{ liveData.rpm }}</p>
         <p><strong>Temperature:</strong> {{ liveData.temperature }} °C</p>
         <p><strong>Fuel Level:</strong> {{ liveData.fuel_level }} %</p>
       </div>
 
+      <!-- Toggle Button -->
+      <button @click="showHistory = !showHistory" class="toggle-btn">
+        {{ showHistory ? 'Hide' : 'Show' }} Historical Data
+      </button>
       <!-- Historical Data (Right) -->
       <div class="historical-data" v-if="showHistory">
         <h2>Historical Data</h2>
@@ -35,11 +44,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Toggle Button -->
-    <button @click="showHistory = !showHistory" class="toggle-btn">
-      {{ showHistory ? 'Hide' : 'Show' }} Historical Data
-    </button>
   </div>
 </template>
 
@@ -54,6 +58,7 @@ const liveData = ref<OBDData>({
   rpm: 0,
   temperature: 0,
   fuel_level: 0,
+  errors: [],
 });
 
 const chartData = ref<Record<string, ChartData>>({
@@ -92,6 +97,7 @@ onMounted(() => {
     rpm: 2000,
     temperature: 80,
     fuel_level: 50,
+    errors: [{ code: 'P0301', severity: 'high', description: 'Cylinder 1 Misfire Detected' }],
   };
 
   chartData.value = {
@@ -140,7 +146,8 @@ onMounted(() => {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
+  flex-direction: column;
   gap: 20px;
 }
 
@@ -183,10 +190,6 @@ onMounted(() => {
   border: 1px solid #ddd;
 }
 
-.history-table th {
-  background-color: #f4f4f4;
-}
-
 /* Toggle Button */
 .toggle-btn {
   margin-top: 20px;
@@ -201,5 +204,9 @@ onMounted(() => {
 
 .toggle-btn:hover {
   background-color: #0056b3;
+}
+
+#error {
+  color: red;
 }
 </style>
