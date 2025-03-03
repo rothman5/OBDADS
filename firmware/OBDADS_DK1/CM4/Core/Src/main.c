@@ -29,6 +29,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "system.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -38,6 +40,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
+#define ERROR_BLINK_PERIOD_MS 100u
 
 /* USER CODE END PD */
 
@@ -115,12 +119,25 @@ int main(void)
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
 
+  if (SysInit(&htim16) != SYS_ERR_OK) {
+    Error_Handler();
+  }
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    if (SysState == SYS_REQ_OBD) {
+      // Request OBD data PIDs
+      // Pid0
+      // Pid1
+      // ...
+      // Pidn
+      // If any transaction times out, set flag to indicate timeout
+      // Set flag to indicate OBD responses have been received
+    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -246,6 +263,8 @@ void Error_Handler(void)
   __disable_irq();
   while (1)
   {
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+    HAL_Delay(ERROR_BLINK_PERIOD_MS);
   }
   /* USER CODE END Error_Handler_Debug */
 }

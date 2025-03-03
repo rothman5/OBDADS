@@ -13,7 +13,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* Public variables ---------------------------------------------------------*/
 
-volatile SysState_t SysState = SYS_ERROR;
+volatile SysState_t SysState = SYS_IDLE;
 
 /* Public functions ----------------------------------------------------------*/
 
@@ -58,7 +58,7 @@ SysError_t SysExec(void) {
     case SYS_REQ_OBD: {
       break;
     }
-    case SYS_IDLE: {
+    case SYS_PENDING: {
       break;
     }
     case SYS_PROCESS: {
