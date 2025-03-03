@@ -17,7 +17,9 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
+from obdads.views import liveData
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/live-data", liveData),
 ]
