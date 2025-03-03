@@ -33,17 +33,18 @@ typedef enum __SYSTEM_STATE_e {
  * @brief Error codes for the OBD auto-dynamics real-time acquisition system.
  */
 typedef enum __SYSTEM_ERROR_e {
-  SYS_ERROR_UNKNOWN = 0u, // An unknown error occured
-  SYS_ERROR_SPI,          // A SPI error occured
-  SYS_ERROR_SPI_TX,       // A SPI TX error occured
-  SYS_ERROR_SPI_RX,       // A SPI RX error occured
-  SYS_ERROR_SPI_DMA,      // A SPI DMA error occured
-  SYS_ERROR_UART,         // A UART error occured
-  SYS_ERROR_UART_TX,      // A UART TX error occured
-  SYS_ERROR_UART_RX,      // A UART RX error occured
-  SYS_ERROR_UART_DMA,     // A UART DMA error occured
-  SYS_ERROR_TIMEOUT,      // Timed out waiting for requested data
-  SYS_ERROR_TIMER,        // An error occured with the state machine execution timer
+  SYS_ERR_OK = 0u,  // No error    
+  SYS_ERR_UNKNOWN,  // An unknown error occured
+  SYS_ERR_SPI,      // A SPI error occured
+  SYS_ERR_SPI_TX,   // A SPI TX error occured
+  SYS_ERR_SPI_RX,   // A SPI RX error occured
+  SYS_ERR_SPI_DMA,  // A SPI DMA error occured
+  SYS_ERR_UART,     // A UART error occured
+  SYS_ERR_UART_TX,  // A UART TX error occured
+  SYS_ERR_UART_RX,  // A UART RX error occured
+  SYS_ERR_UART_DMA, // A UART DMA error occured
+  SYS_ERR_TIMEOUT,  // Timed out waiting for requested data
+  SYS_ERR_TIMER,    // An error occured with the state machine execution timer
 } SystemError_t;
 
 /* Exported macro ------------------------------------------------------------*/
