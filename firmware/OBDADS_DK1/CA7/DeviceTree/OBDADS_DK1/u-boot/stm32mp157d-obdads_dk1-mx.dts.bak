@@ -349,18 +349,18 @@
 		};
 	};
 
-	m4_fdcan2_pins_mx: m4_fdcan2_mx-0 {
-		pins {
-			pinmux = <STM32_PINMUX('B', 12, RSVD)>, /* FDCAN2_RX */
-					 <STM32_PINMUX('B', 13, RSVD)>; /* FDCAN2_TX */
-		};
-	};
-
 	m4_spi5_pins_mx: m4_spi5_mx-0 {
 		pins {
 			pinmux = <STM32_PINMUX('F', 7, RSVD)>, /* SPI5_SCK */
 					 <STM32_PINMUX('F', 8, RSVD)>, /* SPI5_MISO */
 					 <STM32_PINMUX('F', 9, RSVD)>; /* SPI5_MOSI */
+		};
+	};
+
+	m4_usart3_pins_mx: m4_usart3_mx-0 {
+		pins {
+			pinmux = <STM32_PINMUX('B', 10, RSVD)>, /* USART3_TX */
+					 <STM32_PINMUX('B', 12, RSVD)>; /* USART3_RX */
 		};
 	};
 
@@ -994,15 +994,6 @@
 	/* USER CODE END m4_dma2 */
 };
 
-&m4_m_can2 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&m4_fdcan2_pins_mx>;
-	status = "okay";
-
-	/* USER CODE BEGIN m4_m_can2 */
-	/* USER CODE END m4_m_can2 */
-};
-
 &m4_spi5 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&m4_spi5_pins_mx>;
@@ -1017,6 +1008,15 @@
 
 	/* USER CODE BEGIN m4_timers16 */
 	/* USER CODE END m4_timers16 */
+};
+
+&m4_usart3 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&m4_usart3_pins_mx>;
+	status = "okay";
+
+	/* USER CODE BEGIN m4_usart3 */
+	/* USER CODE END m4_usart3 */
 };
 
 &mdma1 {

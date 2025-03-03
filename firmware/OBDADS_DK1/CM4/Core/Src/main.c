@@ -19,11 +19,11 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "dma.h"
+#include "fdcan.h"
 #include "ipcc.h"
 #include "openamp.h"
 #include "spi.h"
 #include "tim.h"
-#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -116,7 +116,7 @@ int main(void)
   MX_DMA_Init();
   MX_SPI5_Init();
   MX_TIM16_Init();
-  MX_USART3_UART_Init();
+  MX_FDCAN2_Init();
   /* USER CODE BEGIN 2 */
 
   if (SysInit(&htim16) != SYS_ERR_OK) {

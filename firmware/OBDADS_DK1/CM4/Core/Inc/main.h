@@ -61,16 +61,12 @@ void Error_Handler(void);
 #define IMU_NSS_GPIO_Port GPIOF
 #define LED_Pin GPIO_PIN_2
 #define LED_GPIO_Port GPIOG
-#define OBD_TX_Pin GPIO_PIN_10
-#define OBD_TX_GPIO_Port GPIOB
 #define SME_Pin GPIO_PIN_6
 #define SME_GPIO_Port GPIOF
 #define IMU_MOSI_Pin GPIO_PIN_9
 #define IMU_MOSI_GPIO_Port GPIOF
 #define IMU_CLK_Pin GPIO_PIN_7
 #define IMU_CLK_GPIO_Port GPIOF
-#define OBD_RX_Pin GPIO_PIN_12
-#define OBD_RX_GPIO_Port GPIOB
 #define IMU_MISO_Pin GPIO_PIN_8
 #define IMU_MISO_GPIO_Port GPIOF
 
