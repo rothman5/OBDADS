@@ -18,25 +18,25 @@
  * @brief  Initialize the system state machine's required peripherals and start the
  *         state machine execution timer.
  * @param  htim: Reference to the timer handler.
- * @return SystemError_t
+ * @return SysError_t
  */
-SystemError_t SystemInit(TIM_HandleTypeDef *htim) {
+SysError_t SysInit(TIM_HandleTypeDef *htim) {
   if (htim == NULL) {
-    return SYS_ERROR_TIMER;
+    return SYS_ERR_TIMER;
   }
 
   // Start the state machine execution timer
   if (HAL_TIM_Base_Start_IT(htim) != HAL_OK) {
-    return SYS_ERROR_TIMER;
+    return SYS_ERR_TIMER;
   }
 }
 
 /**
  * @brief  Execute the system state machine and configure the next state.
  * @note   Executed every 250ms.
- * @return SystemError_t
+ * @return SysError_t
  */
-SystemError_t SystemExec(void) {
+SysError_t SysExec(void) {
   HAL_GPIO_TogglePin(SME_GPIO_Port, SME_Pin);
 }
 
