@@ -22,11 +22,12 @@ extern "C"
  * @brief State machine states for the OBD auto-dynamics real-time acquisition system.
  */
 typedef enum __SYSTEM_STATE_e {
-  SYS_INIT = 0u, // Initialize the acquisition system
-  SYS_REQUEST,   // Request OBD and IMU data
-  SYS_IDLE,      // Wait for requested data
-  SYS_PROCESS,   // Process data once requests are received
-  SYS_FORWARD    // Forward the processed data to the SD card and OS
+  SYS_REQ_IMU = 0u, // Request IMU data
+  SYS_REQ_OBD,      // Request OBD data
+  SYS_IDLE,         // Wait for requested data
+  SYS_PROCESS,      // Process data once requests are received
+  SYS_FORWARD,      // Forward the processed data to the SD card and OS
+  SYS_ERROR         // An error occured during operation
 } SysState_t;
 
 /**
@@ -49,6 +50,9 @@ typedef enum __SYSTEM_ERROR_e {
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/
+
+extern volatile SysState_t SysState;
+
 /* Exported function prototypes ----------------------------------------------*/
 
 SysError_t SysInit(TIM_HandleTypeDef *htim);

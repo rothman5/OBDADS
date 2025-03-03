@@ -12,6 +12,9 @@
 /* Private function prototypes -----------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Public variables ---------------------------------------------------------*/
+
+volatile SysState_t SysState = SYS_ERROR;
+
 /* Public functions ----------------------------------------------------------*/
 
 /**
@@ -24,11 +27,17 @@ SysError_t SysInit(TIM_HandleTypeDef *htim) {
   if (htim == NULL) {
     return SYS_ERR_TIMER;
   }
+  
+  // Initialize OBD driver
+  // Initialize IMU driver
+  // Initialize SD card driver
 
   // Start the state machine execution timer
   if (HAL_TIM_Base_Start_IT(htim) != HAL_OK) {
     return SYS_ERR_TIMER;
   }
+
+  SysState = SYS_REQ_IMU;
 
   return SYS_ERR_OK;
 }
@@ -40,6 +49,25 @@ SysError_t SysInit(TIM_HandleTypeDef *htim) {
  */
 SysError_t SysExec(void) {
   HAL_GPIO_TogglePin(SME_GPIO_Port, SME_Pin);
+
+  switch (SysState) {
+    case SYS_REQ_IMU: {
+      // Request IMU data using DMA
+      break;
+    }
+    case SYS_REQ_OBD: {
+      break;
+    }
+    case SYS_IDLE: {
+      break;
+    }
+    case SYS_PROCESS: {
+      break;
+    }
+    case SYS_FORWARD: {
+      break;
+    }
+  }
 
   return SYS_ERR_OK;
 }
