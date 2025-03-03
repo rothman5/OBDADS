@@ -29,6 +29,8 @@ SysError_t SysInit(TIM_HandleTypeDef *htim) {
   if (HAL_TIM_Base_Start_IT(htim) != HAL_OK) {
     return SYS_ERR_TIMER;
   }
+
+  return SYS_ERR_OK;
 }
 
 /**
@@ -38,6 +40,8 @@ SysError_t SysInit(TIM_HandleTypeDef *htim) {
  */
 SysError_t SysExec(void) {
   HAL_GPIO_TogglePin(SME_GPIO_Port, SME_Pin);
+
+  return SYS_ERR_OK;
 }
 
 /* Private functions ---------------------------------------------------------*/
