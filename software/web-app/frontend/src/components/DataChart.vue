@@ -29,5 +29,7 @@ const chartDataFormatted = computed(() => ({
 <style scoped>
 .chart-container {
   margin: 20px 0;
+  width: 100%;
+  height: 100%;
 }
 </style>

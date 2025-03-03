@@ -22,7 +22,7 @@
         {{ showHistory ? 'Hide' : 'Show' }} Historical Data
       </button>
       <!-- Historical Data (Right) -->
-      <div class="historical-data" v-if="showHistory">
+      <div :class="['historical-data', { show: showHistory }]">
         <h2>Historical Data</h2>
         <div class="data-section" v-for="(chart, key) in chartData" :key="key">
           <DataChart :title="getTitle(key)" :chart-data="chart" :border-color="getColor(key)" />
@@ -135,6 +135,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/* Base Styles */
 .dashboard {
   padding: 20px;
   text-align: center;
@@ -160,6 +161,7 @@ onMounted(() => {
   background-color: #222;
   font-size: 1.4rem;
   text-align: left;
+  color: white;
 }
 
 /* Historical Data Section */
@@ -208,5 +210,38 @@ onMounted(() => {
 
 #error {
   color: red;
+}
+
+/* Responsive Design - Mobile Breakpoint for the LCD */
+@media (max-width: 768px) {
+  .content-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .live-data-box {
+    width: 90%;
+    text-align: center;
+  }
+
+  .historical-data {
+    display: none;
+    width: 100%;
+  }
+
+  .data-section {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .history-table {
+    display: none;
+    width: 100%;
+  }
+
+  /* Show historical data when the button is clicked */
+  .historical-data.show {
+    display: block;
+  }
 }
 </style>
