@@ -61,6 +61,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_exti.c</locationURI>
 		</link>
 		<link>
+			<name>Drivers/STM32MP1xx_HAL_Driver/stm32mp1xx_hal_fdcan.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_fdcan.c</locationURI>
+		</link>
+		<link>
 			<name>Drivers/STM32MP1xx_HAL_Driver/stm32mp1xx_hal_gpio.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_gpio.c</locationURI>
@@ -119,16 +124,6 @@
 			<name>Drivers/STM32MP1xx_HAL_Driver/stm32mp1xx_hal_tim_ex.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_tim_ex.c</locationURI>
-		</link>
-		<link>
-			<name>Drivers/STM32MP1xx_HAL_Driver/stm32mp1xx_hal_uart.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_uart.c</locationURI>
-		</link>
-		<link>
-			<name>Drivers/STM32MP1xx_HAL_Driver/stm32mp1xx_hal_uart_ex.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_uart_ex.c</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/Third_Party/OpenAMP/CMakeLists.txt</name>
