@@ -56,7 +56,6 @@
 
 /* External variables --------------------------------------------------------*/
 extern IPCC_HandleTypeDef hipcc;
-extern SD_HandleTypeDef hsd3;
 extern DMA_HandleTypeDef hdma_spi5_tx;
 extern DMA_HandleTypeDef hdma_spi5_rx;
 extern SPI_HandleTypeDef hspi5;
@@ -330,20 +329,6 @@ void TIM16_IRQHandler(void)
   /* USER CODE BEGIN TIM16_IRQn 1 */
 
   /* USER CODE END TIM16_IRQn 1 */
-}
-
-/**
-  * @brief This function handles SDMMC3 global interrupt.
-  */
-void SDMMC3_IRQHandler(void)
-{
-  /* USER CODE BEGIN SDMMC3_IRQn 0 */
-
-  /* USER CODE END SDMMC3_IRQn 0 */
-  HAL_SD_IRQHandler(&hsd3);
-  /* USER CODE BEGIN SDMMC3_IRQn 1 */
-
-  /* USER CODE END SDMMC3_IRQn 1 */
 }
 
 /**

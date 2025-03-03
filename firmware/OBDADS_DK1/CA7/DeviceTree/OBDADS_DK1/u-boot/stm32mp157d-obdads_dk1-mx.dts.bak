@@ -349,28 +349,11 @@
 		};
 	};
 
-	m4_sdmmc3_pins_mx: m4_sdmmc3_mx-0 {
-		pins {
-			pinmux = <STM32_PINMUX('D', 7, RSVD)>, /* SDMMC3_D3 */
-					 <STM32_PINMUX('F', 0, RSVD)>, /* SDMMC3_D0 */
-					 <STM32_PINMUX('F', 1, RSVD)>, /* SDMMC3_CMD */
-					 <STM32_PINMUX('F', 4, RSVD)>, /* SDMMC3_D1 */
-					 <STM32_PINMUX('F', 5, RSVD)>, /* SDMMC3_D2 */
-					 <STM32_PINMUX('G', 15, RSVD)>; /* SDMMC3_CK */
-		};
-	};
-
 	m4_spi5_pins_mx: m4_spi5_mx-0 {
 		pins {
 			pinmux = <STM32_PINMUX('F', 7, RSVD)>, /* SPI5_SCK */
 					 <STM32_PINMUX('F', 8, RSVD)>, /* SPI5_MISO */
 					 <STM32_PINMUX('F', 9, RSVD)>; /* SPI5_MOSI */
-		};
-	};
-
-	m4_tim16_pwm_pins_mx: m4_tim16_pwm_mx-0 {
-		pins {
-			pinmux = <STM32_PINMUX('F', 6, RSVD)>; /* TIM16_CH1 */
 		};
 	};
 
@@ -623,7 +606,7 @@
 };
 
 &dma2 {
-	status = "okay";
+	status = "disabled";
 
 	/* USER CODE BEGIN dma2 */
 	/* USER CODE END dma2 */
@@ -632,8 +615,8 @@
 &dmamux1 {
 	status = "okay";
 
-	dma-masters = <&dma1 &dma2>;
-	dma-channels = <16>;
+	dma-masters = <&dma1>;
+	dma-channels = <8>;
 
 	/* USER CODE BEGIN dmamux1 */
 	/* USER CODE END dmamux1 */
@@ -1004,13 +987,11 @@
 	/* USER CODE END ltdc */
 };
 
-&m4_sdmmc3 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&m4_sdmmc3_pins_mx>;
+&m4_dma2 {
 	status = "okay";
 
-	/* USER CODE BEGIN m4_sdmmc3 */
-	/* USER CODE END m4_sdmmc3 */
+	/* USER CODE BEGIN m4_dma2 */
+	/* USER CODE END m4_dma2 */
 };
 
 &m4_spi5 {
@@ -1023,8 +1004,6 @@
 };
 
 &m4_timers16 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&m4_tim16_pwm_pins_mx>;
 	status = "okay";
 
 	/* USER CODE BEGIN m4_timers16 */

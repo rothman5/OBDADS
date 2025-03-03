@@ -21,7 +21,6 @@
 #include "dma.h"
 #include "ipcc.h"
 #include "openamp.h"
-#include "sdmmc.h"
 #include "spi.h"
 #include "tim.h"
 #include "usart.h"
@@ -111,11 +110,12 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_SDMMC3_SD_Init();
   MX_SPI5_Init();
   MX_TIM16_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
+
+  HAL_TIM_Base_Start_IT(&htim16);
 
   /* USER CODE END 2 */
 

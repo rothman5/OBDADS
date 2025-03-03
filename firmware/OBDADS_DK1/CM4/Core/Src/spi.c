@@ -104,7 +104,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
     PF7     ------> SPI5_SCK
     PF8     ------> SPI5_MISO
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_7|GPIO_PIN_8;
+    GPIO_InitStruct.Pin = IMU_MOSI_Pin|IMU_CLK_Pin|IMU_MISO_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
@@ -173,7 +173,7 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* spiHandle)
     PF7     ------> SPI5_SCK
     PF8     ------> SPI5_MISO
     */
-    HAL_GPIO_DeInit(GPIOF, GPIO_PIN_9|GPIO_PIN_7|GPIO_PIN_8);
+    HAL_GPIO_DeInit(GPIOF, IMU_MOSI_Pin|IMU_CLK_Pin|IMU_MISO_Pin);
 
     /* SPI5 DMA DeInit */
     HAL_DMA_DeInit(spiHandle->hdmatx);
