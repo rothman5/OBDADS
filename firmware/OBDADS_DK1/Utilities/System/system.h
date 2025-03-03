@@ -27,7 +27,7 @@ typedef enum __SYSTEM_STATE_e {
   SYS_IDLE,      // Wait for requested data
   SYS_PROCESS,   // Process data once requests are received
   SYS_FORWARD    // Forward the processed data to the SD card and OS
-} SystemState_t;
+} SysState_t;
 
 /**
  * @brief Error codes for the OBD auto-dynamics real-time acquisition system.
@@ -45,14 +45,14 @@ typedef enum __SYSTEM_ERROR_e {
   SYS_ERR_UART_DMA, // A UART DMA error occured
   SYS_ERR_TIMEOUT,  // Timed out waiting for requested data
   SYS_ERR_TIMER,    // An error occured with the state machine execution timer
-} SystemError_t;
+} SysError_t;
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/
 /* Exported function prototypes ----------------------------------------------*/
 
-SystemError_t SystemInit(TIM_HandleTypeDef *htim);
-SystemError_t SystemExec(void);
+SysError_t SysInit(TIM_HandleTypeDef *htim);
+SysError_t SysExec(void);
 
 #ifdef __cplusplus
 }
