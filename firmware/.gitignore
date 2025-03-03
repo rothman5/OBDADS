@@ -1,4 +1,5 @@
 **/Debug
+**/*.cfg
 **/*.launch
 **/.project
 **/.cproject

@@ -4,7 +4,7 @@
             "name": "STM32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/**/CM4/Utilities/**",
+                "${workspaceFolder}/**/Utilities/**",
                 "${workspaceFolder}/**/CM4/OPENAMP",
                 "${workspaceFolder}/**/CM4/Core/Inc",
                 "${workspaceFolder}/**/CM4/Middlewares/Third_Party/OpenAMP/open-amp/lib/include",
