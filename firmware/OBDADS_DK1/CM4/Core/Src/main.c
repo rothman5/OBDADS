@@ -29,8 +29,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
-#include "system.h"
-
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -117,20 +115,12 @@ int main(void)
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  if (SysInit(&htim16) != SYS_ERR_OK) {
-    Error_Handler();
-  }
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    if (SysState == SYS_REQ_OBD) {
-      // Request OBD PIDs (blocking with a timeout)
-      // Set a flag to indicate that the OBD data has been received
-    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
