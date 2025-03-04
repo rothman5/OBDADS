@@ -57,8 +57,8 @@
 /* External variables --------------------------------------------------------*/
 extern FDCAN_HandleTypeDef hfdcan2;
 extern IPCC_HandleTypeDef hipcc;
-extern DMA_HandleTypeDef hdma_spi5_tx;
 extern DMA_HandleTypeDef hdma_spi5_rx;
+extern DMA_HandleTypeDef hdma_spi5_tx;
 extern SPI_HandleTypeDef hspi5;
 extern TIM_HandleTypeDef htim16;
 /* USER CODE BEGIN EV */
@@ -218,20 +218,6 @@ void FDCAN2_IT0_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles FDCAN2 interrupt 1.
-  */
-void FDCAN2_IT1_IRQHandler(void)
-{
-  /* USER CODE BEGIN FDCAN2_IT1_IRQn 0 */
-
-  /* USER CODE END FDCAN2_IT1_IRQn 0 */
-  HAL_FDCAN_IRQHandler(&hfdcan2);
-  /* USER CODE BEGIN FDCAN2_IT1_IRQn 1 */
-
-  /* USER CODE END FDCAN2_IT1_IRQn 1 */
-}
-
-/**
   * @brief This function handles DMA2 stream0 global interrupt.
   */
 void DMA2_Stream0_IRQHandler(void)
@@ -257,20 +243,6 @@ void DMA2_Stream1_IRQHandler(void)
   /* USER CODE BEGIN DMA2_Stream1_IRQn 1 */
 
   /* USER CODE END DMA2_Stream1_IRQn 1 */
-}
-
-/**
-  * @brief This function handles FDCAN calibration unit interrupt.
-  */
-void FDCAN_CAL_IRQHandler(void)
-{
-  /* USER CODE BEGIN FDCAN_CAL_IRQn 0 */
-
-  /* USER CODE END FDCAN_CAL_IRQn 0 */
-  HAL_FDCAN_IRQHandler(&hfdcan2);
-  /* USER CODE BEGIN FDCAN_CAL_IRQn 1 */
-
-  /* USER CODE END FDCAN_CAL_IRQn 1 */
 }
 
 /**
