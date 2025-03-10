@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "STM32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/**/Utilities/**",
+                "${workspaceFolder}/**/Core/Inc",
+                "${workspaceFolder}/**/Drivers/STM32L4xx_HAL_Driver/Inc",
+                "${workspaceFolder}/**/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy",
+                "${workspaceFolder}/**/Drivers/CMSIS/Include",
+                "${workspaceFolder}/**/Drivers/CMSIS/Device/ST/STM32L4xx/Include"
+            ],
+            "defines": [
+                "DEBUG",
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE",
+                "STM32L412xx",
+                "ARM_MATH_CM4",
+                "USE_HAL_DRIVER"
+            ]
+        }
+    ],
+    "version": 4
+}
