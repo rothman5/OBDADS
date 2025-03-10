@@ -28,6 +28,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32mp1xx_hal.h"
+#include "resmgr_utility.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -57,18 +58,32 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define IMU_NSS_Pin GPIO_PIN_3
-#define IMU_NSS_GPIO_Port GPIOF
-#define LED_Pin GPIO_PIN_2
-#define LED_GPIO_Port GPIOG
-#define SME_Pin GPIO_PIN_6
-#define SME_GPIO_Port GPIOF
-#define IMU_MOSI_Pin GPIO_PIN_9
-#define IMU_MOSI_GPIO_Port GPIOF
-#define IMU_CLK_Pin GPIO_PIN_7
-#define IMU_CLK_GPIO_Port GPIOF
-#define IMU_MISO_Pin GPIO_PIN_8
-#define IMU_MISO_GPIO_Port GPIOF
+#define LED_DBG_Pin GPIO_PIN_1
+#define LED_DBG_GPIO_Port GPIOD
+#define LED_ERR_Pin GPIO_PIN_3
+#define LED_ERR_GPIO_Port GPIOG
+#define IMU_INT1_Pin GPIO_PIN_3
+#define IMU_INT1_GPIO_Port GPIOF
+#define IMU_INT2_Pin GPIO_PIN_2
+#define IMU_INT2_GPIO_Port GPIOG
+#define LED_PWM_Pin GPIO_PIN_6
+#define LED_PWM_GPIO_Port GPIOH
+#define OBD_CAN_TX_Pin GPIO_PIN_13
+#define OBD_CAN_TX_GPIO_Port GPIOB
+#define VCP_UART_RX_Pin GPIO_PIN_7
+#define VCP_UART_RX_GPIO_Port GPIOE
+#define IMU_SPI_NSS_Pin GPIO_PIN_6
+#define IMU_SPI_NSS_GPIO_Port GPIOF
+#define IMU_SPI_MOSI_Pin GPIO_PIN_9
+#define IMU_SPI_MOSI_GPIO_Port GPIOF
+#define IMU_SPI_CLK_Pin GPIO_PIN_7
+#define IMU_SPI_CLK_GPIO_Port GPIOF
+#define OBD_CAN_RX_Pin GPIO_PIN_12
+#define OBD_CAN_RX_GPIO_Port GPIOB
+#define IMU_SPI_MISO_Pin GPIO_PIN_8
+#define IMU_SPI_MISO_GPIO_Port GPIOF
+#define VCP_UART_TX_Pin GPIO_PIN_8
+#define VCP_UART_TX_GPIO_Port GPIOE
 
 /* USER CODE BEGIN Private defines */
 

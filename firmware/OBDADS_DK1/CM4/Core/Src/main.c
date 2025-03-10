@@ -22,12 +22,17 @@
 #include "fdcan.h"
 #include "ipcc.h"
 #include "openamp.h"
+#include "sdmmc.h"
 #include "spi.h"
 #include "tim.h"
+#include "usart.h"
 #include "gpio.h"
+#include "resmgr_utility.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
+#include "system.h"
 
 /* USER CODE END Includes */
 
@@ -102,6 +107,8 @@ int main(void)
     /* OpenAmp initialisation ---------------------------------*/
     MX_OPENAMP_Init(RPMSG_REMOTE, NULL);
   }
+  /* Resource Manager Utility initialisation ---------------------------------*/
+  // MX_RESMGR_UTILITY_Init();
 
   /* USER CODE BEGIN SysInit */
 
@@ -110,10 +117,16 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_SPI5_Init();
-  MX_TIM16_Init();
   MX_FDCAN2_Init();
+  // MX_SDMMC3_SD_Init();
+  MX_SPI5_Init();
+  MX_UART7_Init();
+  MX_TIM12_Init();
   /* USER CODE BEGIN 2 */
+
+  if (SysInit(&htim12) != SYS_OK) {
+    Error_Handler();
+  }
 
   /* USER CODE END 2 */
 
@@ -121,6 +134,11 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    SysExec();
+    HAL_Delay(100u);
+    if (SysError) {
+      Error_Handler();
+    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -165,10 +183,10 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL3.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL3.PLLSource = RCC_PLL3SOURCE_HSE;
   RCC_OscInitStruct.PLL3.PLLM = 2;
-  RCC_OscInitStruct.PLL3.PLLN = 50;
+  RCC_OscInitStruct.PLL3.PLLN = 52;
   RCC_OscInitStruct.PLL3.PLLP = 3;
-  RCC_OscInitStruct.PLL3.PLLQ = 12;
-  RCC_OscInitStruct.PLL3.PLLR = 30;
+  RCC_OscInitStruct.PLL3.PLLQ = 6;
+  RCC_OscInitStruct.PLL3.PLLR = 12;
   RCC_OscInitStruct.PLL3.PLLRGE = RCC_PLL3IFRANGE_1;
   RCC_OscInitStruct.PLL3.PLLFRACV = 0;
   RCC_OscInitStruct.PLL3.PLLMODE = RCC_PLL_INTEGER;
@@ -243,9 +261,17 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
+
+  // Disable interrupts
   __disable_irq();
+
+  // Initialize the DWT cycle counter
+  DwtInit();
+
   while (1)
   {
+    HAL_GPIO_TogglePin(LED_ERR_GPIO_Port, LED_ERR_Pin);
+    DwtNoOpDelay(250u);
   }
   /* USER CODE END Error_Handler_Debug */
 }

@@ -58,10 +58,14 @@ void SysTick_Handler(void);
 void FDCAN2_IT0_IRQHandler(void);
 void DMA2_Stream0_IRQHandler(void);
 void DMA2_Stream1_IRQHandler(void);
+void DMA2_Stream2_IRQHandler(void);
+void DMA2_Stream3_IRQHandler(void);
+void UART7_IRQHandler(void);
 void SPI5_IRQHandler(void);
 void IPCC_RX1_IRQHandler(void);
 void IPCC_TX1_IRQHandler(void);
-void TIM16_IRQHandler(void);
+void TIM12_IRQHandler(void);
+void SDMMC3_IRQHandler(void);
 void RCC_WAKEUP_IRQHandler(void);
 /* USER CODE BEGIN EFP */
 
