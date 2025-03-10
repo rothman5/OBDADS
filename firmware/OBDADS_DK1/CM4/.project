@@ -38,7 +38,7 @@
 		<link>
 			<name>Modules</name>
 			<type>2</type>
-			<location>D:/Development/STM32/OBDADS_DK1/Modules</location>
+			<location>D:/Development/OBDADS/firmware/OBDADS_DK1/Modules</location>
 		</link>
 		<link>
 			<name>Utilities/res_mgr.c</name>
