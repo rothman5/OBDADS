@@ -24,8 +24,8 @@
 		<nature>com.st.stm32cube.ide.mcu.MCUCubeIdeServicesRevAev2ProjectNature</nature>
 		<nature>com.st.stm32cube.ide.mcu.MCUCubeProjectNature</nature>
 		<nature>com.st.stm32cube.ide.mcu.MCUAdvancedStructureProjectNature</nature>
-		<nature>com.st.stm32cube.ide.mcu.MCUSingleCpuProjectNature</nature>
 		<nature>com.st.stm32cube.ide.mpu.MPUEmbeddedMCUProjectNature</nature>
+		<nature>com.st.stm32cube.ide.mcu.MCUSingleCpuProjectNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
@@ -34,6 +34,16 @@
 			<name>Common</name>
 			<type>2</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Common</locationURI>
+		</link>
+		<link>
+			<name>Modules</name>
+			<type>2</type>
+			<location>D:/Development/STM32/OBDADS_DK1/Modules</location>
+		</link>
+		<link>
+			<name>Utilities/res_mgr.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Utilities/ResourcesManager/res_mgr.c</locationURI>
 		</link>
 		<link>
 			<name>Drivers/STM32MP1xx_HAL_Driver/stm32mp1xx_hal.c</name>
@@ -106,6 +116,16 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_rcc_ex.c</locationURI>
 		</link>
 		<link>
+			<name>Drivers/STM32MP1xx_HAL_Driver/stm32mp1xx_hal_sd.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_sd.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/STM32MP1xx_HAL_Driver/stm32mp1xx_hal_sd_ex.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_sd_ex.c</locationURI>
+		</link>
+		<link>
 			<name>Drivers/STM32MP1xx_HAL_Driver/stm32mp1xx_hal_spi.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_spi.c</locationURI>
@@ -124,6 +144,26 @@
 			<name>Drivers/STM32MP1xx_HAL_Driver/stm32mp1xx_hal_tim_ex.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_tim_ex.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/STM32MP1xx_HAL_Driver/stm32mp1xx_hal_uart.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_uart.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/STM32MP1xx_HAL_Driver/stm32mp1xx_hal_uart_ex.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_uart_ex.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/STM32MP1xx_HAL_Driver/stm32mp1xx_ll_delayblock.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_ll_delayblock.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/STM32MP1xx_HAL_Driver/stm32mp1xx_ll_sdmmc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_ll_sdmmc.c</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/Third_Party/OpenAMP/CMakeLists.txt</name>

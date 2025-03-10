@@ -57,10 +57,14 @@
 /* External variables --------------------------------------------------------*/
 extern FDCAN_HandleTypeDef hfdcan2;
 extern IPCC_HandleTypeDef hipcc;
-extern DMA_HandleTypeDef hdma_spi5_rx;
+extern SD_HandleTypeDef hsd3;
 extern DMA_HandleTypeDef hdma_spi5_tx;
+extern DMA_HandleTypeDef hdma_spi5_rx;
 extern SPI_HandleTypeDef hspi5;
-extern TIM_HandleTypeDef htim16;
+extern TIM_HandleTypeDef htim12;
+extern DMA_HandleTypeDef hdma_uart7_tx;
+extern DMA_HandleTypeDef hdma_uart7_rx;
+extern UART_HandleTypeDef huart7;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -225,7 +229,7 @@ void DMA2_Stream0_IRQHandler(void)
   /* USER CODE BEGIN DMA2_Stream0_IRQn 0 */
 
   /* USER CODE END DMA2_Stream0_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_spi5_tx);
+  HAL_DMA_IRQHandler(&hdma_uart7_tx);
   /* USER CODE BEGIN DMA2_Stream0_IRQn 1 */
 
   /* USER CODE END DMA2_Stream0_IRQn 1 */
@@ -239,10 +243,52 @@ void DMA2_Stream1_IRQHandler(void)
   /* USER CODE BEGIN DMA2_Stream1_IRQn 0 */
 
   /* USER CODE END DMA2_Stream1_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_spi5_rx);
+  HAL_DMA_IRQHandler(&hdma_uart7_rx);
   /* USER CODE BEGIN DMA2_Stream1_IRQn 1 */
 
   /* USER CODE END DMA2_Stream1_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMA2 stream2 global interrupt.
+  */
+void DMA2_Stream2_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA2_Stream2_IRQn 0 */
+
+  /* USER CODE END DMA2_Stream2_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_spi5_tx);
+  /* USER CODE BEGIN DMA2_Stream2_IRQn 1 */
+
+  /* USER CODE END DMA2_Stream2_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMA2 stream3 global interrupt.
+  */
+void DMA2_Stream3_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA2_Stream3_IRQn 0 */
+
+  /* USER CODE END DMA2_Stream3_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_spi5_rx);
+  /* USER CODE BEGIN DMA2_Stream3_IRQn 1 */
+
+  /* USER CODE END DMA2_Stream3_IRQn 1 */
+}
+
+/**
+  * @brief This function handles UART7 global interrupt.
+  */
+void UART7_IRQHandler(void)
+{
+  /* USER CODE BEGIN UART7_IRQn 0 */
+
+  /* USER CODE END UART7_IRQn 0 */
+  HAL_UART_IRQHandler(&huart7);
+  /* USER CODE BEGIN UART7_IRQn 1 */
+
+  /* USER CODE END UART7_IRQn 1 */
 }
 
 /**
@@ -288,17 +334,31 @@ void IPCC_TX1_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles TIM16 global interrupt.
+  * @brief This function handles TIM12 global interrupt.
   */
-void TIM16_IRQHandler(void)
+void TIM12_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM16_IRQn 0 */
+  /* USER CODE BEGIN TIM12_IRQn 0 */
 
-  /* USER CODE END TIM16_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim16);
-  /* USER CODE BEGIN TIM16_IRQn 1 */
+  /* USER CODE END TIM12_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim12);
+  /* USER CODE BEGIN TIM12_IRQn 1 */
 
-  /* USER CODE END TIM16_IRQn 1 */
+  /* USER CODE END TIM12_IRQn 1 */
+}
+
+/**
+  * @brief This function handles SDMMC3 global interrupt.
+  */
+void SDMMC3_IRQHandler(void)
+{
+  /* USER CODE BEGIN SDMMC3_IRQn 0 */
+
+  /* USER CODE END SDMMC3_IRQn 0 */
+  HAL_SD_IRQHandler(&hsd3);
+  /* USER CODE BEGIN SDMMC3_IRQn 1 */
+
+  /* USER CODE END SDMMC3_IRQn 1 */
 }
 
 /**

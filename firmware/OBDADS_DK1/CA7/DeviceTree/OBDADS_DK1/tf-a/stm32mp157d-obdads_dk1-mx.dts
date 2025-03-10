@@ -323,9 +323,9 @@
 			divmn = < 2 65 >;
 			frac = < 0x1400 >;
 		};
-		pll3_vco_600Mhz: pll3-vco-600Mhz {
+		pll3_vco_624Mhz: pll3-vco-624Mhz {
 			src = < CLK_PLL3_HSE >;
-			divmn = < 1 49 >;
+			divmn = < 1 51 >;
 		};
 		pll4_vco_594Mhz: pll4-vco-594Mhz {
 			src = < CLK_PLL4_HSE >;
@@ -356,8 +356,8 @@
 		st,pll = < &pll3_cfg1 >;
 
 		pll3_cfg1: pll3_cfg1 {
-			st,pll_vco = < &pll3_vco_600Mhz >;
-			st,pll_div_pqr = < 2 11 29 >;
+			st,pll_vco = < &pll3_vco_624Mhz >;
+			st,pll_div_pqr = < 2 5 11 >;
 		};
 		/* USER CODE BEGIN pll3 */
 		/* USER CODE END pll3 */
