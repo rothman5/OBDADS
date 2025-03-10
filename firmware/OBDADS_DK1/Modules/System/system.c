@@ -142,6 +142,8 @@ SysError_t SysExec(void) {
 
     case SYS_PROCESS: {
       for (uint8_t i = 0u; i < ObdGetNumPids(); i++) {
+        memset(Message, 0x00u, sizeof(Message));
+
         uint8_t *obdReq = ObdGetReq(i);
         uint8_t *obdRsp = ObdGetRsp(i);
 
@@ -150,17 +152,19 @@ SysError_t SysExec(void) {
 
         if ((rspPidDesc == NULL) || ((obdRsp[1] - obdReq[1]) != OBD_PID_MASK)) {
           MessageSize = snprintf(Message, sizeof(Message),
-                                "Unknown PID response detected for requested PID: %s (0x%02X)",
-                                reqPidDesc->name, reqPidDesc->PID);
+                                "Unknown PID response detected for requested PID (0x%02X): %s \r\n",
+                                reqPidDesc->PID, reqPidDesc->name);
         } else {
           float value = rspPidDesc->processor(obdRsp, obdRsp[0]);
           MessageSize = snprintf(Message, sizeof(Message),
-                                "PID: %s (0x%02X) -> [ %.4f %s ]",
-                                rspPidDesc->name, rspPidDesc->PID, value, rspPidDesc->unit);
+                                "PID (0x%02X): %.4f %s [ %s ]\r\n",
+                                rspPidDesc->PID, value, rspPidDesc->unit, rspPidDesc->name);
         }
 
-        HAL_UART_Transmit_DMA(&huart7, (uint8_t *) Message, MessageSize);
+        HAL_UART_Transmit(&huart7, (uint8_t *) Message, MessageSize, HAL_MAX_DELAY);
+        HAL_Delay(10u);
       }
+      SysState = SYS_REQ_OBD;
       break;
     }
 
