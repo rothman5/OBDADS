@@ -4,6 +4,7 @@
             "name": "STM32",
             "includePath": [
                 "${workspaceFolder}/**",
+                "${workspaceFolder}/**/Modules/**",
                 "${workspaceFolder}/**/Utilities/**",
                 "${workspaceFolder}/**/CM4/OPENAMP",
                 "${workspaceFolder}/**/CM4/Core/Inc",
@@ -30,6 +31,7 @@
                 "UNICODE",
                 "_UNICODE",
                 "CORE_CM4",
+                "__LOG_TRACE_IO_",
                 "NO_ATOMIC_64_SUPPORT",
                 "METAL_INTERNAL",
                 "METAL_MAX_DEVICE_REGIONS=2",

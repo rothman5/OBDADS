@@ -1,0 +1,5 @@
+{
+    "files.associations": {
+        "virt_uart.h": "c"
+    }
+}
