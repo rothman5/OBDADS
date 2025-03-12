@@ -17,6 +17,10 @@ extern "C"
 #include "tim.h"
 
 /* Exported defines ----------------------------------------------------------*/
+
+#define SYS_LOOP_DELAY_MS 100u // System loop delay in milliseconds
+#define SYS_CSV_LINE_SIZE 512u // Maximum CSV line size
+
 /* Exported types ------------------------------------------------------------*/
 
 /**
@@ -41,36 +45,23 @@ typedef enum __SYSTEM_ERROR_e {
   SYS_ERR_TIMER    = (1u << 13)  // An error occured with the state machine execution timer
 } SysError_t;
 
-/**
- * @brief State machine states for the OBD auto-dynamics real-time acquisition system.
- */
-typedef enum __SYSTEM_STATE_e {
-  SYS_IDLE = 0u, // Initial state
-  SYS_REQ_IMU,   // Request IMU data
-  SYS_REQ_OBD,   // Request OBD data
-  SYS_WAIT_IMU,  // Wait for requested IMU data
-  SYS_PROCESS,   // Process data once requests are received
-  SYS_ERROR      // An error occured during operation
-} SysState_t;
-
 /* Exported macro ------------------------------------------------------------*/
+
+#define ERR_CHK(_FUNC_, _ERR_) \
+  do {                         \
+    int _err = (_FUNC_);       \
+    if (_err != (_ERR_)) {     \
+      return _err;             \
+    }                          \
+  } while (0)                  \
+
 /* Exported variables --------------------------------------------------------*/
-
-/**
- * @brief Tracks if an error occured during the operation of the system state machine.
- */
-extern volatile bool SysError;
-
-/**
- * @brief Tracks the current state of the system state machine.
- */
-extern volatile SysState_t SysState;
 
 /* Exported function prototypes ----------------------------------------------*/
 
-SysError_t SysInit(TIM_HandleTypeDef *htim);
+SysError_t SysInit(void);
 SysError_t SysDeInit(void);
-SysError_t SysExec(void);
+SysError_t SysExecute(void);
 
 void DwtInit(void);
 void DwtNoOpDelay(uint32_t ms);

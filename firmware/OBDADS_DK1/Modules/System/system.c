@@ -16,47 +16,38 @@
 /* Private types -------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
+
+static SysError_t SysRequestImu(void);
+static SysError_t SysRequestObd(void);
+static SysError_t SysRequest(void);
+static SysError_t SysProcessImu(void);
+static SysError_t SysProcessObd(void);
+static SysError_t SysProcess(void);
+static SysError_t SysForwardOs(void);
+static SysError_t SysForwardSd(void);
+static SysError_t SysForward(void);
+
 /* Private variables ---------------------------------------------------------*/
 
-static TIM_HandleTypeDef *SysTimer = NULL;
+static uint16_t SysCsvMsgSize = 0u;
+static char SysCsvMsg[SYS_CSV_LINE_SIZE] = {'\0'};
 
 /* Public variables ----------------------------------------------------------*/
-
-volatile bool SysError = false;
-volatile SysState_t SysState = SYS_IDLE;
-
 /* Public functions ----------------------------------------------------------*/
 
 /**
  * @brief  Initializes the system state machine.
- * @param  htim TIM handle
  * @retval SysError_t
  */
-SysError_t SysInit(TIM_HandleTypeDef *htim) {
-  // Check if the TIM handle is valid
-  if (htim == NULL) {
-    return SYS_ERR_TIMER;
-  }
+SysError_t SysInit(void) {
+  // TODO: Initialize the IMU driver
 
-  // Set the system timer handle
-  SysTimer = htim;
-
-  // Initialize the IMU driver
   // Initialize the OBD driver
   if (ObdInit(&hfdcan2) != OBD_OK) {
     return SYS_ERR_CAN;
   }
-  // Initialize the SD driver
-  // Initialize the IPC driver
-  
-  // if (HAL_TIM_Base_Start_IT(SysTimer) != HAL_OK) {
-  //   return SYS_ERR_TIMER;
-  // }
 
-  // Set the system state to begin requesting IMU data after the timer expires
-  SysState = SYS_REQ_IMU;
-
-  HAL_GPIO_TogglePin(LED_DBG_GPIO_Port, LED_DBG_Pin);
+  // TODO: Initialize the SD driver
 
   return SYS_OK;
 }
@@ -66,115 +57,45 @@ SysError_t SysInit(TIM_HandleTypeDef *htim) {
  * @retval SysError_t
  */
 SysError_t SysDeInit(void) {
-  // Stop the system timer
-  if (HAL_TIM_Base_Stop_IT(SysTimer) != HAL_OK) {
-    return SYS_ERR_TIMER;
-  }
+  // TODO: De-initialize the IMU driver
 
-  // De-initialize the IMU driver
   // De-initialize the OBD driver
   if (ObdDeInit() != OBD_OK) {
     return SYS_ERR_CAN;
   }
 
-  // De-initialize the SD driver
-  // De-initialize the IPC driver
+  // TODO: De-initialize the SD driver
   return SYS_OK;
 }
 
 /**
- * @brief  Executes the system state machine based on the current state.
+ * @brief  Executes the system.
  * @retval SysError_t
  */
-SysError_t SysExec(void) {
-  if (SysError) {
-    return SYS_ERR_UNKNOWN;
-  }
-
+SysError_t SysExecute(void) {
   HAL_GPIO_TogglePin(LED_DBG_GPIO_Port, LED_DBG_Pin);
 
-  static uint16_t MessageSize = 0u;
-  static char Message[128] = {'\0'};
+  SysError_t err = SYS_OK;
 
-  switch (SysState) {
-    case SYS_IDLE: {
-      break;
-    }
-
-    case SYS_REQ_IMU: {
-      // For now just skip to requesting OBD data
-      SysState = SYS_REQ_OBD;
-      break;
-    }
-
-    case SYS_REQ_OBD: {
-      const ObdPidDesc_t *obdPids = ObdGetPidDescs();
-      if (obdPids == NULL) {
-        SysState = SYS_ERROR;
-        break;
-      }
-
-      // Request OBD data for each PID
-      for (uint8_t i = 0u; i < ObdGetNumPids(); i++) {
-        // Check if the OBD request was successful
-        if (ObdSend(i, obdPids[i].PID) != OBD_OK) {
-          SysState = SYS_ERROR;
-          break;
-        }
-
-        // Check if the OBD response was received
-        if (ObdRecv(i) != OBD_OK) {
-          SysState = SYS_ERROR;
-        } else {
-          // Set the system state to process the IMU and OBD data
-          // TODO: add check to see if IMU data was received, if not set state to SYS_WAIT_IMU
-          SysState = SYS_PROCESS;
-        }
-      }
-      break;
-    }
-
-    case SYS_WAIT_IMU: {
-      // TODO: Check if the IMU data was received and if not chill till bill, otherwise set state to SYS_PROCESS
-      SysState = SYS_PROCESS;
-      break;
-    }
-
-    case SYS_PROCESS: {
-      for (uint8_t i = 0u; i < ObdGetNumPids(); i++) {
-        memset(Message, 0x00u, sizeof(Message));
-
-        uint8_t *obdReq = ObdGetReq(i);
-        uint8_t *obdRsp = ObdGetRsp(i);
-
-        const ObdPidDesc_t *reqPidDesc = ObdGetPidDesc(obdReq[2]);
-        const ObdPidDesc_t *rspPidDesc = ObdGetPidDesc(obdRsp[2]);
-
-        if ((rspPidDesc == NULL) || ((obdRsp[1] - obdReq[1]) != OBD_PID_MASK)) {
-          MessageSize = snprintf(Message, sizeof(Message),
-                                "Unknown PID response detected for requested PID (0x%02X): %s \r\n",
-                                reqPidDesc->PID, reqPidDesc->name);
-        } else {
-          float value = rspPidDesc->processor(obdRsp, obdRsp[0]);
-          MessageSize = snprintf(Message, sizeof(Message),
-                                "PID (0x%02X): %.4f %s [ %s ]\r\n",
-                                rspPidDesc->PID, value, rspPidDesc->unit, rspPidDesc->name);
-        }
-
-        HAL_UART_Transmit(&huart7, (uint8_t *) Message, MessageSize, HAL_MAX_DELAY);
-        HAL_Delay(10u);
-      }
-      SysState = SYS_REQ_OBD;
-      break;
-    }
-
-    case SYS_ERROR: {
-      SysDeInit();
-      SysError = true;
-      break;
-    }
+  err = SysRequest();
+  if (err != SYS_OK) {
+    SysDeInit();
+    return err;
   }
-  return SYS_OK;
+
+  err = SysProcess();
+  if (err != SYS_OK) {
+    SysDeInit();
+    return err;
+  }
+
+  err = SysForward();
+  if (err != SYS_OK) {
+    SysDeInit();
+    return err;
+  }
+
+  return err;
 }
 
 /**
@@ -205,5 +126,162 @@ void DwtNoOpDelay(uint32_t ms) {
 }
 
 /* Private functions ---------------------------------------------------------*/
+
+/**
+ * @brief  Requests IMU data.
+ * @retval SysError_t
+ */
+static SysError_t SysRequestImu(void) {
+  return SYS_OK;
+}
+
+/**
+ * @brief  Requests OBD data.
+ * @retval SysError_t
+ */
+static SysError_t SysRequestObd(void) {
+  SysError_t err = SYS_OK;
+
+  // Request OBD data for each PID
+  const ObdPidDesc_t *obdPids = ObdGetPidDescs();
+  for (uint8_t i = 0u; i < ObdGetNumPids(); i++) {
+    // Send the OBD request
+    if (ObdSend(i, obdPids[i].PID) != OBD_OK) {
+      err = SYS_ERR_CAN_TX;
+      break;
+    }
+
+    // Receive the OBD response
+    if (ObdRecv(i) != OBD_OK) {
+      err = SYS_ERR_CAN_RX;
+      break;
+    }
+  }
+  return err;
+}
+
+/**
+ * @brief  Requests IMU and OBD data.
+ * @retval SysError_t
+ */
+static SysError_t SysRequest(void) {
+  SysError_t err = SYS_OK;
+
+  err = SysRequestImu();
+  if (err != SYS_OK) {
+    return err;
+  }
+
+  return SysRequestObd();
+}
+
+/**
+ * @brief  Processes IMU data.
+ * @retval SysError_t
+ */
+static SysError_t SysProcessImu(void) {
+  return SYS_OK;
+}
+
+/**
+ * @brief  Processes OBD data.
+ * @retval SysError_t
+ */
+static SysError_t SysProcessObd(void) {
+  for (uint8_t i = 0u; i < ObdGetNumPids(); i++) {
+    uint8_t *obdReq = ObdGetReq(i);
+    uint8_t *obdRsp = ObdGetRsp(i);
+    // const ObdPidDesc_t *reqPidDesc = ObdGetPidDesc(obdReq[OBD_PID_INDEX]);
+    const ObdPidDesc_t *rspPidDesc = ObdGetPidDesc(obdRsp[OBD_PID_INDEX]);
+
+    if ((rspPidDesc == NULL) || ((obdRsp[1] - obdReq[1]) != OBD_PID_MASK)) {
+      // Unknown responses
+      SysCsvMsgSize += snprintf(SysCsvMsg, sizeof(SysCsvMsg), ",");
+    } else {
+      // Expected responses
+      SysCsvMsgSize += snprintf(SysCsvMsg, sizeof(SysCsvMsg), ", %.4f", rspPidDesc->processor(obdRsp, obdRsp[0]));
+    }
+  }
+
+  return SYS_OK;
+}
+
+/**
+ * @brief  Processes IMU and OBD data.
+ * @retval SysError_t
+ */
+static SysError_t SysProcess(void) {
+  SysError_t err = SYS_OK;
+
+  // Reset the message size and buffer
+  SysCsvMsgSize = 0u;
+  memset(SysCsvMsg, '\0', sizeof(SysCsvMsg));
+ 
+  err = SysProcessImu();
+  if (err != SYS_OK) {
+    return err;
+  }
+
+  err = SysProcessObd();
+  if (err != SYS_OK) {
+    return err;
+  }
+
+  // Add a newline to the message
+  SysCsvMsgSize += snprintf(SysCsvMsg, sizeof(SysCsvMsg), "\r\n");
+
+  return err;
+}
+
+/**
+ * @brief  Forwards the CSV message to the operating system.
+ * @retval SysError_t
+ */
+static SysError_t SysForwardOs(void) {
+  SysError_t err = SYS_OK;
+
+  // Send message to VCP
+  // if (HAL_UART_Transmit_DMA(&huart4, (uint8_t *) SysCsvMsg, SysCsvMsgSize) != HAL_OK) {
+  //   err = SYS_ERR_UART_TX | SYS_ERR_UART_DMA;
+  // }
+
+  return err;
+}
+
+/**
+ * @brief  Forwards the CSV message to the SD card.
+ * @retval SysError_t
+ */
+static SysError_t SysForwardSd(void) {
+  // TODO: Open CSV file on SD card
+  // TODO: Check if SD card would become full (pretend circular buffer)
+  // TODO: Write CSV message to SD card
+  return SYS_OK;
+}
+
+/**
+ * @brief  Forwards the CSV message to the operating system and SD card.
+ * @retval SysError_t
+ */
+static SysError_t SysForward(void) {
+  SysError_t err = SYS_OK;
+
+  err = SysForwardOs();
+  if (err != SYS_OK) {
+    return err;
+  }
+
+  err = SysForwardSd();
+  if (err != SYS_OK) {
+    return err;
+  }
+
+  // Send message to VCP
+  if (HAL_UART_Transmit_DMA(&huart7, (uint8_t *) SysCsvMsg, SysCsvMsgSize) != HAL_OK) {
+    err = SYS_ERR_UART_TX | SYS_ERR_UART_DMA;
+  }
+
+  return err;
+}
 
 /********************************* END OF FILE ********************************/

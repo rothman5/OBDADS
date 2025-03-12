@@ -124,7 +124,7 @@ int main(void)
   MX_TIM12_Init();
   /* USER CODE BEGIN 2 */
 
-  if (SysInit(&htim12) != SYS_OK) {
+  if (SysInit() != SYS_OK) {
     Error_Handler();
   }
 
@@ -134,10 +134,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    SysExec();
-    HAL_Delay(100u);
-    if (SysError) {
+    if (SysExecute()) {
       Error_Handler();
+    } else {
+      HAL_Delay(SYS_LOOP_DELAY_MS);
     }
     /* USER CODE END WHILE */
 

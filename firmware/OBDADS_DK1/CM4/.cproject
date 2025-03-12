@@ -59,8 +59,8 @@
 									<listOptionValue builtIn="false" value="../../Middlewares/Third_Party/OpenAMP/virtual_driver"/>
 									<listOptionValue builtIn="false" value="../../Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../../Utilities/ResourcesManager"/>
-									<listOptionValue builtIn="false" value="&quot;../..\Modules\OBD&quot;"/>
-									<listOptionValue builtIn="false" value="../../Modules/System"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OBDADS_DK1/Modules/OBD}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OBDADS_DK1/Modules/System}&quot;"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.715359661" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
 							</tool>
