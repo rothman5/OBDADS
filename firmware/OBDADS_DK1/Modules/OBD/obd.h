@@ -17,11 +17,13 @@ extern "C"
 
 /* Exported defines ----------------------------------------------------------*/
 
-#define OBD_MAX_REQUESTS  10u  // Maximum number of OBD requests
-#define OBD_BUFFER_SIZE   8u   // OBD request and response buffer size
+#define OBD_MAX_REQUESTS  10u   // Maximum number of OBD requests
+#define OBD_BUFFER_SIZE   8u    // OBD request and response buffer size
 #define OBD_TIMEOUT_MS    1000u // OBD request timeout in milliseconds
 #define OBD_PID_MASK      0x40u // OBD PID mask
-#define OBD_MAX_DESC_SIZE 32u // Maximum OBD PID description size
+#define OBD_MAX_DESC_SIZE 32u   // Maximum OBD PID description size
+#define OBD_PID_INDEX     2u    // OBD PID index in the request and response buffer
+#define OBD_SVC_INDEX     1u    // OBD service index in the request and response buffer
 
 /* Exported types ------------------------------------------------------------*/
 
