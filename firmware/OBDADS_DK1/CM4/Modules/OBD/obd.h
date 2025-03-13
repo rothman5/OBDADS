@@ -86,12 +86,12 @@ typedef float (*ObdRspProcessor_t)(const uint8_t *rsp, uint8_t size);
 /**
  * @brief OBD PID description structure.
  */
-typedef struct __OBD_PID_DESCRIPTION_s {
-    ObdService_0x01_PID_t PID;
-    const char* name;
-    const char* unit;
-    ObdRspProcessor_t processor;
-} ObdPidDesc_t;
+typedef struct __OBD_SERVICE_0x01_PID_DESCRIPTION_s {
+  ObdService_0x01_PID_t PID;
+  const char* name;
+  const char* unit;
+  ObdRspProcessor_t processor;
+} ObdService_0x01_PidDesc_t;
 
 /* Exported macro ------------------------------------------------------------*/
 
@@ -106,8 +106,8 @@ ObdError_t ObdSend(uint8_t index, ObdService_0x01_PID_t PID);
 ObdError_t ObdRecv(uint8_t index);
 uint8_t *ObdGetReq(uint8_t index);
 uint8_t *ObdGetRsp(uint8_t index);
-const ObdPidDesc_t *ObdGetPidDescs(void);
-const ObdPidDesc_t *ObdGetPidDesc(ObdService_0x01_PID_t PID);
+const ObdService_0x01_PidDesc_t *ObdGetPidDescs(void);
+const ObdService_0x01_PidDesc_t *ObdGetPidDesc(ObdService_0x01_PID_t PID);
 uint8_t ObdGetNumPids(void);
 
 #ifdef __cplusplus
