@@ -143,7 +143,7 @@ static SysError_t SysRequestObd(void) {
   SysError_t err = SYS_OK;
 
   // Request OBD data for each PID
-  const ObdPidDesc_t *obdPids = ObdGetPidDescs();
+  const ObdService_0x01_PidDesc_t *obdPids = ObdGetPidDescs();
   for (uint8_t i = 0u; i < ObdGetNumPids(); i++) {
     // Send the OBD request
     if (ObdSend(i, obdPids[i].PID) != OBD_OK) {
@@ -191,8 +191,8 @@ static SysError_t SysProcessObd(void) {
   for (uint8_t i = 0u; i < ObdGetNumPids(); i++) {
     uint8_t *obdReq = ObdGetReq(i);
     uint8_t *obdRsp = ObdGetRsp(i);
-    // const ObdPidDesc_t *reqPidDesc = ObdGetPidDesc(obdReq[OBD_PID_INDEX]);
-    const ObdPidDesc_t *rspPidDesc = ObdGetPidDesc(obdRsp[OBD_PID_INDEX]);
+    // const ObdService_0x01_PidDesc_t *reqPidDesc = ObdGetPidDesc(obdReq[OBD_PID_INDEX]);
+    const ObdService_0x01_PidDesc_t *rspPidDesc = ObdGetPidDesc(obdRsp[OBD_PID_INDEX]);
 
     if ((rspPidDesc == NULL) || ((obdRsp[1] - obdReq[1]) != OBD_PID_MASK)) {
       // Unknown responses

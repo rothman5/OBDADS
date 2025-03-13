@@ -37,7 +37,7 @@ static FDCAN_TxHeaderTypeDef ObdTxHeader = {0};
 static FDCAN_RxHeaderTypeDef ObdRxHeader = {0};
 
 // Array of OBD service 0x01 PID descriptions
-static const ObdPidDesc_t ObdPidDescs[] = {
+static const ObdService_0x01_PidDesc_t ObdPidDescs[] = {
   { OBD_SVC_0x01_PID_ENG_SPEED,  "Engine speed",                  "rpm",  EndSpeedProcessor },
   { OBD_SVC_0x01_PID_VEH_SPEED,  "Vehicle speed",                 "km/h", VehSpeedProcessor },
   { OBD_SVC_0x01_PID_ENG_LOAD,   "Calculated engine load",        "%",    EngLoadProcessor  },
@@ -109,6 +109,7 @@ ObdError_t ObdDeInit(void) {
   if (HAL_FDCAN_Stop(ObdCan) != HAL_OK) {
     return OBD_ERR_CAN;
   }
+
   return OBD_OK;
 }
 
@@ -200,22 +201,24 @@ uint8_t *ObdGetRsp(uint8_t index) {
  * @brief  Get the OBD service 0x01 PID descriptions.
  * @retval Pointer to the OBD service 0x01 PID descriptions.
  */
-const ObdPidDesc_t *ObdGetPidDescs(void) {
+const ObdService_0x01_PidDesc_t *ObdGetPidDescs(void) {
   return ObdPidDescs;
 }
 
 /**
  * @brief  Get the description of an OBD service 0x01 PID.
  * @param  PID OBD service 0x01 PID.
- * @retval Description of the PID.
+ * @retval ObdService_0x01_PidDesc_t of the PID or NULL if not found.
  */
-const ObdPidDesc_t* ObdGetPidDesc(ObdService_0x01_PID_t PID) {
+const ObdService_0x01_PidDesc_t* ObdGetPidDesc(ObdService_0x01_PID_t PID) {
   for (uint32_t i = 0u; i < (sizeof(ObdPidDescs) / sizeof(ObdPidDescs[0])); i++) {
     if (ObdPidDescs[i].PID == PID) {
       return &ObdPidDescs[i];
     }
   }
-  return NULL; // Return this if the PID is not found
+
+  // Return NULL if the PID is not found
+  return NULL;
 }
 
 /**

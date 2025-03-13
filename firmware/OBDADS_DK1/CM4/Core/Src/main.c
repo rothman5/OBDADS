@@ -134,7 +134,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    if (SysExecute()) {
+    if (SysExecute() != SYS_OK) {
       Error_Handler();
     } else {
       HAL_Delay(SYS_LOOP_DELAY_MS);
