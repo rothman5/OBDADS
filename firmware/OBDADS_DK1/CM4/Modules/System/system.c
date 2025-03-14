@@ -278,11 +278,8 @@ static SysError_t SysForward(void) {
   }
 
   // Send message to VCP
-  // if (HAL_UART_Transmit_DMA(&huart7, (uint8_t *) SysCsvMsg, SysCsvMsgSize) != HAL_OK) {
-  //   err = SYS_ERR_UART_TX | SYS_ERR_UART_DMA;
-  // }
-  if (HAL_UART_Transmit(&huart7, (uint8_t *) SysCsvMsg, SysCsvMsgSize, HAL_MAX_DELAY) != HAL_OK) {
-    err = SYS_ERR_UART_TX;
+  if (HAL_UART_Transmit_DMA(&huart7, (uint8_t *) SysCsvMsg, SysCsvMsgSize) != HAL_OK) {
+    err = SYS_ERR_UART_TX | SYS_ERR_UART_DMA;
   }
 
   return err;
