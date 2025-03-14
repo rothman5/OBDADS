@@ -70,7 +70,7 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN Private defines */
 
-#define BUFFER_SIZE 128u
+#define BUFFER_SIZE 512u
 
 extern uint8_t TxData[BUFFER_SIZE];
 extern uint8_t RxData[BUFFER_SIZE];
