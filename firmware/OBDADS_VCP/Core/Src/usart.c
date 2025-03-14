@@ -293,8 +293,11 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t size) {
   if (huart->Instance == USART1) {
+    memset(TxData, 0x00u, BUFFER_SIZE);
     memcpy(TxData, RxData, size);
-    HAL_UART_Transmit(&huart2, TxData, size, 1000u);
+    HAL_UART_Transmit_DMA(&huart2, TxData, size);
+
+    memset(RxData, 0x00u, BUFFER_SIZE);
     HAL_UARTEx_ReceiveToIdle_DMA(&huart1, RxData, BUFFER_SIZE);
   }
 }

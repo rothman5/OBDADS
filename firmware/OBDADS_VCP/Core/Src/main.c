@@ -25,6 +25,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include <string.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -95,6 +97,9 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+
+  memset(TxData, 0x00u, BUFFER_SIZE);
+  memset(RxData, 0x00u, BUFFER_SIZE);
 
   HAL_UARTEx_ReceiveToIdle_DMA(&huart1, RxData, BUFFER_SIZE);
 

@@ -196,11 +196,12 @@ static SysError_t SysProcessObd(void) {
 
     if ((rspPidDesc == NULL) || ((obdRsp[1] - obdReq[1]) != OBD_PID_MASK)) {
       // Unknown responses
-      SysCsvMsgSize += snprintf(SysCsvMsg, sizeof(SysCsvMsg), ",");
-    } else {
-      // Expected responses
-      SysCsvMsgSize += snprintf(SysCsvMsg, sizeof(SysCsvMsg), ", %.4f", rspPidDesc->processor(obdRsp, obdRsp[0]));
-    }
+      SysCsvMsgSize += snprintf(&SysCsvMsg[SysCsvMsgSize], sizeof(SysCsvMsg), ",");
+      continue;
+    } 
+    
+    // Expected responses
+    SysCsvMsgSize += snprintf(&SysCsvMsg[SysCsvMsgSize], sizeof(SysCsvMsg), (i == 0) ? "%.4f" : ", %.4f", rspPidDesc->processor(obdRsp, obdRsp[0]));
   }
 
   return SYS_OK;
@@ -228,7 +229,7 @@ static SysError_t SysProcess(void) {
   }
 
   // Add a newline to the message
-  SysCsvMsgSize += snprintf(SysCsvMsg, sizeof(SysCsvMsg), "\r\n");
+  SysCsvMsgSize += snprintf(&SysCsvMsg[SysCsvMsgSize], sizeof(SysCsvMsg), "\r\n");
 
   return err;
 }
@@ -240,7 +241,7 @@ static SysError_t SysProcess(void) {
 static SysError_t SysForwardOs(void) {
   SysError_t err = SYS_OK;
 
-  // Send message to VCP
+  // Send message to OS
   // if (HAL_UART_Transmit_DMA(&huart4, (uint8_t *) SysCsvMsg, SysCsvMsgSize) != HAL_OK) {
   //   err = SYS_ERR_UART_TX | SYS_ERR_UART_DMA;
   // }
@@ -277,8 +278,11 @@ static SysError_t SysForward(void) {
   }
 
   // Send message to VCP
-  if (HAL_UART_Transmit_DMA(&huart7, (uint8_t *) SysCsvMsg, SysCsvMsgSize) != HAL_OK) {
-    err = SYS_ERR_UART_TX | SYS_ERR_UART_DMA;
+  // if (HAL_UART_Transmit_DMA(&huart7, (uint8_t *) SysCsvMsg, SysCsvMsgSize) != HAL_OK) {
+  //   err = SYS_ERR_UART_TX | SYS_ERR_UART_DMA;
+  // }
+  if (HAL_UART_Transmit(&huart7, (uint8_t *) SysCsvMsg, SysCsvMsgSize, HAL_MAX_DELAY) != HAL_OK) {
+    err = SYS_ERR_UART_TX;
   }
 
   return err;
