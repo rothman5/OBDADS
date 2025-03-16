@@ -36,11 +36,6 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Common</locationURI>
 		</link>
 		<link>
-			<name>Utilities/res_mgr.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Utilities/ResourcesManager/res_mgr.c</locationURI>
-		</link>
-		<link>
 			<name>Drivers/STM32MP1xx_HAL_Driver/stm32mp1xx_hal.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal.c</locationURI>

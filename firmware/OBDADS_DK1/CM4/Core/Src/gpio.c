@@ -82,13 +82,13 @@ void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : IMU_INT1_Pin */
   GPIO_InitStruct.Pin = IMU_INT1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_EVT_RISING_FALLING;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(IMU_INT1_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : IMU_INT2_Pin */
   GPIO_InitStruct.Pin = IMU_INT2_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_EVT_RISING_FALLING;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(IMU_INT2_GPIO_Port, &GPIO_InitStruct);
 
@@ -98,6 +98,13 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(IMU_SPI_NSS_GPIO_Port, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI2_IRQn, 1, 0);
+  HAL_NVIC_EnableIRQ(EXTI2_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI3_IRQn, 1, 0);
+  HAL_NVIC_EnableIRQ(EXTI3_IRQn);
 
 }
 

@@ -55,6 +55,11 @@ static uint8_t ObdRspBuffer[OBD_NUM_PIDS][OBD_BUFFER_SIZE] = {0};
 /* Public variables ----------------------------------------------------------*/
 /* Public functions ----------------------------------------------------------*/
 
+/**
+ * @brief  Initialize the OBD driver.
+ * @param  hfdcan Pointer to the FDCAN handle
+ * @retval ObdError_t
+ */
 ObdError_t ObdInit(FDCAN_HandleTypeDef *hfdcan) {
   // Check if the FDCAN handle is valid
   if (hfdcan == NULL) {

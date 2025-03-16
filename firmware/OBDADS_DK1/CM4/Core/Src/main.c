@@ -27,7 +27,6 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
-#include "resmgr_utility.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -107,8 +106,6 @@ int main(void)
     /* OpenAmp initialisation ---------------------------------*/
     MX_OPENAMP_Init(RPMSG_REMOTE, NULL);
   }
-  /* Resource Manager Utility initialisation ---------------------------------*/
-  // MX_RESMGR_UTILITY_Init();
 
   /* USER CODE BEGIN SysInit */
 
