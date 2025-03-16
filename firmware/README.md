@@ -15,12 +15,12 @@
 |    13 | PD7       | GPIO27, SDMMC3_D3  |       | Y    | SD Card  |
 |    15 | PG15      | GPIO2, SDMMC3_CK   |       | Y    | SD Card  |
 |    17 | -         | 3V3                |       | -    |          |
-|    19 | PF9       | GPIO10, SPI5_MOSI  |       | Y    | IMU      |
-|    21 | PF8       | GPIO9, SPI5_MISO   |       | Y    | IMU      |
-|    23 | PF7       | GPIO11, SPI5_SCK   |       | Y    | IMU      |
+|    19 | PF9       | GPIO10, SPI5_MOSI  |       | Y    | IMU MOSI |
+|    21 | PF8       | GPIO9, SPI5_MISO   |       | Y    | IMU MISO |
+|    23 | PF7       | GPIO11, SPI5_SCK   |       | Y    | IMU CLK  |
 |    25 | -         | GND                |       | -    |          |
 |    27 | PF15      | I2C1_SDA           |       | N    |          |
-|    29 | PG2       | GPIO5, MCO2        |       | Y    | IMU      |
+|    29 | PG2       | GPIO5, MCO2        |       | Y    | IMU INT2 |
 |    31 | PH11      | GPIO6, TIM5_CH2    |       | N    |          |
 |    33 | PC7       | GPIO13, TIM3_CH2   |       | N    |          |
 |    35 | PI7       | GPIO19, SAI2_FSA   |       | N    |          |
@@ -34,20 +34,20 @@
 |     4 | -         | 5V                            |       | -    |          |
 |     6 | -         | GND                           |       | -    |          |
 |     8 | PB10      | GPIO14, USART3_TX             |       | N    |          |
-|    10 | PB12      | GPIO15, USART3_RX, FDCAN2_RX  |       | Y    | OBD Port |
+|    10 | PB12      | GPIO15, USART3_RX, FDCAN2_RX  |       | Y    | OBD RX   |
 |    12 | PI5       | GPIO18, SAI2_SCKA             |       | N    |          |
 |    14 | -         | GND                           |       | -    |          |
 |    16 | PF1       | GPIO23, SDMMC3_CMD            |       | Y    | SD Card  |
 |    18 | PF0       | GPIO24, SDMMC3_D0             |       | Y    | SD Card  |
 |    20 | -         | GND                           |       | -    |          |
 |    22 | PF4       | GPIO25, SDMMC3_D1             |       | Y    | SD Card  |
-|    24 | PF6       | GPIO8, SPI5_NSS               |       | Y    | IMU      |
-|    26 | PF3       | GPIO7                         |       | Y    | IMU      |
+|    24 | PF6       | GPIO8, SPI5_NSS               |       | Y    | IMU NSS  |
+|    26 | PF3       | GPIO7                         |       | Y    | IMU INT1 |
 |    28 | PD12      | I2C1_SCL                      |       | N    |          |
 |    30 | -         | GND                           |       | -    |          |
 |    32 | PD13      | GPIO12, TIM4_CH2              |       | N    |          |
 |    34 | -         | GND                           |       | -    |          |
-|    36 | PB13      | GPIO16, USART3_CTS, FDCAN2_TX |       | Y    | OBD Port |
+|    36 | PB13      | GPIO16, USART3_CTS, FDCAN2_TX |       | Y    | OBD TX   |
 |    38 | PI6       | GPIO20, SAI2_SDA              |       | N    |          |
 |    40 | PF11      | GPIO21, SAI2_SDB              |       | N    |          |
 
@@ -78,8 +78,8 @@
 ### CN14
 | Pin # | STM32 Pin | Signal | Notes     | Used | Usage            |
 |:-----:|:---------:|:------:|:---------:|:----:|:----------------:|
-| 1     | PE7       | ARD_D0 | USART7_RX | Y    | Virtual COM Port |
-| 2     | PE8       | ARD_D1 | USART7_TX | Y    | Virtual COM Port |
+| 1     | PE7       | ARD_D0 | USART7_RX | Y    | VCP RX           |
+| 2     | PE8       | ARD_D1 | USART7_TX | Y    | VCP TX           |
 | 3     | PE1       | ARD_D2 | GPIO      | N    |                  |
 | 4     | PD14      | ARD_D3 | TIM4_CH3  | N    |                  |
 | 5     | PE10      | ARD_D4 | GPIO      | N    |                  |
