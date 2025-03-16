@@ -47,20 +47,36 @@ typedef enum __SYSTEM_ERROR_e {
 
 /* Exported macro ------------------------------------------------------------*/
 
-#define ERR_CHK(_FUNC_, _ERR_)         do {                      \
-                                          int _err = (_FUNC_);   \
-                                          if (_err != (_ERR_)) { \
-                                            return _err;         \
-                                          }                      \
-                                        } while (0)              \
+/**
+ * @brief Set or clear a pin, alternative to HAL_GPIO_WritePin.
+ * @param __PORT__ GPIO port
+ * @param __PIN__  GPIO pin
+ */
+#define PIN_SET(__PORT__, __PIN__) (__PORT__->BSRR = __PIN__)
+#define PIN_CLR(__PORT__, __PIN__) (__PORT__->BRR  = __PIN__)
 
-#define PIN_SET(__PORT__, __PIN__)     (__PORT__->BSRR = __PIN__)
-#define PIN_CLR(__PORT__, __PIN__)     (__PORT__->BRR  = __PIN__)
+/**
+ * @brief Convert two bytes to a 16-bit unsigned or signed integer.
+ * @param __MSB__ Most significant byte
+ * @param __LSB__ Least significant byte
+ */
 #define BYTES_TO_U16(__MSB__, __LSB__) (uint16_t) ((__MSB__ << 8u) | (__LSB__ & 0xFFu))
 #define BYTES_TO_S16(__MSB__, __LSB__) (int16_t) (((int16_t) __MSB__ << 8u) | (__LSB__ & 0xFFu))
 
-/* Exported variables --------------------------------------------------------*/
+/**
+ * @brief Check for an error and return it if one is found.
+ * @param _FUNC_ Function to check for an error
+ * @param _ERR_  Error to check for
+ */
+#define ERR_CHK(_FUNC_, _ERR_) \
+  do {                         \
+    int _err = (_FUNC_);       \
+    if (_err != (_ERR_)) {     \
+      return _err;             \
+    }                          \
+  } while (0)                  \
 
+/* Exported variables --------------------------------------------------------*/
 /* Exported function prototypes ----------------------------------------------*/
 
 SysError_t SysInit(void);

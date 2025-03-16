@@ -63,6 +63,9 @@ SysError_t SysInit(void) {
  */
 SysError_t SysDeInit(void) {
   // TODO: De-initialize the IMU driver
+  if (ImuDeInit() != IMU_OK) {
+    return SYS_ERR_SPI;
+  }
 
   // De-initialize the OBD driver
   if (ObdDeInit() != OBD_OK) {
@@ -204,7 +207,7 @@ static SysError_t SysProcessImu(void) {
   Vec3_t *imuGy = ImuGetGyData();
   float *imuTemp = ImuGetTemp();
 
-  if (imuXl == NULL || imuGy == NULL || imuTemp == NULL) {
+  if ((imuXl == NULL) || (imuGy == NULL) || (imuTemp == NULL)) {
     return SYS_ERR_SPI_TX | SYS_ERR_SPI_RX;
   }
 

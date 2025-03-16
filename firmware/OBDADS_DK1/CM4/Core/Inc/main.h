@@ -28,7 +28,6 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32mp1xx_hal.h"
-#include "resmgr_utility.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -64,8 +63,10 @@ void Error_Handler(void);
 #define LED_ERR_GPIO_Port GPIOG
 #define IMU_INT1_Pin GPIO_PIN_3
 #define IMU_INT1_GPIO_Port GPIOF
+#define IMU_INT1_EXTI_IRQn EXTI3_IRQn
 #define IMU_INT2_Pin GPIO_PIN_2
 #define IMU_INT2_GPIO_Port GPIOG
+#define IMU_INT2_EXTI_IRQn EXTI2_IRQn
 #define LED_PWM_Pin GPIO_PIN_6
 #define LED_PWM_GPIO_Port GPIOH
 #define OBD_CAN_TX_Pin GPIO_PIN_13

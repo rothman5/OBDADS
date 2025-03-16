@@ -29,6 +29,11 @@ static uint8_t ImuRspBuffer[IMU_BUFFER_SIZE] = {0};
 /* Public variables ----------------------------------------------------------*/
 /* Public functions ----------------------------------------------------------*/
 
+/**
+ * @brief  Initializes the IMU communications driver.
+ * @param  hspi: Pointer to the SPI handle
+ * @retval ImuError_t
+ */
 ImuError_t ImuInit(SPI_HandleTypeDef *hspi) {
   ImuError_t err = IMU_OK;
 
@@ -39,6 +44,13 @@ ImuError_t ImuInit(SPI_HandleTypeDef *hspi) {
 
   // Initialize the IMU SPI handle
   ImuSpi = hspi;
+
+  // Configure interrupt active level, SPI mode, and reset device
+  uint8_t reg = 0b00000101;
+  err = ImuWriteReg(IMU_ADDR_CTRL3_C, &reg, sizeof(reg));
+  if (err != IMU_OK) {
+    return err;
+  }
 
   // Check the IMU sensor ID
   uint8_t attempt = 0u;
@@ -59,8 +71,6 @@ ImuError_t ImuInit(SPI_HandleTypeDef *hspi) {
     HAL_Delay(IMU_POLL_DELAY_MS);
   }
 
-  uint8_t reg = 0x00u;
-
   // Disable INT1 interrupts
   reg = 0b00000000;
   err = ImuWriteReg(IMU_ADDR_INT1_CTRL, &reg, sizeof(reg));
@@ -76,14 +86,14 @@ ImuError_t ImuInit(SPI_HandleTypeDef *hspi) {
   }
 
   // Configure XL range and output data rate and filter
-  reg = (IMU_ODR_1667HZ << 4) | (IMU_XL_RANGE_16G << 2) | 0x00u;
+  reg = (IMU_ODR_416HZ << 4) | (IMU_XL_RANGE_16G << 2) | 0x00u;
   err = ImuWriteReg(IMU_ADDR_CTRL1_XL, &reg, sizeof(reg));
   if (err != IMU_OK) {
     return err;
   }
 
   // Configure gyroscope range and output data rate
-  reg = (IMU_ODR_1667HZ << 4) | (IMU_GY_RANGE_2000DPS << 2) | 0x00u;
+  reg = (IMU_ODR_416HZ << 4) | (IMU_GY_RANGE_2000DPS << 2) | 0x00u;
   err = ImuWriteReg(IMU_ADDR_CTRL2_G, &reg, sizeof(reg));
   if (err != IMU_OK) {
     return err;
@@ -96,21 +106,24 @@ ImuError_t ImuInit(SPI_HandleTypeDef *hspi) {
     return err;
   }
 
-  // Configure interrupt active level, SPI mode, and reset device
-  reg = 0b00000101;
-  err = ImuWriteReg(IMU_ADDR_CTRL3_C, &reg, sizeof(reg));
-  if (err != IMU_OK) {
-    return err;
-  }
-
   return err;
 }
 
+/**
+ * @brief  De-initialize the IMU communications driver.
+ * @retval ImuError_t
+ */
 ImuError_t ImuDeInit(void) {
   ImuError_t err = IMU_OK;
   return err;
 }
 
+/**
+ * @brief  Reads register(s) from the IMU.
+ * @param  reg:  Register address to read
+ * @param  size: Number of registers to read, each register is 1 byte
+ * @retval ImuError_t
+ */
 ImuError_t ImuReadReg(ImuRegAddress_t reg, uint8_t size) {
   ImuError_t err = IMU_OK;
 
@@ -128,7 +141,7 @@ ImuError_t ImuReadReg(ImuRegAddress_t reg, uint8_t size) {
   ImuCmdBuffer[0] = (uint8_t) reg | RD_MASK;
 
   // Select the IMU using the SPI NSS pin
-  HAL_GPIO_WritePin(IMU_SPI_NSS_GPIO_Port, IMU_SPI_NSS_Pin, GPIO_PIN_RESET);
+  PIN_CLR(IMU_SPI_NSS_GPIO_Port, IMU_SPI_NSS_Pin);
 
   // Transmit the command buffer to the IMU
   // The plus one is to account for the register address
@@ -137,11 +150,18 @@ ImuError_t ImuReadReg(ImuRegAddress_t reg, uint8_t size) {
   }
 
   // Deselect the IMU using the SPI NSS pin
-  HAL_GPIO_WritePin(IMU_SPI_NSS_GPIO_Port, IMU_SPI_NSS_Pin, GPIO_PIN_SET);
+  PIN_SET(IMU_SPI_NSS_GPIO_Port, IMU_SPI_NSS_Pin);
 
   return err;
 }
 
+/**
+ * @brief  Writes register(s) to the IMU.
+ * @param  reg:  Register address to write
+ * @param  data: Pointer to the data to write
+ * @param  size: Number of registers to write, each register is 1 byte
+ * @retval ImuError_t
+ */
 ImuError_t ImuWriteReg(ImuRegAddress_t reg, uint8_t *data, uint8_t size) {
   ImuError_t err = IMU_OK;
 
@@ -159,7 +179,7 @@ ImuError_t ImuWriteReg(ImuRegAddress_t reg, uint8_t *data, uint8_t size) {
   ImuCmdBuffer[0] = (uint8_t) reg & WR_MASK;
 
   // Select the IMU using the SPI NSS pin
-  HAL_GPIO_WritePin(IMU_SPI_NSS_GPIO_Port, IMU_SPI_NSS_Pin, GPIO_PIN_RESET);
+  PIN_CLR(IMU_SPI_NSS_GPIO_Port, IMU_SPI_NSS_Pin);
 
   // Transmit the command buffer to the IMU
   if (HAL_SPI_Transmit(ImuSpi, ImuCmdBuffer, size + 1, IMU_TIMEOUT_MS) != HAL_OK) {
@@ -167,72 +187,129 @@ ImuError_t ImuWriteReg(ImuRegAddress_t reg, uint8_t *data, uint8_t size) {
   }
 
   // Deselect the IMU using the SPI NSS pin
-  HAL_GPIO_WritePin(IMU_SPI_NSS_GPIO_Port, IMU_SPI_NSS_Pin, GPIO_PIN_SET);
+  PIN_SET(IMU_SPI_NSS_GPIO_Port, IMU_SPI_NSS_Pin);
 
   return err;
 }
 
+/**
+ * @brief  Reads accelerometer data from the IMU.
+ * @retval ImuError_t
+ */
 ImuError_t ImuReadXl(void) {
   ImuError_t err = IMU_OK;
 
-  err = ImuReadReg(IMU_ADDR_OUTX_H_A, sizeof(uint16_t) * 3);
+  // Wait for the IMU data to be available
+  uint32_t messageStartTick = HAL_GetTick();
+  do {
+    err = ImuReadReg(IMU_ADDR_STATUS_REG, sizeof(uint8_t));
+    if ((err != IMU_OK) || ((HAL_GetTick() - messageStartTick) > IMU_TIMEOUT_MS)) {
+      err |= IMU_ERR_SPI_RX | IMU_ERR_TIMEOUT;
+      return err;
+    }
+  } while ((ImuRspBuffer[1] & 0x01u) != 0x01u);
+
+  // Read the accelerometer data
+  err = ImuReadReg(IMU_ADDR_OUTX_L_A, sizeof(uint16_t) * 3);
   if (err != IMU_OK) {
     return err;
   }
 
+  // Convert the data to floating point values
   int16_t x = BYTES_TO_S16(ImuRspBuffer[2], ImuRspBuffer[1]);
   int16_t y = BYTES_TO_S16(ImuRspBuffer[4], ImuRspBuffer[3]);
   int16_t z = BYTES_TO_S16(ImuRspBuffer[6], ImuRspBuffer[5]);
-
-  ImuVecXl.x = (float) x * IMU_XL_SENS_16G;
-  ImuVecXl.y = (float) y * IMU_XL_SENS_16G;
-  ImuVecXl.z = (float) z * IMU_XL_SENS_16G;
+  ImuVecXl.x = (float) x * IMU_XL_SENS_16G / 1000.0f;
+  ImuVecXl.y = (float) y * IMU_XL_SENS_16G / 1000.0f;
+  ImuVecXl.z = (float) z * IMU_XL_SENS_16G / 1000.0f;
 
   return err;
 }
 
+/**
+ * @brief  Reads gyroscope data from the IMU.
+ * @retval ImuError_t
+ */
 ImuError_t ImuReadGy(void) {
   ImuError_t err = IMU_OK;
 
-  err = ImuReadReg(IMU_ADDR_OUTX_H_G, sizeof(uint16_t) * 3);
+  // Wait for the IMU data to be available
+  uint32_t messageStartTick = HAL_GetTick();
+  do {
+    err = ImuReadReg(IMU_ADDR_STATUS_REG, sizeof(uint8_t));
+    if ((err != IMU_OK) || ((HAL_GetTick() - messageStartTick) > IMU_TIMEOUT_MS)) {
+      err |= IMU_ERR_SPI_RX | IMU_ERR_TIMEOUT;
+      return err;
+    }
+  } while ((ImuRspBuffer[1] & 0x02u) != 0x02u);
+
+  // Read the gyroscope data
+  err = ImuReadReg(IMU_ADDR_OUTX_L_G, sizeof(uint16_t) * 3);
   if (err != IMU_OK) {
     return err;
   }
 
+  // Convert the data to floating point values
   int16_t x = BYTES_TO_S16(ImuRspBuffer[2], ImuRspBuffer[1]);
   int16_t y = BYTES_TO_S16(ImuRspBuffer[4], ImuRspBuffer[3]);
   int16_t z = BYTES_TO_S16(ImuRspBuffer[6], ImuRspBuffer[5]);
-
-  ImuVecGy.x = (float) x * IMU_GY_SENS_2000DPS;
-  ImuVecGy.y = (float) y * IMU_GY_SENS_2000DPS;
-  ImuVecGy.z = (float) z * IMU_GY_SENS_2000DPS;
+  ImuVecGy.x = (float) x * IMU_GY_SENS_2000DPS / 1000.0f;
+  ImuVecGy.y = (float) y * IMU_GY_SENS_2000DPS / 1000.0f;
+  ImuVecGy.z = (float) z * IMU_GY_SENS_2000DPS / 1000.0f;
 
   return err;
 }
 
+/**
+ * @brief  Reads temperature data from the IMU.
+ * @retval ImuError_t
+ */
 ImuError_t ImuReadTemp(void) {
   ImuError_t err = IMU_OK;
 
-  err = ImuReadReg(IMU_ADDR_OUT_TEMP_H, sizeof(uint16_t));
+  // Wait for the IMU data to be available
+  uint32_t messageStartTick = HAL_GetTick();
+  do {
+    err = ImuReadReg(IMU_ADDR_STATUS_REG, sizeof(uint8_t));
+    if ((err != IMU_OK) || ((HAL_GetTick() - messageStartTick) > IMU_TIMEOUT_MS)) {
+      err |= IMU_ERR_SPI_RX | IMU_ERR_TIMEOUT;
+      return err;
+    }
+  } while ((ImuRspBuffer[1] & 0x04u) != 0x04u);
+
+  // Read the temperature data
+  err = ImuReadReg(IMU_ADDR_OUT_TEMP_L, sizeof(uint16_t));
   if (err != IMU_OK) {
     return err;
   }
 
+  // Convert the data to floating point values
   int16_t temp = BYTES_TO_S16(ImuRspBuffer[2], ImuRspBuffer[1]);
-
-  ImuTemp = (float) temp / IMU_TEMP_SENS;
+  ImuTemp = (float) temp / IMU_TEMP_SENS + 25.0f;
 
   return err;
 }
 
+/**
+ * @brief  Gets the accelerometer data from the IMU.
+ * @retval Vec3_t pointer
+ */
 Vec3_t *ImuGetXlData(void) {
   return &ImuVecXl;
 }
 
+/**
+ * @brief  Gets the gyroscope data from the IMU.
+ * @retval Vec3_t pointer
+ */
 Vec3_t *ImuGetGyData(void) {
   return &ImuVecGy;
 }
 
+/**
+ * @brief  Gets the temperature data from the IMU.
+ * @retval float pointer
+ */
 float *ImuGetTemp(void) {
   return &ImuTemp;
 }
