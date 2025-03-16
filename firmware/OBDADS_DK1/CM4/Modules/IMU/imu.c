@@ -120,12 +120,12 @@ ImuError_t ImuReadReg(ImuRegAddress_t reg, uint8_t size) {
     return err;
   }
 
-  // Set the register address in the command buffer
-  ImuCmdBuffer[0] = (uint8_t) reg | RD_MASK;
-
   // Clear the command and response buffers
   memset(ImuCmdBuffer, 0x00u, IMU_BUFFER_SIZE);
   memset(ImuRspBuffer, 0x00u, IMU_BUFFER_SIZE);
+
+  // Set the register address in the command buffer
+  ImuCmdBuffer[0] = (uint8_t) reg | RD_MASK;
 
   // Select the IMU using the SPI NSS pin
   HAL_GPIO_WritePin(IMU_SPI_NSS_GPIO_Port, IMU_SPI_NSS_Pin, GPIO_PIN_RESET);
@@ -151,12 +151,12 @@ ImuError_t ImuWriteReg(ImuRegAddress_t reg, uint8_t *data, uint8_t size) {
     return err;
   }
 
-  // Set the register address in the command buffer
-  ImuCmdBuffer[0] = (uint8_t) reg & WR_MASK;
-
   // Copy the data to the command buffer
   memset(ImuCmdBuffer, 0x00u, IMU_BUFFER_SIZE);
   memcpy(&ImuCmdBuffer[1], data, size);
+
+  // Set the register address in the command buffer
+  ImuCmdBuffer[0] = (uint8_t) reg & WR_MASK;
 
   // Select the IMU using the SPI NSS pin
   HAL_GPIO_WritePin(IMU_SPI_NSS_GPIO_Port, IMU_SPI_NSS_Pin, GPIO_PIN_RESET);

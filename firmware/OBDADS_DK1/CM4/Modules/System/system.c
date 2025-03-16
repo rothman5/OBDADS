@@ -11,6 +11,7 @@
 #include "imu.h"
 #include "obd.h"
 #include "usart.h"
+#include "spi.h"
 #include "fdcan.h"
 
 /* Private define ------------------------------------------------------------*/
@@ -42,6 +43,9 @@ static char SysCsvMsg[SYS_CSV_LINE_SIZE] = {'\0'};
  */
 SysError_t SysInit(void) {
   // TODO: Initialize the IMU driver
+  if (ImuInit(&hspi5) != IMU_OK) {
+    return SYS_ERR_SPI;
+  }
 
   // Initialize the OBD driver
   if (ObdInit(&hfdcan2) != OBD_OK) {
@@ -147,7 +151,7 @@ static SysError_t SysRequestImu(void) {
     err = SYS_ERR_SPI_TX | SYS_ERR_SPI_RX;
   }
 
-  return SYS_OK;
+  return err;
 }
 
 /**

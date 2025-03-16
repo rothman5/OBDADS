@@ -164,7 +164,7 @@ typedef enum __IMU_REGISTER_ADDRESS_e {
 
 ImuError_t ImuInit(SPI_HandleTypeDef *hspi);
 ImuError_t ImuDeInit(void);
-ImuError_t ImuReadReg(ImuRegAddress_t reg, uint8_t *data, uint8_t size);
+ImuError_t ImuReadReg(ImuRegAddress_t reg, uint8_t size);
 ImuError_t ImuWriteReg(ImuRegAddress_t reg, uint8_t *data, uint8_t size);
 ImuError_t ImuReadXl(void);
 ImuError_t ImuReadGy(void);
