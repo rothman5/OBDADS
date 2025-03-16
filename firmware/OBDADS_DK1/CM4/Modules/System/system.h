@@ -47,13 +47,17 @@ typedef enum __SYSTEM_ERROR_e {
 
 /* Exported macro ------------------------------------------------------------*/
 
-#define ERR_CHK(_FUNC_, _ERR_) \
-  do {                         \
-    int _err = (_FUNC_);       \
-    if (_err != (_ERR_)) {     \
-      return _err;             \
-    }                          \
-  } while (0)                  \
+#define ERR_CHK(_FUNC_, _ERR_)         do {                      \
+                                          int _err = (_FUNC_);   \
+                                          if (_err != (_ERR_)) { \
+                                            return _err;         \
+                                          }                      \
+                                        } while (0)              \
+
+#define PIN_SET(__PORT__, __PIN__)     (__PORT__->BSRR = __PIN__)
+#define PIN_CLR(__PORT__, __PIN__)     (__PORT__->BRR  = __PIN__)
+#define BYTES_TO_U16(__MSB__, __LSB__) (uint16_t) ((__MSB__ << 8u) | (__LSB__ & 0xFFu))
+#define BYTES_TO_S16(__MSB__, __LSB__) (int16_t) (((int16_t) __MSB__ << 8u) | (__LSB__ & 0xFFu))
 
 /* Exported variables --------------------------------------------------------*/
 

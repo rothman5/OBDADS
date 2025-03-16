@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "system.h"
+#include "imu.h"
 #include "obd.h"
 #include "usart.h"
 #include "fdcan.h"
@@ -132,6 +133,20 @@ void DwtNoOpDelay(uint32_t ms) {
  * @retval SysError_t
  */
 static SysError_t SysRequestImu(void) {
+  SysError_t err = SYS_OK;
+
+  if (ImuReadXl() != IMU_OK) {
+    err = SYS_ERR_SPI_TX | SYS_ERR_SPI_RX;
+  }
+
+  if (ImuReadGy() != IMU_OK) {
+    err = SYS_ERR_SPI_TX | SYS_ERR_SPI_RX;
+  }
+
+  if (ImuReadTemp() != IMU_OK) {
+    err = SYS_ERR_SPI_TX | SYS_ERR_SPI_RX;
+  }
+
   return SYS_OK;
 }
 
@@ -157,6 +172,7 @@ static SysError_t SysRequestObd(void) {
       break;
     }
   }
+
   return err;
 }
 
@@ -180,6 +196,18 @@ static SysError_t SysRequest(void) {
  * @retval SysError_t
  */
 static SysError_t SysProcessImu(void) {
+  Vec3_t *imuXl = ImuGetXlData();
+  Vec3_t *imuGy = ImuGetGyData();
+  float *imuTemp = ImuGetTemp();
+
+  if (imuXl == NULL || imuGy == NULL || imuTemp == NULL) {
+    return SYS_ERR_SPI_TX | SYS_ERR_SPI_RX;
+  }
+
+  SysCsvMsgSize += snprintf(&SysCsvMsg[SysCsvMsgSize], sizeof(SysCsvMsg), "%.4f, %.4f, %.4f", imuXl->x, imuXl->y, imuXl->z);
+  SysCsvMsgSize += snprintf(&SysCsvMsg[SysCsvMsgSize], sizeof(SysCsvMsg), ", %.4f, %.4f, %.4f", imuGy->x, imuGy->y, imuGy->z);
+  SysCsvMsgSize += snprintf(&SysCsvMsg[SysCsvMsgSize], sizeof(SysCsvMsg), ", %.4f", *imuTemp);
+
   return SYS_OK;
 }
 
@@ -201,7 +229,7 @@ static SysError_t SysProcessObd(void) {
     } 
     
     // Expected responses
-    SysCsvMsgSize += snprintf(&SysCsvMsg[SysCsvMsgSize], sizeof(SysCsvMsg), (i == 0) ? "%.4f" : ", %.4f", rspPidDesc->processor(obdRsp, obdRsp[0]));
+    SysCsvMsgSize += snprintf(&SysCsvMsg[SysCsvMsgSize], sizeof(SysCsvMsg), ", %.4f", rspPidDesc->processor(obdRsp, obdRsp[0]));
   }
 
   return SYS_OK;
