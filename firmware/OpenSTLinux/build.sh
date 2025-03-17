@@ -200,3 +200,11 @@ cp -r $WORKDIR/sources/arm-ostl-linux-gnueabi/FIP_artifacts/fip/fip-$DTB_FILE-op
 # sudo dd if=tf-a-stm32mp157d-obdads_dk1-mx-optee-sdcard.stm32 of=/dev/sdb2 bs=1M conv=fdatasync status=progress
 # flash fip source to fip-a
 # sudo dd if=fip-stm32mp157d-obdads_dk1-mx-optee-sdcard.bin of=/dev/sdb5 bs=1M conv=fdatasync status=progress
+
+# To start firmware
+# cd /usr/local/projects/OBDADS_DK1_CM4
+# ./fw_cortex_m4.sh start
+# Top stop firmware
+# ./fw_cortex_m4.sh stop
+# Check firmware status
+# cat /sys/class/remoteproc/remoteproc0/state
