@@ -1,0 +1,9 @@
+# Soft dependencies extracted from modules themselves.
+softdep xts pre: ecb
+softdep libcrc32c pre: crc32c
+softdep lima pre: governor_simpleondemand
+softdep panfrost pre: governor_simpleondemand
+softdep wm8994 pre: wm8994_regulator
+softdep genet pre: mdio-bcm-unimac
+softdep xt_LOG pre: nf_log_syslog
+softdep xt_NFLOG pre: nfnetlink_log
