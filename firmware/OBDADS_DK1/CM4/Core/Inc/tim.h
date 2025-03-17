@@ -27,6 +27,8 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "res_mgr_conf.h"
+#include "res_mgr.h"
 
 /* USER CODE BEGIN Includes */
 

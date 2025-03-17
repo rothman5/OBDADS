@@ -28,6 +28,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32mp1xx_hal.h"
+#include "resmgr_utility.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */

@@ -27,6 +27,7 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
+#include "resmgr_utility.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -106,6 +107,8 @@ int main(void)
     /* OpenAmp initialisation ---------------------------------*/
     MX_OPENAMP_Init(RPMSG_REMOTE, NULL);
   }
+  /* Resource Manager Utility initialisation ---------------------------------*/
+//  MX_RESMGR_UTILITY_Init();
 
   /* USER CODE BEGIN SysInit */
 
@@ -115,7 +118,7 @@ int main(void)
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_FDCAN2_Init();
-  // MX_SDMMC3_SD_Init();
+//  MX_SDMMC3_SD_Init();
   MX_SPI5_Init();
   MX_UART7_Init();
   MX_TIM12_Init();

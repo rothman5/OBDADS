@@ -58,12 +58,12 @@
 extern FDCAN_HandleTypeDef hfdcan2;
 extern IPCC_HandleTypeDef hipcc;
 extern SD_HandleTypeDef hsd3;
-extern DMA_HandleTypeDef hdma_spi5_rx;
 extern DMA_HandleTypeDef hdma_spi5_tx;
+extern DMA_HandleTypeDef hdma_spi5_rx;
 extern SPI_HandleTypeDef hspi5;
 extern TIM_HandleTypeDef htim12;
-extern DMA_HandleTypeDef hdma_uart7_rx;
 extern DMA_HandleTypeDef hdma_uart7_tx;
+extern DMA_HandleTypeDef hdma_uart7_rx;
 extern UART_HandleTypeDef huart7;
 /* USER CODE BEGIN EV */
 
@@ -247,6 +247,20 @@ void FDCAN2_IT0_IRQHandler(void)
   /* USER CODE BEGIN FDCAN2_IT0_IRQn 1 */
 
   /* USER CODE END FDCAN2_IT0_IRQn 1 */
+}
+
+/**
+  * @brief This function handles FDCAN2 interrupt 1.
+  */
+void FDCAN2_IT1_IRQHandler(void)
+{
+  /* USER CODE BEGIN FDCAN2_IT1_IRQn 0 */
+
+  /* USER CODE END FDCAN2_IT1_IRQn 0 */
+  HAL_FDCAN_IRQHandler(&hfdcan2);
+  /* USER CODE BEGIN FDCAN2_IT1_IRQn 1 */
+
+  /* USER CODE END FDCAN2_IT1_IRQn 1 */
 }
 
 /**

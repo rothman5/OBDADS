@@ -1,9 +1,9 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file    usart.h
-  * @brief   This file contains all the function prototypes for
-  *          the usart.c file
+  * File Name          : resmgr_utility.h
+  * Description        : This file provides code for the configuration
+  *                      of the resmgr_utility instances.
   ******************************************************************************
   * @attention
   *
@@ -17,38 +17,38 @@
   ******************************************************************************
   */
 /* USER CODE END Header */
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __USART_H__
-#define __USART_H__
 
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __resmgr_utility_H
+#define __resmgr_utility_H
 #ifdef __cplusplus
-extern "C" {
+  extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
-#include "res_mgr_conf.h"
 #include "res_mgr.h"
+#include "main.h"
 
-/* USER CODE BEGIN Includes */
+/* USER CODE BEGIN 0 */
+/* USER CODE END 0 */
 
-/* USER CODE END Includes */
+/* Global variables ---------------------------------------------------------*/
 
-extern UART_HandleTypeDef huart7;
+/* USER CODE BEGIN 1 */
+/* USER CODE END 1 */
 
-/* USER CODE BEGIN Private defines */
+/* RESMGR_UTILITY init function */
+void MX_RESMGR_UTILITY_Init(void);
 
-/* USER CODE END Private defines */
-
-void MX_UART7_Init(void);
-
-/* USER CODE BEGIN Prototypes */
-
-/* USER CODE END Prototypes */
+/* USER CODE BEGIN 2 */
+/* USER CODE END 2 */
 
 #ifdef __cplusplus
 }
 #endif
+#endif /*__resmgr_utility_H */
 
-#endif /* __USART_H__ */
+/**
+  * @}
+  */
 
