@@ -6,6 +6,7 @@ import network
 # Define the LED pin
 led = machine.Pin('LED', machine.Pin.OUT)
 
+
 # Configure AP
 ap = network.WLAN(network.AP_IF)
 ap.config(ssid='MyPicoAP', password='my_password')
