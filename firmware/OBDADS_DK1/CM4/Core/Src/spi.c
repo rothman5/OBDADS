@@ -104,7 +104,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
     PF7     ------> SPI5_SCK
     PF8     ------> SPI5_MISO
     */
-    GPIO_InitStruct.Pin = IMU_MOSI_Pin|IMU_CLK_Pin|IMU_MISO_Pin;
+    GPIO_InitStruct.Pin = IMU_SPI_MOSI_Pin|IMU_SPI_CLK_Pin|IMU_SPI_MISO_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
@@ -113,7 +113,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
 
     /* SPI5 DMA Init */
     /* SPI5_TX Init */
-    hdma_spi5_tx.Instance = DMA2_Stream0;
+    hdma_spi5_tx.Instance = DMA2_Stream2;
     hdma_spi5_tx.Init.Request = DMA_REQUEST_SPI5_TX;
     hdma_spi5_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
     hdma_spi5_tx.Init.PeriphInc = DMA_PINC_DISABLE;
@@ -131,7 +131,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
     __HAL_LINKDMA(spiHandle,hdmatx,hdma_spi5_tx);
 
     /* SPI5_RX Init */
-    hdma_spi5_rx.Instance = DMA2_Stream1;
+    hdma_spi5_rx.Instance = DMA2_Stream3;
     hdma_spi5_rx.Init.Request = DMA_REQUEST_SPI5_RX;
     hdma_spi5_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
     hdma_spi5_rx.Init.PeriphInc = DMA_PINC_DISABLE;
@@ -173,7 +173,7 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* spiHandle)
     PF7     ------> SPI5_SCK
     PF8     ------> SPI5_MISO
     */
-    HAL_GPIO_DeInit(GPIOF, IMU_MOSI_Pin|IMU_CLK_Pin|IMU_MISO_Pin);
+    HAL_GPIO_DeInit(GPIOF, IMU_SPI_MOSI_Pin|IMU_SPI_CLK_Pin|IMU_SPI_MISO_Pin);
 
     /* SPI5 DMA DeInit */
     HAL_DMA_DeInit(spiHandle->hdmatx);

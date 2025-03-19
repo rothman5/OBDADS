@@ -1,10 +1,11 @@
 {
     "configurations": [
         {
-            "name": "STM32",
+            "name": "STM32MP1",
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/**/Utilities/**",
+                "${workspaceFolder}/**/CM4/Modules/**",
                 "${workspaceFolder}/**/CM4/OPENAMP",
                 "${workspaceFolder}/**/CM4/Core/Inc",
                 "${workspaceFolder}/**/CM4/Middlewares/Third_Party/OpenAMP/open-amp/lib/include",
@@ -30,12 +31,34 @@
                 "UNICODE",
                 "_UNICODE",
                 "CORE_CM4",
+                "__LOG_TRACE_IO_",
                 "NO_ATOMIC_64_SUPPORT",
                 "METAL_INTERNAL",
                 "METAL_MAX_DEVICE_REGIONS=2",
                 "VIRTIO_SLAVE_ONLY",
                 "USE_HAL_DRIVER",
                 "STM32MP157Dxx"
+            ]
+        },
+        {
+            "name": "STM32L4",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/**/Utilities/**",
+                "${workspaceFolder}/**/Core/Inc",
+                "${workspaceFolder}/**/Drivers/STM32L4xx_HAL_Driver/Inc",
+                "${workspaceFolder}/**/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy",
+                "${workspaceFolder}/**/Drivers/CMSIS/Include",
+                "${workspaceFolder}/**/Drivers/CMSIS/Device/ST/STM32L4xx/Include"
+            ],
+            "defines": [
+                "DEBUG",
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE",
+                "USE_HAL_DRIVER",
+                "ARM_MATH_CM4",
+                "STM32L412xx"
             ]
         }
     ],

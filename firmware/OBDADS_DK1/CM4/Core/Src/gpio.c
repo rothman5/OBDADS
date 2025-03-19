@@ -33,15 +33,9 @@
 /* USER CODE END 1 */
 
 /** Configure pins
-     PF1   ------> SDMMC3_CMD
      JTDO-TRACESWO   ------> DEBUG_JTDO-SWO
-     PG15   ------> SDMMC3_CK
      JTCK-SWCLK   ------> DEBUG_JTCK-SWCLK
      JTMS-SWDIO   ------> DEBUG_JTMS-SWDIO
-     PF5   ------> SDMMC3_D2
-     PF0   ------> SDMMC3_D0
-     PF4   ------> SDMMC3_D1
-     PD7   ------> SDMMC3_D3
      PC15-OSC32_OUT   ------> RCC_OSC32_OUT
      PC14-OSC32_IN   ------> RCC_OSC32_IN
      PH0-OSC_IN   ------> RCC_OSC_IN
@@ -60,41 +54,57 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOF, IMU_NSS_Pin|SME_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED_DBG_GPIO_Port, LED_DBG_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : PF1 PF5 PF0 PF4 */
-  GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_5|GPIO_PIN_0|GPIO_PIN_4;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
-  GPIO_InitStruct.Alternate = GPIO_AF9_SDIO3;
-  HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(LED_ERR_GPIO_Port, LED_ERR_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : PG15 */
-  GPIO_InitStruct.Pin = GPIO_PIN_15;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-  GPIO_InitStruct.Alternate = GPIO_AF10_SDIO3;
-  HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(IMU_SPI_NSS_GPIO_Port, IMU_SPI_NSS_Pin, GPIO_PIN_SET);
 
-  /*Configure GPIO pin : PD7 */
-  GPIO_InitStruct.Pin = GPIO_PIN_7;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
-  GPIO_InitStruct.Alternate = GPIO_AF10_SDIO3;
-  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : IMU_NSS_Pin SME_Pin */
-  GPIO_InitStruct.Pin = IMU_NSS_Pin|SME_Pin;
+  /*Configure GPIO pin : LED_DBG_Pin */
+  GPIO_InitStruct.Pin = LED_DBG_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
+  HAL_GPIO_Init(LED_DBG_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : LED_ERR_Pin */
+  GPIO_InitStruct.Pin = LED_ERR_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LED_ERR_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : IMU_INT1_Pin */
+  GPIO_InitStruct.Pin = IMU_INT1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(IMU_INT1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : IMU_INT2_Pin */
+  GPIO_InitStruct.Pin = IMU_INT2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(IMU_INT2_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : IMU_SPI_NSS_Pin */
+  GPIO_InitStruct.Pin = IMU_SPI_NSS_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(IMU_SPI_NSS_GPIO_Port, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI2_IRQn, 1, 0);
+  HAL_NVIC_EnableIRQ(EXTI2_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI3_IRQn, 1, 0);
+  HAL_NVIC_EnableIRQ(EXTI3_IRQn);
 
 }
 
