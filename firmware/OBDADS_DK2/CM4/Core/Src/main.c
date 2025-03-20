@@ -30,6 +30,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "system.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -118,12 +120,21 @@ int main(void)
   MX_UART7_Init();
   /* USER CODE BEGIN 2 */
 
+  if (SysInit() != SYS_OK) {
+    Error_Handler();
+  }
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    if (SysExecute() != SYS_OK) {
+      Error_Handler();
+    } else {
+      HAL_Delay(SYS_LOOP_DELAY_MS);
+    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -247,8 +258,13 @@ void Error_Handler(void)
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
+
+  // Initialize the DWT cycle counter
+  DwtInit();
   while (1)
   {
+    HAL_GPIO_TogglePin(LED_ERR_GPIO_Port, LED_ERR_Pin);
+    DwtNoOpDelay(250u);
   }
   /* USER CODE END Error_Handler_Debug */
 }
