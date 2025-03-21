@@ -30,6 +30,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "virt_uart.h"
 #include "system.h"
 
 /* USER CODE END Includes */
@@ -52,6 +53,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+
+VIRT_UART_HandleTypeDef IpcUart;
 
 /* USER CODE END PV */
 
@@ -119,6 +122,19 @@ int main(void)
   MX_SPI5_Init();
   MX_UART7_Init();
   /* USER CODE BEGIN 2 */
+
+  if (VIRT_UART_Init(&IpcUart) != VIRT_UART_OK) {
+    Error_Handler();
+  }
+  char IpcInitMsg[128] = {'\0'};
+  uint16_t IpcInitMsgSize = snprintf(IpcInitMsg, sizeof(IpcInitMsg), "Cortex-M4 boot successful with STM32Cube FW version: v%ld.%ld.%ld \r\n",
+                                    (long)((HAL_GetHalVersion() >> 24) & 0x000000FF),
+                                    (long)((HAL_GetHalVersion() >> 16) & 0x000000FF),
+                                    (long)((HAL_GetHalVersion() >> 8) & 0x000000FF));
+  if (VIRT_UART_Transmit(&IpcUart, (uint8_t *) IpcInitMsg, IpcInitMsgSize) != VIRT_UART_OK) {
+    Error_Handler();
+  }
+  log_info("%s", IpcInitMsg);
 
   if (SysInit() != SYS_OK) {
     Error_Handler();
