@@ -18,7 +18,7 @@ extern "C"
 
 /* Exported defines ----------------------------------------------------------*/
 
-#define SYS_LOOP_DELAY_MS 100u // System loop delay in milliseconds
+#define SYS_LOOP_DELAY_MS 250u // System loop delay in milliseconds
 #define SYS_CSV_LINE_SIZE 512u // Maximum CSV line size
 
 /* Exported types ------------------------------------------------------------*/
