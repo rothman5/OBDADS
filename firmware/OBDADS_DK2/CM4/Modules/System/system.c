@@ -28,7 +28,6 @@ static SysError_t SysProcess(void);
 static SysError_t SysForwardOs(void);
 static SysError_t SysForwardSd(void);
 static SysError_t SysForward(void);
-void IpcRxCpltCallback(VIRT_UART_HandleTypeDef *huart);
 
 /* Private variables ---------------------------------------------------------*/
 
@@ -36,15 +35,6 @@ static uint16_t SysCsvMsgSize = 0u;
 static char SysCsvMsg[SYS_CSV_LINE_SIZE] = {'\0'};
 
 /* Public variables ----------------------------------------------------------*/
-
-VIRT_UART_HandleTypeDef IpcUart;
-__IO FlagStatus IpcInit = RESET;
-__IO FlagStatus IpcState = RESET;
-uint16_t IpcTxBufferSize = 0;
-uint16_t IpcRxBufferSize = 0;
-uint8_t IpcTxBuffer[RPMSG_BUFFER_SIZE] = {0};
-uint8_t IpcRxBuffer[RPMSG_BUFFER_SIZE] = {0};
-
 /* Public functions ----------------------------------------------------------*/
 
 /**
@@ -52,24 +42,17 @@ uint8_t IpcRxBuffer[RPMSG_BUFFER_SIZE] = {0};
  * @retval SysError_t
  */
 SysError_t SysInit(void) {
-  // Initialize the IPC driver
-  if (VIRT_UART_Init(&IpcUart) != VIRT_UART_OK) {
-    return SYS_ERR_UART;
-  }
-
-  if (VIRT_UART_RegisterCallback(&IpcUart, VIRT_UART_RXCPLT_CB_ID, IpcRxCpltCallback) != VIRT_UART_OK) {
-    Error_Handler();
-  }
-
   // Initialize the IMU driver
   if (ImuInit(&hspi5) != IMU_OK) {
     return SYS_ERR_SPI;
   }
+  log_info("IMU SPI initialized\r\n");
 
   // Initialize the OBD driver
   if (ObdInit(&hfdcan2) != OBD_OK) {
     return SYS_ERR_CAN;
   }
+  log_info("OBD CAN initialized\r\n");
 
   // TODO: Initialize the SD driver
 
@@ -85,11 +68,13 @@ SysError_t SysDeInit(void) {
   if (ImuDeInit() != IMU_OK) {
     return SYS_ERR_SPI;
   }
+  log_info("IMU SPI de-initialized\r\n");
 
   // De-initialize the OBD driver
   if (ObdDeInit() != OBD_OK) {
     return SYS_ERR_CAN;
   }
+  log_info("OBD CAN de-initialized\r\n");
 
   // TODO: De-initialize the SD driver
 
@@ -338,17 +323,6 @@ static SysError_t SysForward(void) {
   }
 
   return err;
-}
-
-void IpcRxCpltCallback(VIRT_UART_HandleTypeDef *huart)
-{
-  log_info("IPC RX: %s\r\n", (char *) huart->pRxBuffPtr);
-  IpcRxBufferSize = huart->RxXferSize < sizeof(IpcRxBuffer) ? huart->RxXferSize : (sizeof(IpcRxBuffer) - 1);
-  memcpy(IpcRxBuffer, huart->pRxBuffPtr, IpcRxBufferSize);
-  IpcState = SET;
-  if (memcmp(IpcRxBuffer, "OBDADS-IPC", 10) == 0) {
-    IpcInit = SET;
-  }
 }
 
 /********************************* END OF FILE ********************************/

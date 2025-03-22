@@ -30,6 +30,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "virt_uart.h"
 #include "system.h"
 
 /* USER CODE END Includes */
@@ -53,12 +54,22 @@
 
 /* USER CODE BEGIN PV */
 
+VIRT_UART_HandleTypeDef IpcUart;
+__IO FlagStatus IpcInit = RESET;
+__IO FlagStatus IpcState = RESET;
+uint16_t IpcTxBufferSize = 0;
+uint16_t IpcRxBufferSize = 0;
+uint8_t IpcTxBuffer[RPMSG_BUFFER_SIZE] = {0};
+uint8_t IpcRxBuffer[RPMSG_BUFFER_SIZE] = {0};
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void PeriphCommonClock_Config(void);
 /* USER CODE BEGIN PFP */
+
+void IpcRxCpltCallback(VIRT_UART_HandleTypeDef *huart);
 
 /* USER CODE END PFP */
 
@@ -120,27 +131,47 @@ int main(void)
   MX_UART7_Init();
   /* USER CODE BEGIN 2 */
 
-  if (SysInit() != SYS_OK) {
-    Error_Handler();
-  }
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+  // Initialize the IPC driver
+  if (VIRT_UART_Init(&IpcUart) != VIRT_UART_OK) {
+    Error_Handler();
+  }
+
+  if (VIRT_UART_RegisterCallback(&IpcUart, VIRT_UART_RXCPLT_CB_ID, IpcRxCpltCallback) != VIRT_UART_OK) {
+    Error_Handler();
+  }
+  log_info("IPC UART initialized\r\n");
+
   while (1)
   {
-    if (IpcInit == RESET) {
-      OPENAMP_check_for_message();
+    // Check for IPC message
+    OPENAMP_check_for_message();
 
-      if (IpcState == SET) {
-        IpcState = RESET;
-        VIRT_UART_Transmit(&IpcUart, IpcRxBuffer, IpcRxBufferSize);
+    // Message received
+    if (IpcState == SET) {
+      IpcState = RESET;
+
+      // Transmit the message back
+      VIRT_UART_Transmit(&IpcUart, IpcRxBuffer, IpcRxBufferSize);
+
+      // Check for initialization message
+      if (memcmp(IpcRxBuffer, "OBDADS-IPC", 10) == 0) {
+        IpcInit = SET;
+
+        // Initialize the system
+        if (SysInit() != SYS_OK) {
+          Error_Handler();
+        }
+
+        log_info("System initialized\r\n");
       }
-    } else {
-      // IpcTxBufferSize = snprintf(IpcTxBuffer, sizeof(IpcTxBuffer), "System execute\r\n");
-      // VIRT_UART_Transmit(&IpcUart, IpcTxBuffer, IpcTxBufferSize);
+    }
 
+    if (IpcInit == SET) {
       if (SysExecute() != SYS_OK) {
         Error_Handler();
       }
@@ -259,15 +290,12 @@ void PeriphCommonClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
-void VIRT_UART_RxCpltCallback(VIRT_UART_HandleTypeDef *huart)
+void IpcRxCpltCallback(VIRT_UART_HandleTypeDef *huart)
 {
   log_info("IPC RX: %s\r\n", (char *) huart->pRxBuffPtr);
   IpcRxBufferSize = huart->RxXferSize < sizeof(IpcRxBuffer) ? huart->RxXferSize : (sizeof(IpcRxBuffer) - 1);
   memcpy(IpcRxBuffer, huart->pRxBuffPtr, IpcRxBufferSize);
   IpcState = SET;
-  if (memcmp(IpcRxBuffer, "OBDADS-IPC", 10) == 0) {
-    IpcInit = SET;
-  }
 }
 
 /* USER CODE END 4 */
