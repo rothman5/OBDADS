@@ -14,11 +14,12 @@ extern "C"
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdbool.h>
+#include "virt_uart.h"
 #include "tim.h"
 
 /* Exported defines ----------------------------------------------------------*/
 
-#define SYS_LOOP_DELAY_MS 100u // System loop delay in milliseconds
+#define SYS_LOOP_DELAY_MS 250u // System loop delay in milliseconds
 #define SYS_CSV_LINE_SIZE 512u // Maximum CSV line size
 
 /* Exported types ------------------------------------------------------------*/
@@ -77,6 +78,15 @@ typedef enum __SYSTEM_ERROR_e {
   } while (0)                  \
 
 /* Exported variables --------------------------------------------------------*/
+
+extern VIRT_UART_HandleTypeDef IpcUart;
+extern __IO FlagStatus IpcInit;
+extern __IO FlagStatus IpcState;
+extern uint16_t IpcTxBufferSize;
+extern uint16_t IpcRxBufferSize;
+extern uint8_t IpcTxBuffer[RPMSG_BUFFER_SIZE];
+extern uint8_t IpcRxBuffer[RPMSG_BUFFER_SIZE];
+
 /* Exported function prototypes ----------------------------------------------*/
 
 SysError_t SysInit(void);

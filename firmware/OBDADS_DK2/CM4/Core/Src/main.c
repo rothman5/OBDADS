@@ -30,7 +30,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
-#include "virt_uart.h"
 #include "system.h"
 
 /* USER CODE END Includes */
@@ -54,22 +53,12 @@
 
 /* USER CODE BEGIN PV */
 
-VIRT_UART_HandleTypeDef IpcUart;
-__IO FlagStatus IpcInit = RESET;
-__IO FlagStatus IpcState = RESET;
-uint16_t IpcTxBufferSize = 0;
-uint16_t IpcRxBufferSize = 0;
-uint8_t IpcTxBuffer[RPMSG_BUFFER_SIZE] = {0};
-uint8_t IpcRxBuffer[RPMSG_BUFFER_SIZE] = {0};
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void PeriphCommonClock_Config(void);
 /* USER CODE BEGIN PFP */
-
-void VIRT_UART_RxCpltCallback(VIRT_UART_HandleTypeDef *huart);
 
 /* USER CODE END PFP */
 
@@ -131,18 +120,9 @@ int main(void)
   MX_UART7_Init();
   /* USER CODE BEGIN 2 */
 
-  if (VIRT_UART_Init(&IpcUart) != VIRT_UART_OK) {
+  if (SysInit() != SYS_OK) {
     Error_Handler();
   }
-
-  if (VIRT_UART_RegisterCallback(&IpcUart, VIRT_UART_RXCPLT_CB_ID, VIRT_UART_RxCpltCallback) != VIRT_UART_OK) {
-    Error_Handler();
-  }
-
-  log_info("Cortex-M4 boot successful with FW version: v%ld.%ld.%ld \r\n",
-          (long)((HAL_GetHalVersion() >> 24) & 0x000000FF),
-          (long)((HAL_GetHalVersion() >> 16) & 0x000000FF),
-          (long)((HAL_GetHalVersion() >> 8) & 0x000000FF));
 
   /* USER CODE END 2 */
 
@@ -158,8 +138,12 @@ int main(void)
         VIRT_UART_Transmit(&IpcUart, IpcRxBuffer, IpcRxBufferSize);
       }
     } else {
-      IpcTxBufferSize = snprintf(IpcTxBuffer, sizeof(IpcTxBuffer), "System execute\r\n");
-      VIRT_UART_Transmit(&IpcUart, IpcTxBuffer, IpcTxBufferSize);
+      // IpcTxBufferSize = snprintf(IpcTxBuffer, sizeof(IpcTxBuffer), "System execute\r\n");
+      // VIRT_UART_Transmit(&IpcUart, IpcTxBuffer, IpcTxBufferSize);
+
+      if (SysExecute() != SYS_OK) {
+        Error_Handler();
+      }
     }
 
     HAL_Delay(SYS_LOOP_DELAY_MS);

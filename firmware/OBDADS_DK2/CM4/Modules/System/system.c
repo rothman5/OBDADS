@@ -28,6 +28,7 @@ static SysError_t SysProcess(void);
 static SysError_t SysForwardOs(void);
 static SysError_t SysForwardSd(void);
 static SysError_t SysForward(void);
+void IpcRxCpltCallback(VIRT_UART_HandleTypeDef *huart);
 
 /* Private variables ---------------------------------------------------------*/
 
@@ -35,6 +36,15 @@ static uint16_t SysCsvMsgSize = 0u;
 static char SysCsvMsg[SYS_CSV_LINE_SIZE] = {'\0'};
 
 /* Public variables ----------------------------------------------------------*/
+
+VIRT_UART_HandleTypeDef IpcUart;
+__IO FlagStatus IpcInit = RESET;
+__IO FlagStatus IpcState = RESET;
+uint16_t IpcTxBufferSize = 0;
+uint16_t IpcRxBufferSize = 0;
+uint8_t IpcTxBuffer[RPMSG_BUFFER_SIZE] = {0};
+uint8_t IpcRxBuffer[RPMSG_BUFFER_SIZE] = {0};
+
 /* Public functions ----------------------------------------------------------*/
 
 /**
@@ -42,7 +52,16 @@ static char SysCsvMsg[SYS_CSV_LINE_SIZE] = {'\0'};
  * @retval SysError_t
  */
 SysError_t SysInit(void) {
-  // TODO: Initialize the IMU driver
+  // Initialize the IPC driver
+  if (VIRT_UART_Init(&IpcUart) != VIRT_UART_OK) {
+    return SYS_ERR_UART;
+  }
+
+  if (VIRT_UART_RegisterCallback(&IpcUart, VIRT_UART_RXCPLT_CB_ID, IpcRxCpltCallback) != VIRT_UART_OK) {
+    Error_Handler();
+  }
+
+  // Initialize the IMU driver
   if (ImuInit(&hspi5) != IMU_OK) {
     return SYS_ERR_SPI;
   }
@@ -73,6 +92,7 @@ SysError_t SysDeInit(void) {
   }
 
   // TODO: De-initialize the SD driver
+
   return SYS_OK;
 }
 
@@ -277,9 +297,9 @@ static SysError_t SysForwardOs(void) {
   SysError_t err = SYS_OK;
 
   // Send message to OS
-  // if (HAL_UART_Transmit_DMA(&huart4, (uint8_t *) SysCsvMsg, SysCsvMsgSize) != HAL_OK) {
-  //   err = SYS_ERR_UART_TX | SYS_ERR_UART_DMA;
-  // }
+  if (VIRT_UART_Transmit(&IpcUart, (uint8_t *) SysCsvMsg, SysCsvMsgSize) != VIRT_UART_OK) {
+    err = SYS_ERR_UART | SYS_ERR_UART_TX;
+  }
 
   return err;
 }
@@ -318,6 +338,17 @@ static SysError_t SysForward(void) {
   }
 
   return err;
+}
+
+void IpcRxCpltCallback(VIRT_UART_HandleTypeDef *huart)
+{
+  log_info("IPC RX: %s\r\n", (char *) huart->pRxBuffPtr);
+  IpcRxBufferSize = huart->RxXferSize < sizeof(IpcRxBuffer) ? huart->RxXferSize : (sizeof(IpcRxBuffer) - 1);
+  memcpy(IpcRxBuffer, huart->pRxBuffPtr, IpcRxBufferSize);
+  IpcState = SET;
+  if (memcmp(IpcRxBuffer, "OBDADS-IPC", 10) == 0) {
+    IpcInit = SET;
+  }
 }
 
 /********************************* END OF FILE ********************************/
