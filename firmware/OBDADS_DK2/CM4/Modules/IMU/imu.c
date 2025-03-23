@@ -17,6 +17,9 @@
 /* Private types -------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
+
+static ImuError_t CheckSensorStatus(ImuSensor_t sensor);
+
 /* Private variables ---------------------------------------------------------*/
 
 static SPI_HandleTypeDef *ImuSpi = NULL;
@@ -71,37 +74,58 @@ ImuError_t ImuInit(SPI_HandleTypeDef *hspi) {
     HAL_Delay(IMU_POLL_DELAY_MS);
   }
 
-  // Disable INT1 interrupts
-  reg = 0b00000000;
+  // Enable XL data-ready interrupt on INT1
+  reg = 0b00000001;
   err = ImuWriteReg(IMU_ADDR_INT1_CTRL, &reg, sizeof(reg));
   if (err != IMU_OK) {
     return err;
   }
 
-  // Enable temperature, accelerometer, and gyroscope data-ready interrupts on INT2
-  reg = 0b00000111;
+  // Enable GY data-ready interrupt on INT2
+  reg = 0b00000010;
   err = ImuWriteReg(IMU_ADDR_INT2_CTRL, &reg, sizeof(reg));
   if (err != IMU_OK) {
     return err;
   }
 
   // Configure XL range and output data rate and filter
-  reg = (IMU_ODR_416HZ << 4) | (IMU_XL_RANGE_16G << 2) | 0x00u;
+  reg = (IMU_ODR_1667HZ << 4) | (IMU_XL_RANGE_16G << 2) | 0x00u;
   err = ImuWriteReg(IMU_ADDR_CTRL1_XL, &reg, sizeof(reg));
   if (err != IMU_OK) {
     return err;
   }
 
   // Configure gyroscope range and output data rate
-  reg = (IMU_ODR_416HZ << 4) | (IMU_GY_RANGE_2000DPS << 2) | 0x00u;
+  reg = (IMU_ODR_1667HZ << 4) | (IMU_GY_RANGE_2000DPS << 2) | 0x00u;
   err = ImuWriteReg(IMU_ADDR_CTRL2_G, &reg, sizeof(reg));
   if (err != IMU_OK) {
     return err;
   }
 
+  // Configure interrupt active level, SPI mode, and block data updates
+  reg = 0b00000100;
+  err = ImuWriteReg(IMU_ADDR_CTRL3_C, &reg, sizeof(reg));
+  if (err != IMU_OK) {
+    return err;
+  }
+
   // Disable gyroscope sleep mode and filter, disable I2C
-  reg = 0b00000000;
+  reg = 0b00001100;
   err = ImuWriteReg(IMU_ADDR_CTRL4_C, &reg, sizeof(reg));
+  if (err != IMU_OK) {
+    return err;
+  }
+
+  // Clear latched interrupts
+  reg = 0b01000001;
+  err = ImuWriteReg(IMU_ADDR_INT_CFG0, &reg, sizeof(reg));
+  if (err != IMU_OK) {
+    return err;
+  }
+
+  // Enable interrupts
+  reg = 0b10000000;
+  err = ImuWriteReg(IMU_ADDR_INT_CFG1, &reg, sizeof(reg));
   if (err != IMU_OK) {
     return err;
   }
@@ -200,14 +224,10 @@ ImuError_t ImuReadXl(void) {
   ImuError_t err = IMU_OK;
 
   // Wait for the IMU data to be available
-  uint32_t messageStartTick = HAL_GetTick();
-  do {
-    err = ImuReadReg(IMU_ADDR_STATUS_REG, sizeof(uint8_t));
-    if ((err != IMU_OK) || ((HAL_GetTick() - messageStartTick) > IMU_TIMEOUT_MS)) {
-      err |= IMU_ERR_SPI_RX | IMU_ERR_TIMEOUT;
-      return err;
-    }
-  } while ((ImuRspBuffer[1] & 0x01u) != 0x01u);
+  err = CheckSensorStatus(IMU_SENSOR_XL);
+  if (err != IMU_OK) {
+    return err;
+  }
 
   // Read the accelerometer data
   err = ImuReadReg(IMU_ADDR_OUTX_L_A, sizeof(uint16_t) * 3);
@@ -234,14 +254,10 @@ ImuError_t ImuReadGy(void) {
   ImuError_t err = IMU_OK;
 
   // Wait for the IMU data to be available
-  uint32_t messageStartTick = HAL_GetTick();
-  do {
-    err = ImuReadReg(IMU_ADDR_STATUS_REG, sizeof(uint8_t));
-    if ((err != IMU_OK) || ((HAL_GetTick() - messageStartTick) > IMU_TIMEOUT_MS)) {
-      err |= IMU_ERR_SPI_RX | IMU_ERR_TIMEOUT;
-      return err;
-    }
-  } while ((ImuRspBuffer[1] & 0x02u) != 0x02u);
+  err = CheckSensorStatus(IMU_SENSOR_GY);
+  if (err != IMU_OK) {
+    return err;
+  }
 
   // Read the gyroscope data
   err = ImuReadReg(IMU_ADDR_OUTX_L_G, sizeof(uint16_t) * 3);
@@ -268,14 +284,10 @@ ImuError_t ImuReadTemp(void) {
   ImuError_t err = IMU_OK;
 
   // Wait for the IMU data to be available
-  uint32_t messageStartTick = HAL_GetTick();
-  do {
-    err = ImuReadReg(IMU_ADDR_STATUS_REG, sizeof(uint8_t));
-    if ((err != IMU_OK) || ((HAL_GetTick() - messageStartTick) > IMU_TIMEOUT_MS)) {
-      err |= IMU_ERR_SPI_RX | IMU_ERR_TIMEOUT;
-      return err;
-    }
-  } while ((ImuRspBuffer[1] & 0x04u) != 0x04u);
+  err = CheckSensorStatus(IMU_SENSOR_TEMP);
+  if (err != IMU_OK) {
+    return err;
+  }
 
   // Read the temperature data
   err = ImuReadReg(IMU_ADDR_OUT_TEMP_L, sizeof(uint16_t));
@@ -315,5 +327,26 @@ float *ImuGetTemp(void) {
 }
 
 /* Private functions ---------------------------------------------------------*/
+
+static ImuError_t CheckSensorStatus(ImuSensor_t sensor) {
+  ImuError_t err = IMU_OK;
+
+  uint32_t messageStartTick = HAL_GetTick();
+  while ((HAL_GetTick() - messageStartTick) < IMU_TIMEOUT_MS) {
+    err = ImuReadReg(IMU_ADDR_STATUS_REG, sizeof(uint8_t));
+    if (err != IMU_OK) {
+      err |= IMU_ERR_TIMEOUT;
+      return err;
+    }
+
+    if (ImuRspBuffer[1] & sensor) {
+      break;
+    } else {
+      HAL_Delay(1u);
+    }
+  }
+
+  return err;
+}
 
 /********************************* END OF FILE ********************************/

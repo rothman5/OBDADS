@@ -297,6 +297,42 @@
 		};
 	};
 
+	m4_fdcan2_pins_mx: m4_fdcan2_mx-0 {
+		pins {
+			pinmux = <STM32_PINMUX('B', 12, RSVD)>, /* FDCAN2_RX */
+					 <STM32_PINMUX('B', 13, RSVD)>; /* FDCAN2_TX */
+		};
+	};
+
+	m4_spi4_pins_mx: m4_spi4_mx-0 {
+		pins {
+			pinmux = <STM32_PINMUX('E', 12, RSVD)>, /* SPI4_SCK */
+					 <STM32_PINMUX('E', 13, RSVD)>, /* SPI4_MISO */
+					 <STM32_PINMUX('E', 14, RSVD)>; /* SPI4_MOSI */
+		};
+	};
+
+	m4_spi5_pins_mx: m4_spi5_mx-0 {
+		pins {
+			pinmux = <STM32_PINMUX('F', 7, RSVD)>, /* SPI5_SCK */
+					 <STM32_PINMUX('F', 8, RSVD)>, /* SPI5_MISO */
+					 <STM32_PINMUX('F', 9, RSVD)>; /* SPI5_MOSI */
+		};
+	};
+
+	m4_tim12_pwm_pins_mx: m4_tim12_pwm_mx-0 {
+		pins {
+			pinmux = <STM32_PINMUX('H', 6, RSVD)>; /* TIM12_CH1 */
+		};
+	};
+
+	m4_uart7_pins_mx: m4_uart7_mx-0 {
+		pins {
+			pinmux = <STM32_PINMUX('E', 7, RSVD)>, /* UART7_RX */
+					 <STM32_PINMUX('E', 8, RSVD)>; /* UART7_TX */
+		};
+	};
+
 	rtc_pins_mx: rtc_mx-0 {
 		pins {
 			pinmux = <STM32_PINMUX('I', 8, ANALOG)>; /* RTC_LSCO */
@@ -564,6 +600,13 @@
 	interrupts = <68 1>;
 	wakeup-source;
 	/* USER CODE END m4_rproc */
+
+	m4_system_resources{
+		status = "okay";
+
+		/* USER CODE BEGIN m4_system_resources */
+		/* USER CODE END m4_system_resources */
+	};
 };
 
 &adc {
@@ -646,7 +689,7 @@
 };
 
 &dma2 {
-	status = "okay";
+	status = "disabled";
 
 	/* USER CODE BEGIN dma2 */
 	/* USER CODE END dma2 */
@@ -655,8 +698,8 @@
 &dmamux1 {
 	status = "okay";
 
-	dma-masters = <&dma1 &dma2>;
-	dma-channels = <16>;
+	dma-masters = <&dma1>;
+	dma-channels = <8>;
 
 	/* USER CODE BEGIN dmamux1 */
 	/* USER CODE END dmamux1 */
@@ -1071,6 +1114,58 @@
 		};
 	};
 	/* USER CODE END ltdc */
+};
+
+&m4_dma2 {
+	status = "okay";
+
+	/* USER CODE BEGIN m4_dma2 */
+	/* USER CODE END m4_dma2 */
+};
+
+&m4_m_can2 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&m4_fdcan2_pins_mx>;
+	status = "okay";
+
+	/* USER CODE BEGIN m4_m_can2 */
+	/* USER CODE END m4_m_can2 */
+};
+
+&m4_spi4 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&m4_spi4_pins_mx>;
+	status = "okay";
+
+	/* USER CODE BEGIN m4_spi4 */
+	/* USER CODE END m4_spi4 */
+};
+
+&m4_spi5 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&m4_spi5_pins_mx>;
+	status = "okay";
+
+	/* USER CODE BEGIN m4_spi5 */
+	/* USER CODE END m4_spi5 */
+};
+
+&m4_timers12 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&m4_tim12_pwm_pins_mx>;
+	status = "okay";
+
+	/* USER CODE BEGIN m4_timers12 */
+	/* USER CODE END m4_timers12 */
+};
+
+&m4_uart7 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&m4_uart7_pins_mx>;
+	status = "okay";
+
+	/* USER CODE BEGIN m4_uart7 */
+	/* USER CODE END m4_uart7 */
 };
 
 &mdma1 {

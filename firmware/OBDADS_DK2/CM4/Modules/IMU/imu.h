@@ -89,6 +89,12 @@ typedef enum __IMU_OUTPUT_DATA_RATE_e {
   IMU_ODR_6667HZ  = 0x0Au  // 6667 Hz
 } ImuOdr_t;
 
+typedef enum __IMU_SENSOR_e {
+  IMU_SENSOR_XL   = (1u << 0), // Accelerometer
+  IMU_SENSOR_GY   = (1u << 1), // Gyroscope
+  IMU_SENSOR_TEMP = (1u << 2)  // Temperature
+} ImuSensor_t;
+
 /**
  * @brief IMU register addresses for the ASM330LHH.
  */
