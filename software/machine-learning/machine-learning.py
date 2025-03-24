@@ -1,12 +1,13 @@
 """
 Machine learning for OBDADS project
 
-Run every 10 seconds
+Sample rate of 50 ms - 20 Hz
+Run every 10 seconds ()
 Grab a minute of data
 
 1. Startup
 2. Train a new model on the last 10 minutes of data
-3. Get the last minute of data (600 seconds)
+3. Get the last minute of data (20*60 = 1200 rows)
 4. Normalize the data
 
 """
@@ -20,12 +21,18 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, RepeatVector, TimeDistributed
 from sklearn.preprocessing import MinMaxScaler
 
-# Define the features
-features = ['ENGINE_RPM', 'VEHICLE_SPEED', 'THROTTLE', 'ENGINE_LOAD']
-SEQ_LENGTH = 40  # 10-second window
+# Determine the number of samples
+SAMPLE_PERIOD = 50  # ms
+samples_per_second = 1000 / SAMPLE_PERIOD
+samples_in_minute = int(samples_per_second * 60)
+samples_in_10_minutes = int(samples_per_second * 60 * 10)
+
+# Define hyperparameters
+SEQ_LENGTH = 40
 THRESHOLD = 0.1
 
-# Create sequences
+# Define the features
+features = ['ENGINE_RPM', 'VEHICLE_SPEED', 'THROTTLE', 'ENGINE_LOAD']
 
 
 def create_sequences(data, seq_length):
@@ -41,6 +48,47 @@ def create_sequences(data, seq_length):
     for i in range(len(data) - seq_length):
         sequences.append(data[i:i + seq_length])
     return np.array(sequences)
+
+
+class EarlyStoppingByLoss(tf.keras.callbacks.Callback):
+    """
+    A custom Keras callback to stop training early when a monitored metric reaches a specified threshold.
+
+    Attributes:
+        monitor (str): The name of the metric to monitor. Default is 'loss'.
+        value (float): The threshold value for the monitored metric. Training will stop if the metric falls below this value.
+
+    Methods:
+        on_epoch_end(epoch, logs=None):
+            Checks the monitored metric at the end of each epoch. If the metric value is below the specified threshold,
+            training is stopped.
+    """
+
+    def __init__(self, monitor='loss', value=0.01):
+        """
+        Initializes the class with monitoring and threshold value parameters.
+
+        Args:
+            monitor (str): The metric to monitor. Default is 'loss'.
+            value (float): The threshold value for the monitored metric. Default is 0.01.
+        """
+        super().__init__()
+        self.monitor = monitor
+        self.value = value
+
+    def on_epoch_end(self, epoch, logs=None):
+        """
+        Callback function triggered at the end of each epoch during training.
+
+        Parameters:
+            epoch (int): The index of the current epoch.
+            logs (dict, optional): A dictionary containing metrics and other information
+                about the current epoch. Defaults to None.
+        """
+        current = logs.get(self.monitor)
+        if current is not None and current < self.value:
+            print(f"\nStopping training as {self.monitor} has reached below {self.value}")
+            self.model.stop_training = True
 
 
 # Define the model
@@ -83,20 +131,6 @@ X_train = create_sequences(data_scaled, SEQ_LENGTH)
 
 # Train the model for 100 epochs or until the loss is less than 0.01
 
-
-class EarlyStoppingByLoss(tf.keras.callbacks.Callback):
-    def __init__(self, monitor='loss', value=0.01):
-        super().__init__()
-        self.monitor = monitor
-        self.value = value
-
-    def on_epoch_end(self, epoch, logs=None):
-        current = logs.get(self.monitor)
-        if current is not None and current < self.value:
-            print(f"\nStopping training as {self.monitor} has reached below {self.value}")
-            self.model.stop_training = True
-
-
 early_stopping = EarlyStoppingByLoss(monitor='loss', value=0.01)
 
 model.fit(X_train, X_train, epochs=100, batch_size=64, validation_split=0.1, callbacks=[early_stopping])
@@ -105,13 +139,14 @@ model.fit(X_train, X_train, epochs=100, batch_size=64, validation_split=0.1, cal
 model.save('model.keras')
 
 # Plot the loss
-plt.plot(model.history.history['loss'], label='loss')
-plt.plot(model.history.history['val_loss'], label='val_loss')
-plt.legend()
-plt.show()
+# plt.plot(model.history.history['loss'], label='loss')
+# plt.plot(model.history.history['val_loss'], label='val_loss')
+# plt.legend()
+# plt.show()
 
 # Get the last minute of data
-data_last_minute = data_scaled[-600:]
+print(samples_in_minute)
+data_last_minute = data_scaled[-samples_in_minute:]
 
 # Create the sequence
 data_last_minute = create_sequences(data_last_minute, SEQ_LENGTH)
