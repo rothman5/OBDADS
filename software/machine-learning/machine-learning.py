@@ -17,6 +17,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import tensorflow as tf
+from keras._tf_keras import keras
 from keras._tf_keras.keras.models import Sequential
 from keras._tf_keras.keras.layers import LSTM, Dense, RepeatVector, TimeDistributed
 from sklearn.preprocessing import MinMaxScaler
@@ -64,7 +65,7 @@ class EarlyStoppingByLoss(tf.keras.callbacks.Callback):
             training is stopped.
     """
 
-    def __init__(self, monitor='loss', value=0.01):
+    def __init__(self, monitor='loss', value=0.001):
         """
         Initializes the class with monitoring and threshold value parameters.
 
@@ -93,16 +94,16 @@ class EarlyStoppingByLoss(tf.keras.callbacks.Callback):
 
 # Define the model
 model = Sequential([
-    LSTM(128, activation='relu', input_shape=(SEQ_LENGTH, len(features)), return_sequences=True),
-    LSTM(64, activation='relu', return_sequences=False),
+    LSTM(64, activation='relu', input_shape=(SEQ_LENGTH, len(features)), return_sequences=True),
+    LSTM(32, activation='relu', return_sequences=False),
     RepeatVector(SEQ_LENGTH),
+    LSTM(32, activation='relu', return_sequences=True),
     LSTM(64, activation='relu', return_sequences=True),
-    LSTM(128, activation='relu', return_sequences=True),
     TimeDistributed(Dense(len(features)))
 ])
 
 # Compile the model
-model.compile(optimizer='adam', loss='mse')
+model.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
 
 
 # Read the last 10 minutes of data from influxdb
@@ -131,7 +132,8 @@ X_train = create_sequences(data_scaled, SEQ_LENGTH)
 
 # Train the model for 100 epochs or until the loss is less than 0.01
 
-early_stopping = EarlyStoppingByLoss(monitor='loss', value=0.01)
+early_stopping = EarlyStoppingByLoss(monitor='loss', value=0.005)
+early_stopping = keras.callbacks.EarlyStopping(patience=4, restore_best_weights=True)
 
 model.fit(X_train, X_train, epochs=100, batch_size=64, validation_split=0.1, callbacks=[early_stopping])
 
@@ -139,10 +141,11 @@ model.fit(X_train, X_train, epochs=100, batch_size=64, validation_split=0.1, cal
 model.save('model.keras')
 
 # Plot the loss
-# plt.plot(model.history.history['loss'], label='loss')
-# plt.plot(model.history.history['val_loss'], label='val_loss')
-# plt.legend()
-# plt.show()
+plt.plot(model.history.history['loss'], label='loss')
+plt.plot(model.history.history['val_loss'], label='val_loss')
+plt.legend()
+plt.show()
+plt.savefig('loss.png')
 
 # Get the last minute of data
 print(samples_in_minute)
