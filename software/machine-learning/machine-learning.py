@@ -17,8 +17,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dense, RepeatVector, TimeDistributed
+from keras._tf_keras.keras.models import Sequential
+from keras._tf_keras.keras.layers import LSTM, Dense, RepeatVector, TimeDistributed
 from sklearn.preprocessing import MinMaxScaler
 
 # Determine the number of samples

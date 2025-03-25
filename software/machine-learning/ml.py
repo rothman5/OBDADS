@@ -4,8 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dense, RepeatVector, TimeDistributed
+from keras._tf_keras.keras.models import Sequential
+from keras._tf_keras.keras.layers import LSTM, Dense, RepeatVector, TimeDistributed
 from sklearn.preprocessing import MinMaxScaler
 
 features = ['ENGINE_RPM', 'VEHICLE_SPEED', 'THROTTLE', 'ENGINE_LOAD']
@@ -19,7 +19,7 @@ df.columns = df.columns.str.replace('(', '')
 df.columns = df.columns.str.replace(')', '')
 df.columns = df.columns.str.strip()
 
-# Clean up data
+# Clean up data``
 df.replace('', np.nan, inplace=True)
 df.replace('NaN', np.nan, inplace=True)
 
