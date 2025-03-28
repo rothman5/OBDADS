@@ -19,8 +19,8 @@ extern "C"
 
 /* Exported defines ----------------------------------------------------------*/
 
-#define SYS_LOOP_DELAY_MS 250u // System loop delay in milliseconds
-#define SYS_CSV_LINE_SIZE 512u // Maximum CSV line size
+#define SYS_LOOP_DELAY_MS 50u   // System loop delay in milliseconds
+#define SYS_CSV_LINE_SIZE 1024u // Maximum CSV line size
 
 /* Exported types ------------------------------------------------------------*/
 
@@ -43,7 +43,8 @@ typedef enum __SYSTEM_ERROR_e {
   SYS_ERR_CAN_TX   = (1u << 10), // A CAN TX error occured
   SYS_ERR_CAN_RX   = (1u << 11), // A CAN RX error occured
   SYS_ERR_TIMEOUT  = (1u << 12), // Timed out waiting for requested data
-  SYS_ERR_TIMER    = (1u << 13)  // An error occured with the state machine execution timer
+  SYS_ERR_TIMER    = (1u << 13), // An error occured with the state machine execution timer
+  SYS_ERR_PAUSED   = (1u << 14)  // The system is paused (timer has not elapsed)
 } SysError_t;
 
 /* Exported macro ------------------------------------------------------------*/
@@ -79,19 +80,15 @@ typedef enum __SYSTEM_ERROR_e {
 
 /* Exported variables --------------------------------------------------------*/
 
-extern VIRT_UART_HandleTypeDef IpcUart;
-extern __IO FlagStatus IpcInit;
-extern __IO FlagStatus IpcState;
-extern uint16_t IpcTxBufferSize;
-extern uint16_t IpcRxBufferSize;
-extern uint8_t IpcTxBuffer[RPMSG_BUFFER_SIZE];
-extern uint8_t IpcRxBuffer[RPMSG_BUFFER_SIZE];
+extern volatile FlagStatus ExecuteSystem;
+extern volatile uint32_t ExecuteCounter;
+extern volatile uint32_t SystemTimestamp_ms;
 
 /* Exported function prototypes ----------------------------------------------*/
 
-SysError_t SysInit(void);
-SysError_t SysDeInit(void);
-SysError_t SysExecute(void);
+void SysInit(void);
+void SysDeInit(void);
+void SysExecute(void);
 
 void DwtInit(void);
 void DwtNoOpDelay(uint32_t ms);

@@ -22,6 +22,8 @@
 
 /* USER CODE BEGIN 0 */
 
+#include "system.h"
+
 /* USER CODE END 0 */
 
 TIM_HandleTypeDef htim12;
@@ -40,9 +42,9 @@ void MX_TIM12_Init(void)
 
   /* USER CODE END TIM12_Init 1 */
   htim12.Instance = TIM12;
-  htim12.Init.Prescaler = 832 - 1;
+  htim12.Init.Prescaler = 4 - 1;
   htim12.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim12.Init.Period = 62500 - 1;
+  htim12.Init.Period = 52000 - 1;
   htim12.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim12.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_PWM_Init(&htim12) != HAL_OK)
@@ -131,5 +133,16 @@ void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef* tim_pwmHandle)
 }
 
 /* USER CODE BEGIN 1 */
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+  if (htim->Instance == TIM12) {
+    SystemTimestamp_ms++;
+
+    if (ExecuteCounter++ >= SYS_LOOP_DELAY_MS) {
+      ExecuteSystem = SET;
+      ExecuteCounter = 0u;
+    }
+  }
+}
 
 /* USER CODE END 1 */

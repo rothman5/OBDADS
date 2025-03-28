@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "system.h": "c"
+        "system.h": "c",
+        "imu.h": "c"
     }
 }

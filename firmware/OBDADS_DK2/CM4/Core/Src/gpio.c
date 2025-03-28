@@ -23,6 +23,8 @@
 
 /* USER CODE BEGIN 0 */
 
+#include "imu.h"
+
 /* USER CODE END 0 */
 
 /*----------------------------------------------------------------------------*/
@@ -113,11 +115,19 @@ void MX_GPIO_Init(void)
   HAL_NVIC_SetPriority(EXTI2_IRQn, 1, 0);
   HAL_NVIC_EnableIRQ(EXTI2_IRQn);
 
-  HAL_NVIC_SetPriority(EXTI3_IRQn, 1, 0);
+  HAL_NVIC_SetPriority(EXTI3_IRQn, 2, 0);
   HAL_NVIC_EnableIRQ(EXTI3_IRQn);
 
 }
 
 /* USER CODE BEGIN 2 */
+
+void HAL_GPIO_EXTI_Rising_Callback(uint16_t pin) {
+  if (pin == IMU_INT1_Pin) {
+    ImuInt1Callback();
+  } else if (pin == IMU_INT2_Pin) {
+    ImuInt2Callback();
+  }
+}
 
 /* USER CODE END 2 */

@@ -23,11 +23,18 @@ static ImuError_t CheckSensorStatus(ImuSensor_t sensor);
 /* Private variables ---------------------------------------------------------*/
 
 static SPI_HandleTypeDef *ImuSpi = NULL;
+
+static uint8_t ImuCmdBuffer[IMU_BUFFER_SIZE] = {0};
+static uint8_t ImuRspBuffer[IMU_BUFFER_SIZE] = {0};
+
 static Vec3_t ImuVecXl = {0};
 static Vec3_t ImuVecGy = {0};
 static float ImuTemp = 0.0f;
-static uint8_t ImuCmdBuffer[IMU_BUFFER_SIZE] = {0};
-static uint8_t ImuRspBuffer[IMU_BUFFER_SIZE] = {0};
+static uint32_t ImuTimestamp = 0u;
+
+static volatile FlagStatus ImuXlReady = RESET;
+static volatile FlagStatus ImuGyReady = RESET;
+static volatile FlagStatus ImuTempReady = RESET;
 
 /* Public variables ----------------------------------------------------------*/
 /* Public functions ----------------------------------------------------------*/
@@ -89,21 +96,21 @@ ImuError_t ImuInit(SPI_HandleTypeDef *hspi) {
   }
 
   // Configure XL range and output data rate and filter
-  reg = (IMU_ODR_1667HZ << 4) | (IMU_XL_RANGE_16G << 2) | 0x00u;
+  reg = (IMU_ODR_208HZ << 4) | (IMU_XL_RANGE_8G << 2) | 0x00u;
   err = ImuWriteReg(IMU_ADDR_CTRL1_XL, &reg, sizeof(reg));
   if (err != IMU_OK) {
     return err;
   }
 
   // Configure gyroscope range and output data rate
-  reg = (IMU_ODR_1667HZ << 4) | (IMU_GY_RANGE_2000DPS << 2) | 0x00u;
+  reg = (IMU_ODR_208HZ << 4) | (IMU_GY_RANGE_1000DPS << 2) | 0x00u;
   err = ImuWriteReg(IMU_ADDR_CTRL2_G, &reg, sizeof(reg));
   if (err != IMU_OK) {
     return err;
   }
 
   // Configure interrupt active level, SPI mode, and block data updates
-  reg = 0b00000100;
+  reg = 0b01000100;
   err = ImuWriteReg(IMU_ADDR_CTRL3_C, &reg, sizeof(reg));
   if (err != IMU_OK) {
     return err;
@@ -116,7 +123,14 @@ ImuError_t ImuInit(SPI_HandleTypeDef *hspi) {
     return err;
   }
 
-  // Clear latched interrupts
+  // Enable the timestamp register
+  reg = 0b00100000;
+  err = ImuWriteReg(IMU_ADDR_CTRL10_C, &reg, sizeof(reg));
+  if (err != IMU_OK) {
+    return err;
+  }
+
+  // Clear latched interrupts immediately after reading
   reg = 0b01000001;
   err = ImuWriteReg(IMU_ADDR_INT_CFG0, &reg, sizeof(reg));
   if (err != IMU_OK) {
@@ -223,6 +237,34 @@ ImuError_t ImuWriteReg(ImuRegAddress_t reg, uint8_t *data, uint8_t size) {
 ImuError_t ImuReadXl(void) {
   ImuError_t err = IMU_OK;
 
+  if (ImuXlIsReady()) {
+    ImuXlSetStatus(RESET);
+
+    // Read the accelerometer data
+    err = ImuReadReg(IMU_ADDR_OUTX_L_A, sizeof(uint16_t) * 3);
+    if (err != IMU_OK) {
+      return err;
+    }
+
+    // Convert the data to floating point values
+    int16_t x = BYTES_TO_S16(ImuRspBuffer[2], ImuRspBuffer[1]);
+    int16_t y = BYTES_TO_S16(ImuRspBuffer[4], ImuRspBuffer[3]);
+    int16_t z = BYTES_TO_S16(ImuRspBuffer[6], ImuRspBuffer[5]);
+    ImuVecXl.x = (float) x * IMU_XL_SENS_8G / 1000.0f;
+    ImuVecXl.y = (float) y * IMU_XL_SENS_8G / 1000.0f;
+    ImuVecXl.z = (float) z * IMU_XL_SENS_8G / 1000.0f;
+  }
+
+  return err;
+}
+
+/**
+ * @brief  Reads accelerometer data from the IMU.
+ * @retval ImuError_t
+ */
+ImuError_t ImuReadXlBlocking(void) {
+  ImuError_t err = IMU_OK;
+
   // Wait for the IMU data to be available
   err = CheckSensorStatus(IMU_SENSOR_XL);
   if (err != IMU_OK) {
@@ -239,9 +281,9 @@ ImuError_t ImuReadXl(void) {
   int16_t x = BYTES_TO_S16(ImuRspBuffer[2], ImuRspBuffer[1]);
   int16_t y = BYTES_TO_S16(ImuRspBuffer[4], ImuRspBuffer[3]);
   int16_t z = BYTES_TO_S16(ImuRspBuffer[6], ImuRspBuffer[5]);
-  ImuVecXl.x = (float) x * IMU_XL_SENS_16G / 1000.0f;
-  ImuVecXl.y = (float) y * IMU_XL_SENS_16G / 1000.0f;
-  ImuVecXl.z = (float) z * IMU_XL_SENS_16G / 1000.0f;
+  ImuVecXl.x = (float) x * IMU_XL_SENS_8G / 1000.0f;
+  ImuVecXl.y = (float) y * IMU_XL_SENS_8G / 1000.0f;
+  ImuVecXl.z = (float) z * IMU_XL_SENS_8G / 1000.0f;
 
   return err;
 }
@@ -251,6 +293,34 @@ ImuError_t ImuReadXl(void) {
  * @retval ImuError_t
  */
 ImuError_t ImuReadGy(void) {
+  ImuError_t err = IMU_OK;
+
+  if (ImuGyIsReady()) {
+    ImuGySetStatus(RESET);
+
+    // Read the gyroscope data
+    err = ImuReadReg(IMU_ADDR_OUTX_L_G, sizeof(uint16_t) * 3);
+    if (err != IMU_OK) {
+      return err;
+    }
+
+    // Convert the data to floating point values
+    int16_t x = BYTES_TO_S16(ImuRspBuffer[2], ImuRspBuffer[1]);
+    int16_t y = BYTES_TO_S16(ImuRspBuffer[4], ImuRspBuffer[3]);
+    int16_t z = BYTES_TO_S16(ImuRspBuffer[6], ImuRspBuffer[5]);
+    ImuVecGy.x = (float) x * IMU_GY_SENS_1000DPS / 1000.0f;
+    ImuVecGy.y = (float) y * IMU_GY_SENS_1000DPS / 1000.0f;
+    ImuVecGy.z = (float) z * IMU_GY_SENS_1000DPS / 1000.0f;
+  }
+
+  return err;
+}
+
+/**
+ * @brief  Reads gyroscope data from the IMU.
+ * @retval ImuError_t
+ */
+ImuError_t ImuReadGyBlocking(void) {
   ImuError_t err = IMU_OK;
 
   // Wait for the IMU data to be available
@@ -269,9 +339,9 @@ ImuError_t ImuReadGy(void) {
   int16_t x = BYTES_TO_S16(ImuRspBuffer[2], ImuRspBuffer[1]);
   int16_t y = BYTES_TO_S16(ImuRspBuffer[4], ImuRspBuffer[3]);
   int16_t z = BYTES_TO_S16(ImuRspBuffer[6], ImuRspBuffer[5]);
-  ImuVecGy.x = (float) x * IMU_GY_SENS_2000DPS / 1000.0f;
-  ImuVecGy.y = (float) y * IMU_GY_SENS_2000DPS / 1000.0f;
-  ImuVecGy.z = (float) z * IMU_GY_SENS_2000DPS / 1000.0f;
+  ImuVecGy.x = (float) x * IMU_GY_SENS_1000DPS / 1000.0f;
+  ImuVecGy.y = (float) y * IMU_GY_SENS_1000DPS / 1000.0f;
+  ImuVecGy.z = (float) z * IMU_GY_SENS_1000DPS / 1000.0f;
 
   return err;
 }
@@ -281,6 +351,30 @@ ImuError_t ImuReadGy(void) {
  * @retval ImuError_t
  */
 ImuError_t ImuReadTemp(void) {
+  ImuError_t err = IMU_OK;
+
+  if (ImuTempIsReady()) {
+    ImuTempSetStatus(RESET);
+
+    // Read the temperature data
+    err = ImuReadReg(IMU_ADDR_OUT_TEMP_L, sizeof(uint16_t));
+    if (err != IMU_OK) {
+      return err;
+    }
+
+    // Convert the data to floating point values
+    int16_t temp = BYTES_TO_S16(ImuRspBuffer[2], ImuRspBuffer[1]);
+    ImuTemp = (float) temp / IMU_TEMP_SENS + 25.0f;
+  }
+
+  return err;
+}
+
+/**
+ * @brief  Reads temperature data from the IMU.
+ * @retval ImuError_t
+ */
+ImuError_t ImuReadTempBlocking(void) {
   ImuError_t err = IMU_OK;
 
   // Wait for the IMU data to be available
@@ -298,6 +392,23 @@ ImuError_t ImuReadTemp(void) {
   // Convert the data to floating point values
   int16_t temp = BYTES_TO_S16(ImuRspBuffer[2], ImuRspBuffer[1]);
   ImuTemp = (float) temp / IMU_TEMP_SENS + 25.0f;
+
+  return err;
+}
+
+/**
+ * @brief  Reads the timestamp from the IMU.
+ * @retval ImuError_t
+ */
+ImuError_t ImuReadTimestamp(void) {
+  ImuError_t err = IMU_OK;
+
+  err = ImuReadReg(IMU_ADDR_TIMESTAMP0_REG, sizeof(uint32_t));
+  if (err != IMU_OK) {
+    return err;
+  }
+
+  ImuTimestamp = ((ImuRspBuffer[3] << 24) | (ImuRspBuffer[2] << 16) | (ImuRspBuffer[1] << 8) | ImuRspBuffer[0]) * IMU_TIME_SENS / 1000u;
 
   return err;
 }
@@ -324,6 +435,55 @@ Vec3_t *ImuGetGyData(void) {
  */
 float *ImuGetTemp(void) {
   return &ImuTemp;
+}
+
+/**
+ * @brief  Gets the timestamp from the IMU.
+ * @retval uint32_t pointer
+ */
+uint32_t *ImuGetTimestamp(void) {
+  return &ImuTimestamp;
+}
+
+void ImuXlSetStatus(FlagStatus status) {
+  ImuXlReady = status;
+}
+
+void ImuGySetStatus(FlagStatus status) {
+  ImuGyReady = status;
+}
+
+void ImuTempSetStatus(FlagStatus status) {
+  ImuTempReady = status;
+}
+
+FlagStatus ImuXlIsReady(void) {
+  return ImuXlReady;
+}
+
+FlagStatus ImuGyIsReady(void) {
+  return ImuGyReady;
+}
+
+FlagStatus ImuTempIsReady(void) {
+  return ImuTempReady;
+}
+
+/**
+ * @brief IMU INT1 interrupt callback.
+ * @note  IMU XL data-ready interrupt.
+ */
+void ImuInt1Callback(void) {
+  ImuXlSetStatus(SET);
+}
+
+/**
+ * @brief IMU INT2 interrupt callback.
+ * @note  IMU GY data-ready and temperature data-ready interrupts.
+ */
+void ImuInt2Callback(void) {
+  ImuGySetStatus(SET);
+  ImuTempSetStatus(SET);
 }
 
 /* Private functions ---------------------------------------------------------*/

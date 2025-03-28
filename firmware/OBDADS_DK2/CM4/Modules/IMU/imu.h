@@ -34,6 +34,7 @@ extern "C"
 #define IMU_GY_SENS_2000DPS 70.0f  // mdps/LSB
 #define IMU_GY_SENS_4000DPS 140.0f // mdps/LSB
 #define IMU_TEMP_SENS       256.0f // LSB/degC
+#define IMU_TIME_SENS       25u    // us/LSB
 
 /* Exported types ------------------------------------------------------------*/
 
@@ -170,14 +171,34 @@ typedef enum __IMU_REGISTER_ADDRESS_e {
 
 ImuError_t ImuInit(SPI_HandleTypeDef *hspi);
 ImuError_t ImuDeInit(void);
+
 ImuError_t ImuReadReg(ImuRegAddress_t reg, uint8_t size);
 ImuError_t ImuWriteReg(ImuRegAddress_t reg, uint8_t *data, uint8_t size);
+
 ImuError_t ImuReadXl(void);
 ImuError_t ImuReadGy(void);
 ImuError_t ImuReadTemp(void);
+ImuError_t ImuReadTimestamp(void);
+
+ImuError_t ImuReadXlBlocking(void);
+ImuError_t ImuReadGyBlocking(void);
+ImuError_t ImuReadTempBlocking(void);
+
 Vec3_t *ImuGetXlData(void);
 Vec3_t *ImuGetGyData(void);
 float *ImuGetTemp(void);
+uint32_t *ImuGetTimestamp(void);
+
+void ImuXlSetStatus(FlagStatus status);
+void ImuGySetStatus(FlagStatus status);
+void ImuTempSetStatus(FlagStatus status);
+
+FlagStatus ImuXlIsReady(void);
+FlagStatus ImuGyIsReady(void);
+FlagStatus ImuTempIsReady(void);
+
+void ImuInt1Callback(void);
+void ImuInt2Callback(void);
 
 #ifdef __cplusplus
 }

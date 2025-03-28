@@ -215,8 +215,8 @@ const ObdService_0x01_PidDesc_t *ObdGetPidDescs(void) {
  * @param  PID OBD service 0x01 PID.
  * @retval ObdService_0x01_PidDesc_t of the PID or NULL if not found.
  */
-const ObdService_0x01_PidDesc_t* ObdGetPidDesc(ObdService_0x01_PID_t PID) {
-  for (uint32_t i = 0u; i < (sizeof(ObdPidDescs) / sizeof(ObdPidDescs[0])); i++) {
+const ObdService_0x01_PidDesc_t *ObdGetPidDesc(ObdService_0x01_PID_t PID) {
+  for (uint32_t i = 0u; i < OBD_NUM_PIDS; i++) {
     if (ObdPidDescs[i].PID == PID) {
       return &ObdPidDescs[i];
     }
