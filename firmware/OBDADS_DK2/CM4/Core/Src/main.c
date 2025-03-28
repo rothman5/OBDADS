@@ -126,8 +126,14 @@ int main(void)
   IpcInit();
   SysInit();
 
-  HAL_GPIO_WritePin(LED_DBG_GPIO_Port, LED_DBG_Pin, GPIO_PIN_SET);
-  HAL_GPIO_WritePin(LED_ERR_GPIO_Port, LED_ERR_Pin, GPIO_PIN_SET);
+  for (uint8_t i = 0u; i < 10u; i++) {
+    HAL_GPIO_TogglePin(LED_DBG_GPIO_Port, LED_DBG_Pin);
+    HAL_GPIO_TogglePin(LED_ERR_GPIO_Port, LED_ERR_Pin);
+    HAL_Delay(50u);
+    HAL_GPIO_TogglePin(LED_DBG_GPIO_Port, LED_DBG_Pin);
+    HAL_GPIO_TogglePin(LED_ERR_GPIO_Port, LED_ERR_Pin);
+    HAL_Delay(50u);
+  }
 
   /* USER CODE END 2 */
 

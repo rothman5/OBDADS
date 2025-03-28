@@ -125,13 +125,13 @@ ObdError_t ObdDeInit(void) {
  * @retval ObdError_t
  */
 ObdError_t ObdSend(uint8_t index, ObdService_0x01_PID_t PID) {
+  // Clear the OBD request buffer
+  memset(ObdReqBuffer[index], OBD_DUMMY_BYTE, OBD_BUFFER_SIZE);
+
   // Check if the PID is in the OBD service 0x01 PID enum
   if (!IsByteInEnum(PID)) {
     return OBD_ERR_CMD | OBD_ERR_PID;
   }
-
-  // Clear the OBD request buffer
-  memset(ObdReqBuffer[index], OBD_DUMMY_BYTE, OBD_BUFFER_SIZE);
 
   // Set the OBD request buffer
   ObdReqBuffer[index][0] = 0x02u; // Number of bytes in the request not include this one
@@ -165,6 +165,9 @@ ObdError_t ObdSend(uint8_t index, ObdService_0x01_PID_t PID) {
  * @retval ObdError_t
  */
 ObdError_t ObdRecv(uint8_t index) {
+  // Clear the OBD response buffer
+  memset(ObdRspBuffer[index], 0x00u, OBD_BUFFER_SIZE);
+
   // Wait for the OBD response to be received
   uint32_t messageStartTick = HAL_GetTick();
   do {
@@ -172,9 +175,6 @@ ObdError_t ObdRecv(uint8_t index) {
       return OBD_ERR_CAN_RX | OBD_ERR_TIMEOUT;
     }
   } while (HAL_FDCAN_IsRxBufferMessageAvailable(ObdCan, FDCAN_RX_BUFFER0) == !SET);
-
-  // Clear the OBD response buffer
-  memset(ObdRspBuffer[index], 0x00u, OBD_BUFFER_SIZE);
 
   // Get the OBD response from the RX buffer at index 0
   if (HAL_FDCAN_GetRxMessage(ObdCan, FDCAN_RX_BUFFER0, &ObdRxHeader, ObdRspBuffer[index]) != HAL_OK) {

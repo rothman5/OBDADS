@@ -101,7 +101,7 @@ void SysDeInit(void) {
  * @brief Executes the system.
  */
 void SysExecute(void) {
-  // HAL_GPIO_TogglePin(LED_DBG_GPIO_Port, LED_DBG_Pin);
+  HAL_GPIO_TogglePin(LED_DBG_GPIO_Port, LED_DBG_Pin);
 
   if (SysRequest() != SYS_OK) {
     SysDeInit();
@@ -180,8 +180,6 @@ static SysError_t SysRequestObd(void) {
   // Request OBD data for each PID
   const ObdService_0x01_PidDesc_t *obdPids = ObdGetPidDescs();
   for (uint8_t i = 0u; i < ObdGetNumPids(); i++) {
-    log_info("t %d, %d, %s\n", i, obdPids[i].PID, obdPids[i].name);
-
     // Send the OBD request
     if (ObdSend(i, obdPids[i].PID) != OBD_OK) {
       err = SYS_ERR_CAN_TX;
@@ -194,8 +192,6 @@ static SysError_t SysRequestObd(void) {
       break;
     }
   }
-
-  log_info("\n");
 
   return err;
 }
@@ -243,22 +239,16 @@ static SysError_t SysProcessObd(void) {
   for (uint8_t i = 0u; i < ObdGetNumPids(); i++) {
     uint8_t *obdReq = ObdGetReq(i);
     uint8_t *obdRsp = ObdGetRsp(i);
-    // const ObdService_0x01_PidDesc_t *reqPidDesc = ObdGetPidDesc(obdReq[OBD_PID_INDEX]);
     const ObdService_0x01_PidDesc_t *rspPidDesc = ObdGetPidDesc(obdRsp[OBD_PID_INDEX]);
-
-    log_info("p %d, %d, %d, %s\n", i, obdReq[OBD_PID_INDEX], obdRsp[OBD_PID_INDEX], rspPidDesc->name);
 
     if ((rspPidDesc == NULL) || ((obdRsp[1] - obdReq[1]) != OBD_PID_MASK)) {
       // Unknown responses
-      SysCsvMsgSize += snprintf(&SysCsvMsg[SysCsvMsgSize], sizeof(SysCsvMsg), ",");
       continue;
     }
 
     // Expected responses
     SysCsvMsgSize += snprintf(&SysCsvMsg[SysCsvMsgSize], sizeof(SysCsvMsg), ", %.2f", rspPidDesc->processor(obdRsp, obdRsp[0]));
   }
-
-  log_info("\n");
 
   return SYS_OK;
 }
@@ -275,7 +265,7 @@ static SysError_t SysProcess(void) {
   memset(SysCsvMsg, '\0', sizeof(SysCsvMsg));
 
   // Add the system timestamp to the message (ms since boot)
-  SysCsvMsgSize += snprintf(&SysCsvMsg[SysCsvMsgSize], sizeof(SysCsvMsg), "%lu", SystemTimestamp_ms);
+  SysCsvMsgSize += snprintf(SysCsvMsg, sizeof(SysCsvMsg), "%lu", SystemTimestamp_ms);
  
   err = SysProcessImu();
   if (err != SYS_OK) {
