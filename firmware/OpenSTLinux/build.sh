@@ -217,6 +217,9 @@ cp -r $WORKDIR/kernel/build/install_artifact/lib $WORKDIR/outputs/
 cp -r $WORKDIR/sources/arm-ostl-linux-gnueabi/FIP_artifacts/arm-trusted-firmware/tf-a-$DTBNAME-optee-sdcard.stm32 $WORKDIR/outputs/
 cp -r $WORKDIR/sources/arm-ostl-linux-gnueabi/FIP_artifacts/fip/fip-$DTBNAME-optee-sdcard.bin $WORKDIR/outputs/
 
+rm -rf $WORKDIR/outputs/lib/modules/*/build
+mv $WORKDIR/outputs/uImage $WORKDIR/outputs/${DTBNAME}_uImage
+
 # ON THE PC:
 # scp uImage root@192.168.7.1:/boot
 # scp stm32mp157d-obdads_dk1-mx.dtb root@192.168.7.1:/boot
