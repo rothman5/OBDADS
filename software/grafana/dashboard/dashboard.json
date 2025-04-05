@@ -1,0 +1,1338 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Grafana dashboard to display OBDADS insights and data.",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 1,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "fei0w1q6h4c8wd"
+      },
+      "description": "Current real-time engine speed from OBD.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "rotrpm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 0,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "fei0w1q6h4c8wd"
+          },
+          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(engine_speed AS REAL) AS engine_speed\nFROM\n  OBD_DATA\nORDER BY\n  time DESC\nLIMIT 1;",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(engine_speed AS REAL) AS engine_speed\nFROM\n  OBD_DATA\nORDER BY\n  time DESC\nLIMIT 1;",
+          "refId": "Engine RPM",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Engine Speed",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "fei0w1q6h4c8wd"
+      },
+      "description": "Current real-time vehicle speed from OBD.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "rotrpm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 3,
+        "y": 0
+      },
+      "id": 13,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "fei0w1q6h4c8wd"
+          },
+          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(vehicle_speed AS REAL) AS vehicle_speed\nFROM\n  OBD_DATA\nORDER BY\n  time DESC\nLIMIT 1;",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(vehicle_speed AS REAL) AS vehicle_speed\nFROM\n  OBD_DATA\nORDER BY\n  time DESC\nLIMIT 1;",
+          "refId": "Vehcile Speed",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Vehicle Speed",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "fei0w1q6h4c8wd"
+      },
+      "description": "Current real-time engine load from OBD.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 6,
+        "y": 0
+      },
+      "id": 14,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "fei0w1q6h4c8wd"
+          },
+          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(engine_load AS REAL) AS engine_load\nFROM\n  OBD_DATA\nORDER BY\n  time DESC\nLIMIT 1;",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(engine_load AS REAL) AS engine_load\nFROM\n  OBD_DATA\nORDER BY\n  time DESC\nLIMIT 1;",
+          "refId": "Engine Load",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Engine Load",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "fei0w1q6h4c8wd"
+      },
+      "description": "Current real-time throttle position from OBD.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 9,
+        "y": 0
+      },
+      "id": 15,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "fei0w1q6h4c8wd"
+          },
+          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(throttle_pos AS REAL) AS throttle_pos\nFROM\n  OBD_DATA\nORDER BY\n  time DESC\nLIMIT 1;",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(throttle_pos AS REAL) AS throttle_pos\nFROM\n  OBD_DATA\nORDER BY\n  time DESC\nLIMIT 1;",
+          "refId": "Throttle Position",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Throttle Position",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "fei0w1q6h4c8wd"
+      },
+      "description": "Current real-time distance travelled with malfunction lamp indicator turned on from OBD.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "lengthkm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 12,
+        "y": 0
+      },
+      "id": 16,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "fei0w1q6h4c8wd"
+          },
+          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(mil_distance AS REAL) AS mil_distance\nFROM\n  OBD_DATA\nORDER BY\n  time DESC\nLIMIT 1;",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(mil_distance AS REAL) AS mil_distance\nFROM\n  OBD_DATA\nORDER BY\n  time DESC\nLIMIT 1;",
+          "refId": "MIL Distance",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "MIL Distance",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "fei0w1q6h4c8wd"
+      },
+      "description": "Current real-time oxygen sensor information from OBD.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "volt"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 16,
+        "y": 0
+      },
+      "id": 17,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "fei0w1q6h4c8wd"
+          },
+          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(oxy_sensor1_volt AS REAL) AS Voltage\nFROM\n  OBD_DATA\nORDER BY\n  time DESC\nLIMIT 1;",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(oxy_sensor1_volt AS REAL) AS Voltage\nFROM\n  OBD_DATA\nORDER BY\n  time DESC\nLIMIT 1;",
+          "refId": "Oxygen Sensor 1 Voltage",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        },
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "fei0w1q6h4c8wd"
+          },
+          "hide": false,
+          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(oxy_sensor1_curr AS REAL) AS Current\nFROM\n  OBD_DATA\nORDER BY\n  time DESC\nLIMIT 1;",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(oxy_sensor1_curr AS REAL) AS Current\nFROM\n  OBD_DATA\nORDER BY\n  time DESC\nLIMIT 1;",
+          "refId": "Oxygen Sensor 1 Current",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "O2 Sensor #1",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "fei0w1q6h4c8wd"
+      },
+      "description": "Current real-time oxygen sensor information from OBD.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "volt"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 20,
+        "y": 0
+      },
+      "id": 18,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "fei0w1q6h4c8wd"
+          },
+          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(oxy_sensor2_volt AS REAL) AS Voltage\nFROM\n  OBD_DATA\nORDER BY\n  time DESC\nLIMIT 1;",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(oxy_sensor2_volt AS REAL) AS Voltage\nFROM\n  OBD_DATA\nORDER BY\n  time DESC\nLIMIT 1;",
+          "refId": "Oxygen Sensor 2 Voltage",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        },
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "fei0w1q6h4c8wd"
+          },
+          "hide": false,
+          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(oxy_sensor2_curr AS REAL) AS Current\nFROM\n  OBD_DATA\nORDER BY\n  time DESC\nLIMIT 1;",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(oxy_sensor2_curr AS REAL) AS Current\nFROM\n  OBD_DATA\nORDER BY\n  time DESC\nLIMIT 1;",
+          "refId": "Oxygen Sensor 2 Current",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "O2 Sensor #2",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "fei0w1q6h4c8wd"
+      },
+      "description": "Real-time OBD data about the engine speed over time.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 8,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "rotrpm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 3
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "fei0w1q6h4c8wd"
+          },
+          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(engine_speed AS REAL) AS engine_speed\nFROM\n  OBD_DATA\nORDER BY\n  time;",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(engine_speed AS REAL) AS engine_speed\nFROM\n  OBD_DATA\nORDER BY\n  time;",
+          "refId": "Engine RPM",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Engine Speed Over Time",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "fei0w1q6h4c8wd"
+      },
+      "description": "Real-time sensor data from the IMU about the axis rotation speed.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 8,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "rotdegs"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 3
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "fei0w1q6h4c8wd"
+          },
+          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(gx AS REAL) AS gx,\n  CAST(gy AS REAL) AS gy,\n  CAST(gz AS REAL) AS gz\nFROM\n  IMU_DATA\nORDER BY\n  time;",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(gx AS REAL) AS gx,\n  CAST(gy AS REAL) AS gy,\n  CAST(gz AS REAL) AS gz\nFROM\n  IMU_DATA\nORDER BY\n  time;",
+          "refId": "Gyroscope",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Axis Rotation Speed Over Time",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "fei0w1q6h4c8wd"
+      },
+      "description": "Real-time OBD data about the vehicle speed over time.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 8,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "velocitykmh"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 9
+      },
+      "id": 9,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "fei0w1q6h4c8wd"
+          },
+          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(vehicle_speed AS REAL) AS vehicle_speed\nFROM\n  OBD_DATA\nORDER BY\n  time;",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(vehicle_speed AS REAL) AS vehicle_speed\nFROM\n  OBD_DATA\nORDER BY\n  time;",
+          "refId": "Engine RPM",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Vehicle Speed Over Time",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "fei0w1q6h4c8wd"
+      },
+      "description": "Real-time sensor data from the IMU about the axis accelerations.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 8,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "accG"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 9
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "fei0w1q6h4c8wd"
+          },
+          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(ax AS REAL) AS ax,\n  CAST(ay AS REAL) AS ay,\n  CAST(az AS REAL) AS az\nFROM\n  IMU_DATA\nORDER BY\n  time;",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(ax AS REAL) AS ax,\n  CAST(ay AS REAL) AS ay,\n  CAST(az AS REAL) AS az\nFROM\n  IMU_DATA\nORDER BY\n  time;",
+          "refId": "Accelerometer",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Axis Acceleration Over Time",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "fei0w1q6h4c8wd"
+      },
+      "description": "Real-time OBD data about the engine load over time.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 8,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 15
+      },
+      "id": 19,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "fei0w1q6h4c8wd"
+          },
+          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(engine_load AS REAL) AS engine_load\nFROM\n  OBD_DATA\nORDER BY\n  time;",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(engine_load AS REAL) AS engine_load\nFROM\n  OBD_DATA\nORDER BY\n  time;",
+          "refId": "Engine RPM",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Engine Load Over Time",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "fei0w1q6h4c8wd"
+      },
+      "description": "Real-time sensor data from the IMU about the ambient device temperature.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 8,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 15
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "fei0w1q6h4c8wd"
+          },
+          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(temp AS REAL) AS temp\nFROM\n  IMU_DATA\nORDER BY\n  time;",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(temp AS REAL) AS temp\nFROM\n  IMU_DATA\nORDER BY\n  time;",
+          "refId": "Temperature",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Temperature Over Time",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "fei0w1q6h4c8wd"
+      },
+      "description": "Real-time OBD data about the throttle position over time.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 8,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 21
+      },
+      "id": 20,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "fei0w1q6h4c8wd"
+          },
+          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(throttle_pos AS REAL) AS throttle_pos\nFROM\n  OBD_DATA\nORDER BY\n  time;",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(throttle_pos AS REAL) AS throttle_pos\nFROM\n  OBD_DATA\nORDER BY\n  time;",
+          "refId": "Engine RPM",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Throttle Position Over Time",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "fei0w1q6h4c8wd"
+      },
+      "description": "Real-time OBD data about the MIL distance over time.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 8,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "lengthkm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 21
+      },
+      "id": 21,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "fei0w1q6h4c8wd"
+          },
+          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(mil_distance AS REAL) AS mil_distance\nFROM\n  OBD_DATA\nORDER BY\n  time;",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(mil_distance AS REAL) AS mil_distance\nFROM\n  OBD_DATA\nORDER BY\n  time;",
+          "refId": "Engine RPM",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "MIL Distance Over Time",
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "schemaVersion": 41,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "2025-03-31T21:28:23.000Z",
+    "to": "2025-03-31T21:56:42.000Z"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "OBDADS",
+  "uid": "aei0xvtfyutq8e",
+  "version": 8
+}

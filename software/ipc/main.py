@@ -65,7 +65,7 @@ def check_env_variables() -> tuple[str, str, str]:
 
 def main() -> None:
     if len(sys.argv) < 2:
-        use_msg = "Usage: python main.py [state|start <port>|stop|firmware <path>|script <path>|database <path>]"
+        use_msg = "Usage: python main.py [state | start <port> | stop | firmware <path> | script <path> | database <path>]"
         print(use_msg)
         sys.exit(1)
 

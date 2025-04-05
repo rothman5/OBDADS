@@ -1,3 +1,0 @@
-# Python version should be 3.12.8
-
-django==5.1.6
