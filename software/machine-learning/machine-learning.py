@@ -14,6 +14,7 @@ Grab a minute of data
 
 import pandas as pd
 import numpy as np
+import sqlite3
 import matplotlib.pyplot as plt
 
 import tensorflow as tf
@@ -30,7 +31,7 @@ samples_in_10_minutes = int(samples_per_second * 60 * 10)
 
 # Define hyperparameters
 SEQ_LENGTH = 40
-THRESHOLD = 0.1
+THRESHOLD = 0.01
 
 # Define the features
 features = ['ENGINE_RPM', 'VEHICLE_SPEED', 'THROTTLE', 'ENGINE_LOAD']
@@ -49,47 +50,6 @@ def create_sequences(data, seq_length):
     for i in range(len(data) - seq_length):
         sequences.append(data[i:i + seq_length])
     return np.array(sequences)
-
-
-class EarlyStoppingByLoss(tf.keras.callbacks.Callback):
-    """
-    A custom Keras callback to stop training early when a monitored metric reaches a specified threshold.
-
-    Attributes:
-        monitor (str): The name of the metric to monitor. Default is 'loss'.
-        value (float): The threshold value for the monitored metric. Training will stop if the metric falls below this value.
-
-    Methods:
-        on_epoch_end(epoch, logs=None):
-            Checks the monitored metric at the end of each epoch. If the metric value is below the specified threshold,
-            training is stopped.
-    """
-
-    def __init__(self, monitor='loss', value=0.001):
-        """
-        Initializes the class with monitoring and threshold value parameters.
-
-        Args:
-            monitor (str): The metric to monitor. Default is 'loss'.
-            value (float): The threshold value for the monitored metric. Default is 0.01.
-        """
-        super().__init__()
-        self.monitor = monitor
-        self.value = value
-
-    def on_epoch_end(self, epoch, logs=None):
-        """
-        Callback function triggered at the end of each epoch during training.
-
-        Parameters:
-            epoch (int): The index of the current epoch.
-            logs (dict, optional): A dictionary containing metrics and other information
-                about the current epoch. Defaults to None.
-        """
-        current = logs.get(self.monitor)
-        if current is not None and current < self.value:
-            print(f"\nStopping training as {self.monitor} has reached below {self.value}")
-            self.model.stop_training = True
 
 
 # Define the model
@@ -130,11 +90,8 @@ data_scaled = scaler.fit_transform(data)
 # Create the sequences for training
 X_train = create_sequences(data_scaled, SEQ_LENGTH)
 
-# Train the model for 100 epochs or until the loss is less than 0.01
-
-early_stopping = EarlyStoppingByLoss(monitor='loss', value=0.005)
-early_stopping = keras.callbacks.EarlyStopping(patience=4, restore_best_weights=True)
-
+# Train the model
+early_stopping = keras.callbacks.EarlyStopping(patience=2, restore_best_weights=True)
 model.fit(X_train, X_train, epochs=100, batch_size=64, validation_split=0.1, callbacks=[early_stopping])
 
 # Save the model
@@ -164,14 +121,45 @@ avg_reconstruction_error = np.mean(reconstruction_error, axis=0)
 
 
 # Print the reconstruction error for each feature
-for i, feature in enumerate(features):
-    print(f'{feature}: {avg_reconstruction_error[i]}')
+# for i, feature in enumerate(features):
+#     print(f'{feature}: {avg_reconstruction_error[i]}')
 
 # print(f'Reconstruction error: {avg_reconstruction_error}')
+
+
+# Connect to database
+
+try:
+    conn = sqlite3.connect('test.db')
+    cursor = conn.cursor()
+    print("Connected to SQLite")
+except sqlite3.Error as e:
+    print(f"Error connecting to SQLite: {e}")
+    
+# Create a table for the data
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS ml (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        start_time TEXT NOT NULL,
+        description TEXT NOT NULL
+    )
+''')
 
 # Print whether there is an anomaly for each stat
 for i, feature in enumerate(features):
     if avg_reconstruction_error[i] > THRESHOLD:
         print(f'Anomaly detected in {feature} with error {avg_reconstruction_error[i]}')
+        
+        # Construct the message
+        description = f'Anomaly detected in {feature} with error {avg_reconstruction_error[i]}'
+        
+        # Insert the data into the database
+        cursor.execute('''
+            INSERT INTO ml (start_time, description)
+            VALUES (datetime("now"), ?)
+        ''', (description,))
+        
+        conn.commit()
+        print(f'Inserted anomaly into database: {description}')
     else:
         print(f'No anomaly detected in {feature} with error {avg_reconstruction_error[i]}')
