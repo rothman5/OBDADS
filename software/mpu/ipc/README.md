@@ -27,43 +27,6 @@ There exists a `setup.sh` that configures the required paths for the module to r
 There also exists a `start.sh` that will start the module.
 Both scripts make usage of the commands described below.
 
-## Schema
-Three separate tables are used in the database to organize the sensor data and machine-learning results:
-
-> Note: The module computes the approximate sample timestamp (timestamp from sampling on the MCU) by subtracting the elapsed time from the reception timestamp (timestamp from receiving over IPC). This occurs before being written to the database.
-
-### IMU Table (`IMU_DATA`)
-| Column          | Type   | Description                              |
-|-----------------|--------|------------------------------------------|
-| `time`          | `TEXT` | Timestamp of the measurement             |
-| `ax`            | `REAL` | Acceleration in X-axis (g)               |
-| `ay`            | `REAL` | Acceleration in Y-axis (g)               |
-| `az`            | `REAL` | Acceleration in Z-axis (g)               |
-| `gx`            | `REAL` | Angular velocity in X-axis (dps)         |
-| `gy`            | `REAL` | Angular velocity in Y-axis (dps)         |
-| `gz`            | `REAL` | Angular velocity in Z-axis (dps)         |
-| `temp`          | `REAL` | Temperature (°C)                         |
-
-### OBD Table (`OBD_DATA`)
-
-| Column          | Type   | Description                              |
-|-----------------|--------|------------------------------------------|
-| `time`          | `TEXT` | Timestamp of the measurement             |
-| `engine_speed`  | `REAL` | Engine speed (rpm)                       |
-| `vehicle_speed` | `REAL` | Vehicle speed (km/h)                     |
-| `engine_load`   | `REAL` | Engine load (%)                          |
-| `throttle_pos`  | `REAL` | Throttle position (%)                    |
-| `mil_distance`  | `REAL` | Distance since MIL activated (km)        |
-| `o2_sens1_volt` | `REAL` | O2 Sensor #1 voltage (V)                 |
-| `o2_sens2_volt` | `REAL` | O2 Sensor #2 voltage (V)                 |
-| `o2_sens1_curr` | `REAL` | O2 Sensor #1 current (mA)                |
-| `o2_sens2_curr` | `REAL` | O2 Sensor #2 current (mA)                |
-
-### ML Table (`ML_DATA`)
-
-| Column          | Type   | Description                              |
-|-----------------|--------|------------------------------------------|
-
 ## Commands
 The module is accessible through `main.py` and utilizes `database.py` and `ipc.py` as support scripts.
 The main script provides several commands for setting up and managing the IPC system.
@@ -107,3 +70,43 @@ Stops the firmware.
 ```bash
 python main.py stop
 ```
+
+## Schema
+Three separate tables are used in the database to organize the sensor data and machine-learning results:
+
+> Note: The module computes the approximate sample timestamp (timestamp from sampling on the MCU) by subtracting the elapsed time from the reception timestamp (timestamp from receiving over IPC). This occurs before being written to the database.
+
+### IMU Table (`IMU_DATA`)
+| Column          | Type      | Description                              |
+|-----------------|-----------|------------------------------------------|
+| `time`          | `TEXT`    | Timestamp of the measurement             |
+| `ax`            | `REAL`    | Acceleration in X-axis (g)               |
+| `ay`            | `REAL`    | Acceleration in Y-axis (g)               |
+| `az`            | `REAL`    | Acceleration in Z-axis (g)               |
+| `gx`            | `REAL`    | Angular velocity in X-axis (dps)         |
+| `gy`            | `REAL`    | Angular velocity in Y-axis (dps)         |
+| `gz`            | `REAL`    | Angular velocity in Z-axis (dps)         |
+| `temp`          | `REAL`    | Temperature (°C)                         |
+
+### OBD Table (`OBD_DATA`)
+
+| Column          | Type      | Description                              |
+|-----------------|-----------|------------------------------------------|
+| `time`          | `TEXT`    | Timestamp of the measurement             |
+| `engine_speed`  | `REAL`    | Engine speed (rpm)                       |
+| `vehicle_speed` | `REAL`    | Vehicle speed (km/h)                     |
+| `engine_load`   | `REAL`    | Engine load (%)                          |
+| `throttle_pos`  | `REAL`    | Throttle position (%)                    |
+| `mil_distance`  | `REAL`    | Distance since MIL activated (km)        |
+| `o2_sens1_volt` | `REAL`    | O2 Sensor #1 voltage (V)                 |
+| `o2_sens2_volt` | `REAL`    | O2 Sensor #2 voltage (V)                 |
+| `o2_sens1_curr` | `REAL`    | O2 Sensor #1 current (mA)                |
+| `o2_sens2_curr` | `REAL`    | O2 Sensor #2 current (mA)                |
+
+### ML Table (`ML_DATA`)
+
+| Column          | Type      | Description                              |
+|-----------------|-----------|------------------------------------------|
+| `aid`           | `INTEGER` | Alert unique identifier                  |
+| `time`          | `TEXT`    | Alert timestamp                          |
+| `desc`          | `TEXT`    | Alert description                        |

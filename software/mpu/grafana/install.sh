@@ -62,6 +62,6 @@ elif [ "$TARGET" = "armv7" ]; then
 
 else
   echo "Unknown target: $TARGET"
-  echo "Usage: $0 [ubuntu|armv7|windows] [standalone]"
+  echo "Usage: $0 [ubuntu|armv7] [standalone]"
   exit 1
 fi

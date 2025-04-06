@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sudo /bin/systemctl stop grafana-server
+sudo systemctl stop grafana-server
