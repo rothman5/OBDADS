@@ -68,7 +68,7 @@ model.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
 
 # Read the last 10 minutes of data from influxdb
 
-# TEMPORARY: Use a CSV file for nowr
+# TEMPORARY: Use a CSV file for now
 df = pd.read_csv('live1.csv')
 
 # TEMPORARY: Clean up data
