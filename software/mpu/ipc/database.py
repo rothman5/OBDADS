@@ -7,27 +7,27 @@ from typing import Optional
 _database_path: str = ""
 
 _IMU_COLUMNS = [
-    "Timestamp",
-    "ax",
-    "ay",
-    "az",
-    "gx",
-    "gy",
-    "gz",
-    "temp",
+    "time TEXT",
+    "ax REAL",
+    "ay REAL",
+    "az REAL",
+    "gx REAL",
+    "gy REAL",
+    "gz REAL",
+    "temp REAL",
 ]
 
 _OBD_COLUMNS = [
-    "Timestamp",
-    "engine_speed",
-    "vehicle_speed",
-    "engine_load",
-    "throttle_pos",
-    "mil_distance",
-    "oxy_sensor1_volt",
-    "oxy_sensor2_volt",
-    "oxy_sensor1_curr",
-    "oxy_sensor2_curr",
+    "time TEXT",
+    "engine_speed REAL",
+    "vehicle_speed REAL",
+    "engine_load REAL",
+    "throttle_pos REAL",
+    "mil_distance REAL",
+    "oxy_sensor1_volt REAL",
+    "oxy_sensor2_volt REAL",
+    "oxy_sensor1_curr REAL",
+    "oxy_sensor2_curr REAL",
 ]
 
 
