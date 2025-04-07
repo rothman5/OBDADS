@@ -49,6 +49,3 @@ if [ -f dashboard/dashboard.json ]; then
 else
     echo "Dashboard JSON not found — skipping copy."
 fi
-
-echo "Restarting Grafana to apply changes..."
-sudo systemctl restart grafana-server
