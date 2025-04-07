@@ -1,20 +1,20 @@
 #!/bin/bash
 
-PROV_DIR="/etc/grafana/provisioning"
+PROV_DIR="$HOME/grafana-v11.6.0/conf/provisioning"
 DATASOURCE_DIR="$PROV_DIR/datasources"
 DASHBOARD_YAML_DIR="$PROV_DIR/dashboards"
 DASHBOARD_JSON_DIR="$PROV_DIR/dashboards/sqlite"
 SQLITE_PLUGIN="frser-sqlite-datasource"
 
 echo "Creating default database and populating schema..."
-sqlite3 OBDADS_DK2_CM4.db < schema.sql
+sqlite3 OBD.db < schema.sql
 echo "Done!"
 
 echo "Installing SQLite plugin for Grafana..."
-grafana-cli plugins install $SQLITE_PLUGIN
+grafana cli plugins install $SQLITE_PLUGIN
 
 echo "Creating SQLite datasource provisioning..."
-cat > "$DATASOURCE_DIR/sqlite.yaml" <<EOF
+cat > "$DATASOURCE_DIR/sqlite_datasources.yaml" <<EOF
 apiVersion: 1
 
 datasources:
@@ -24,7 +24,7 @@ datasources:
     editable: true
     isDefault: true
     jsonData:
-      path: $(realpath OBDADS_DK2_CM4.db)
+      path: $(realpath OBD.db)
 EOF
 
 echo "Setting up dashboard provisioning..."
