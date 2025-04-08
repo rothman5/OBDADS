@@ -52,7 +52,7 @@ def db_write(data: list[list[str]]) -> None:
     for r in range(len(data)):
         timestamp = datetime.now()
         timestamp = timestamp - timedelta(milliseconds=int(data[r][0]))
-        timestamp = timestamp.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+        timestamp = timestamp.strftime("%Y-%m-%d %H:%M:%S.%f")
         data[r][0] = timestamp
 
     imu_data = [row[: len(_IMU_COLUMNS)] for row in data]
@@ -70,12 +70,12 @@ def db_write(data: list[list[str]]) -> None:
 
             query = f"CREATE TABLE IF NOT EXISTS IMU_DATA ({imu_headers})"
             cursor.execute(query)
-            query = f"INSERT INTO IMU_DATA VALUES ({imu_placeholders})"
+            query = f"INSERT OR IGNORE INTO IMU_DATA VALUES ({imu_placeholders})"
             cursor.executemany(query, imu_data)
 
             query = f"CREATE TABLE IF NOT EXISTS OBD_DATA ({obd_headers})"
             cursor.execute(query)
-            query = f"INSERT INTO OBD_DATA VALUES ({obd_placeholders})"
+            query = f"INSERT OR IGNORE INTO OBD_DATA VALUES ({obd_placeholders})"
             cursor.executemany(query, obd_data)
 
             db.commit()

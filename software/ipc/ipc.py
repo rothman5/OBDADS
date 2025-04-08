@@ -41,13 +41,19 @@ def ipc_listen() -> None:
 
         while True:
             try:
-                msg = _ipc.readline().decode("utf-8").strip()
+                msg = _ipc.readline()
                 if not msg:
                     continue
+                print(msg)
+                msg = msg.decode("utf-8").strip()
+                print(msg)
             except serial.SerialException as e:
                 print(f"Error: Failed to read IPC message: {e}")
                 _ipc.close()
                 break
+            except Exception as e:
+                print(f"Error: Failed to read IPC message: {e}")
+                continue
             else:
                 _ipc_process_line(msg)
 

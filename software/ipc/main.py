@@ -24,6 +24,8 @@ def main() -> None:
             ipc_listen()
         except KeyboardInterrupt:
             print("Stopping IPC listener...")
+        except Exception as e:
+            raise Exception from e
 
 
 if __name__ == "__main__":
