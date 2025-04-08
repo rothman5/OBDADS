@@ -885,9 +885,9 @@
             "type": "frser-sqlite-datasource",
             "uid": "fei0w1q6h4c8wd"
           },
-          "queryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(throttle_pos AS REAL) AS throttle_pos\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
+          "queryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(throttle_position AS REAL) AS throttle_pos\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
           "queryType": "table",
-          "rawQueryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(throttle_pos AS REAL) AS throttle_pos\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
+          "rawQueryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(throttle_position AS REAL) AS throttle_pos\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
           "refId": "Throttle Position",
           "timeColumns": [
             "time",
@@ -1355,7 +1355,7 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "OBDADS Copy",
+  "title": "OBDADS Desktop",
   "uid": "fei2cas792io0f",
   "version": 2
 }
