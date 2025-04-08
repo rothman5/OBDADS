@@ -1,7 +1,6 @@
 import time
 
 import serial
-
 from database import db_write
 
 _ID = "OBDADS-IPC"
@@ -22,27 +21,6 @@ def ipc_init(port: str = "", baudrate: int = 115_200, timeout: int = 1) -> None:
     except serial.SerialException as e:
         print(f"Error: Failed to initialize IPC: {e}")
         raise serial.SerialException from e
-    else:
-        _ipc_perform_handshake()
-
-
-def _ipc_perform_handshake() -> None:
-    try:
-        wr = _ipc.write(f"{_ID}\r\n".encode("utf-8"))
-        rd = _ipc.readline().decode("utf-8").strip()
-    except serial.SerialException as e:
-        print(f"Error: Failed to send IPC handshake: {e}")
-        _ipc.close()
-        raise serial.SerialException from e
-    else:
-        print(f"IPC handshake sent ({wr} bytes)")
-        if rd == _ID:
-            print(f"IPC handshake received ({len(rd)} bytes): {rd}")
-        else:
-            err = f"Error: IPC handshake failed: {rd} ({len(rd)}) is not {_ID} ({len(_ID)})"
-            print(err)
-            _ipc.close()
-            raise serial.SerialException(err)
 
 
 def ipc_listen() -> None:

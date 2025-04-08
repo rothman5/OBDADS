@@ -16,7 +16,7 @@ echo "Creating default database and populating schema..."
 sqlite3 $DATABASE_NAME < $DATABASE_SCHEMA
 
 echo "Installing SQLite plugin for Grafana..."
-grafana cli -homepath "$HOME/grafana plugins install $SQLITE_PLUGIN
+grafana cli --homepath $GRAFANA_HOME_DIR --pluginsDir $GRAFANA_PLUGIN_DIR plugins install $SQLITE_PLUGIN
 
 echo "Setting up datasource provisioning..."
 cat > "$GRAFANA_DATASOURCE_DIR/sqlite_datasources.yaml" <<EOF

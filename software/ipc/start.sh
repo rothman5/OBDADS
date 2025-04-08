@@ -2,4 +2,4 @@
 
 source .venv/bin/activate
 uv sync
-uv run main.py start /dev/ttyRPMSG0
+uv run main.py /dev/ttyS0 ../grafana/OBD.db
