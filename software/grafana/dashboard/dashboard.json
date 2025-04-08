@@ -19,7 +19,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 3,
+  "id": 5,
   "links": [],
   "panels": [
     {
@@ -88,9 +88,9 @@
             "type": "frser-sqlite-datasource",
             "uid": "fei0w1q6h4c8wd"
           },
-          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(engine_speed AS REAL) AS engine_speed\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
+          "queryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(engine_speed AS REAL) AS engine_speed\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
           "queryType": "table",
-          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(engine_speed AS REAL) AS engine_speed\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
+          "rawQueryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(engine_speed AS REAL) AS engine_speed\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
           "refId": "Engine RPM",
           "timeColumns": [
             "time",
@@ -206,9 +206,9 @@
             "uid": "fei0w1q6h4c8wd"
           },
           "hide": false,
-          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(oxy_sensor1_volt AS REAL) AS Voltage\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
+          "queryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(oxy_sensor1_volt AS REAL) AS Voltage\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
           "queryType": "table",
-          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(oxy_sensor1_volt AS REAL) AS Voltage\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
+          "rawQueryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(oxy_sensor1_volt AS REAL) AS Voltage\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
           "refId": "O2 Sensor #1 Voltage",
           "timeColumns": [
             "time",
@@ -221,9 +221,9 @@
             "uid": "dei2c0dc7mvi8a"
           },
           "hide": false,
-          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(oxy_sensor1_curr AS REAL) AS Current\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
+          "queryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(oxy_sensor1_curr AS REAL) AS Current\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
           "queryType": "table",
-          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(oxy_sensor1_curr AS REAL) AS Current\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
+          "rawQueryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(oxy_sensor1_curr AS REAL) AS Current\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
           "refId": "O2 Sensor #1 Current",
           "timeColumns": [
             "time",
@@ -339,9 +339,9 @@
             "uid": "fei0w1q6h4c8wd"
           },
           "hide": false,
-          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(oxy_sensor2_volt AS REAL) AS Voltage\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
+          "queryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(oxy_sensor2_volt AS REAL) AS Voltage\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
           "queryType": "table",
-          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(oxy_sensor2_volt AS REAL) AS Voltage\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
+          "rawQueryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(oxy_sensor2_volt AS REAL) AS Voltage\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
           "refId": "O2 Sensor #2 Voltage",
           "timeColumns": [
             "time",
@@ -354,9 +354,9 @@
             "uid": "dei2c0dc7mvi8a"
           },
           "hide": false,
-          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(oxy_sensor2_curr AS REAL) AS Current\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
+          "queryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(oxy_sensor2_curr AS REAL) AS Current\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
           "queryType": "table",
-          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(oxy_sensor2_curr AS REAL) AS Current\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
+          "rawQueryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(oxy_sensor2_curr AS REAL) AS Current\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
           "refId": "O2 Sensor #2 Current",
           "timeColumns": [
             "time",
@@ -460,9 +460,9 @@
             "type": "frser-sqlite-datasource",
             "uid": "fei0w1q6h4c8wd"
           },
-          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(vehicle_speed AS REAL) AS vehicle_speed\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
+          "queryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(vehicle_speed AS REAL) AS vehicle_speed\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
           "queryType": "table",
-          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(vehicle_speed AS REAL) AS vehicle_speed\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
+          "rawQueryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(vehicle_speed AS REAL) AS vehicle_speed\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
           "refId": "Vehicle Speed",
           "timeColumns": [
             "time",
@@ -569,9 +569,9 @@
             "type": "frser-sqlite-datasource",
             "uid": "fei0w1q6h4c8wd"
           },
-          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(engine_speed AS REAL) AS engine_speed\nFROM\n  OBD_DATA\nORDER BY\n  time;",
+          "queryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(engine_speed AS REAL) AS engine_speed\nFROM\n  OBD_DATA\nORDER BY\n  time;",
           "queryType": "table",
-          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(engine_speed AS REAL) AS engine_speed\nFROM\n  OBD_DATA\nORDER BY\n  time;",
+          "rawQueryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(engine_speed AS REAL) AS engine_speed\nFROM\n  OBD_DATA\nORDER BY\n  time;",
           "refId": "Engine RPM",
           "timeColumns": [
             "time",
@@ -726,9 +726,9 @@
             "type": "frser-sqlite-datasource",
             "uid": "fei0w1q6h4c8wd"
           },
-          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(gx AS REAL) AS gx,\n  CAST(gy AS REAL) AS gy,\n  CAST(gz AS REAL) AS gz\nFROM\n  IMU_DATA\nORDER BY\n  time;",
+          "queryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(gx AS REAL) AS gx,\n  CAST(gy AS REAL) AS gy,\n  CAST(gz AS REAL) AS gz\nFROM\n  IMU_DATA\nORDER BY\n  time;",
           "queryType": "table",
-          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(gx AS REAL) AS gx,\n  CAST(gy AS REAL) AS gy,\n  CAST(gz AS REAL) AS gz\nFROM\n  IMU_DATA\nORDER BY\n  time;",
+          "rawQueryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(gx AS REAL) AS gx,\n  CAST(gy AS REAL) AS gy,\n  CAST(gz AS REAL) AS gz\nFROM\n  IMU_DATA\nORDER BY\n  time;",
           "refId": "Gyroscope",
           "timeColumns": [
             "time",
@@ -805,9 +805,9 @@
             "type": "frser-sqlite-datasource",
             "uid": "fei0w1q6h4c8wd"
           },
-          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(mil_distance AS REAL) AS mil_distance\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
+          "queryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(mil_distance AS REAL) AS mil_distance\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
           "queryType": "table",
-          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(mil_distance AS REAL) AS mil_distance\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
+          "rawQueryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(mil_distance AS REAL) AS mil_distance\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
           "refId": "MIL Distance",
           "timeColumns": [
             "time",
@@ -885,9 +885,9 @@
             "type": "frser-sqlite-datasource",
             "uid": "fei0w1q6h4c8wd"
           },
-          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(throttle_pos AS REAL) AS throttle_pos\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
+          "queryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(throttle_pos AS REAL) AS throttle_pos\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
           "queryType": "table",
-          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(throttle_pos AS REAL) AS throttle_pos\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
+          "rawQueryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(throttle_pos AS REAL) AS throttle_pos\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
           "refId": "Throttle Position",
           "timeColumns": [
             "time",
@@ -994,9 +994,9 @@
             "type": "frser-sqlite-datasource",
             "uid": "fei0w1q6h4c8wd"
           },
-          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(vehicle_speed AS REAL) AS vehicle_speed\nFROM\n  OBD_DATA\nORDER BY\n  time;",
+          "queryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(vehicle_speed AS REAL) AS vehicle_speed\nFROM\n  OBD_DATA\nORDER BY\n  time;",
           "queryType": "table",
-          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(vehicle_speed AS REAL) AS vehicle_speed\nFROM\n  OBD_DATA\nORDER BY\n  time;",
+          "rawQueryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(vehicle_speed AS REAL) AS vehicle_speed\nFROM\n  OBD_DATA\nORDER BY\n  time;",
           "refId": "Engine RPM",
           "timeColumns": [
             "time",
@@ -1150,9 +1150,9 @@
             "type": "frser-sqlite-datasource",
             "uid": "fei0w1q6h4c8wd"
           },
-          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(ax AS REAL) AS ax,\n  CAST(ay AS REAL) AS ay,\n  CAST(az AS REAL) AS az\nFROM\n  IMU_DATA\nORDER BY\n  time;",
+          "queryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(ax AS REAL) AS ax,\n  CAST(ay AS REAL) AS ay,\n  CAST(az AS REAL) AS az\nFROM\n  IMU_DATA\nORDER BY\n  time;",
           "queryType": "table",
-          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(ax AS REAL) AS ax,\n  CAST(ay AS REAL) AS ay,\n  CAST(az AS REAL) AS az\nFROM\n  IMU_DATA\nORDER BY\n  time;",
+          "rawQueryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(ax AS REAL) AS ax,\n  CAST(ay AS REAL) AS ay,\n  CAST(az AS REAL) AS az\nFROM\n  IMU_DATA\nORDER BY\n  time;",
           "refId": "Accelerometer",
           "timeColumns": [
             "time",
@@ -1166,7 +1166,7 @@
     {
       "datasource": {
         "type": "frser-sqlite-datasource",
-        "uid": "dei2c0dc7mvi8a"
+        "uid": "PA0AE15DA3656312A"
       },
       "description": "Real-time sensor data from the IMU about the ambient device temperature.",
       "fieldConfig": {
@@ -1249,9 +1249,9 @@
             "type": "frser-sqlite-datasource",
             "uid": "fei0w1q6h4c8wd"
           },
-          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(temp AS REAL) AS temp\nFROM\n  IMU_DATA\nORDER BY\n  time;",
+          "queryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(temp AS REAL) AS temp\nFROM\n  IMU_DATA\nORDER BY\n  time;",
           "queryType": "table",
-          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(temp AS REAL) AS temp\nFROM\n  IMU_DATA\nORDER BY\n  time;",
+          "rawQueryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(temp AS REAL) AS temp\nFROM\n  IMU_DATA\nORDER BY\n  time;",
           "refId": "Temperature",
           "timeColumns": [
             "time",
@@ -1329,9 +1329,9 @@
             "type": "frser-sqlite-datasource",
             "uid": "fei0w1q6h4c8wd"
           },
-          "queryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(engine_load AS REAL) AS engine_load\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
+          "queryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(engine_load AS REAL) AS engine_load\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
           "queryType": "table",
-          "rawQueryText": "SELECT\n  strftime('%s', timestamp) AS time,\n  CAST(engine_load AS REAL) AS engine_load\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
+          "rawQueryText": "SELECT\n  strftime('%s', time) AS time,\n  CAST(engine_load AS REAL) AS engine_load\nFROM\n  OBD_DATA\nORDER BY\n  time DESC;",
           "refId": "Engine Load",
           "timeColumns": [
             "time",
@@ -1357,5 +1357,5 @@
   "timezone": "browser",
   "title": "OBDADS Copy",
   "uid": "fei2cas792io0f",
-  "version": 14
+  "version": 2
 }
