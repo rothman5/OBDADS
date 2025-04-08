@@ -62,18 +62,16 @@ typedef enum __IMU_ERROR_e {
 
 typedef enum __IMU_XL_RANGE_e {
   IMU_XL_RANGE_2G  = 0x00, // +/- 2g
-  IMU_XL_RANGE_4G  = 0x01, // +/- 4g
-  IMU_XL_RANGE_8G  = 0x02, // +/- 8g
-  IMU_XL_RANGE_16G = 0x03  // +/- 16g
+  IMU_XL_RANGE_4G  = 0x02, // +/- 4g
+  IMU_XL_RANGE_8G  = 0x03, // +/- 8g
+  IMU_XL_RANGE_16G = 0x01  // +/- 16g
 } ImuXlRange_t;
 
 typedef enum __IMU_GY_RANGE_e {
-  IMU_GY_RANGE_125DPS  = 0x00, // +/- 125 dps
-  IMU_GY_RANGE_250DPS  = 0x01, // +/- 250 dps
-  IMU_GY_RANGE_500DPS  = 0x02, // +/- 500 dps
-  IMU_GY_RANGE_1000DPS = 0x03, // +/- 1000 dps
-  IMU_GY_RANGE_2000DPS = 0x04, // +/- 2000 dps
-  IMU_GY_RANGE_4000DPS = 0x05  // +/- 4000 dps
+  IMU_GY_RANGE_250DPS  = 0x00, // +/- 250 dps
+  IMU_GY_RANGE_500DPS  = 0x01, // +/- 500 dps
+  IMU_GY_RANGE_1000DPS = 0x02, // +/- 1000 dps
+  IMU_GY_RANGE_2000DPS = 0x03  // +/- 2000 dps
 } ImuGyRange_t;
 
 typedef enum __IMU_OUTPUT_DATA_RATE_e {

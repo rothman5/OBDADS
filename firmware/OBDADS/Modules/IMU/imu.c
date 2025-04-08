@@ -80,6 +80,10 @@ ImuError_t ImuInit(SPI_HandleTypeDef *hspi) {
     HAL_Delay(IMU_POLL_DELAY_MS);
   }
 
+  if (err & IMU_ERR_ID) {
+    return err;
+  }
+
   // Enable configuration
   reg = 0b11100010;
   err = ImuWriteReg(IMU_ADDR_CTRL9_XL, &reg, sizeof(reg));
@@ -123,7 +127,7 @@ ImuError_t ImuInit(SPI_HandleTypeDef *hspi) {
   }
 
   // Disable gyroscope sleep mode and filter, disable I2C
-  reg = 0b00001100;
+  reg = 0b00000100;
   err = ImuWriteReg(IMU_ADDR_CTRL4_C, &reg, sizeof(reg));
   if (err != IMU_OK) {
     return err;

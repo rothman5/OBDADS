@@ -76,9 +76,6 @@ void Error_Handler(void);
 #define LED_GREEN_GPIO_Port GPIOA
 #define LED_RUN_Pin GPIO_PIN_0
 #define LED_RUN_GPIO_Port GPIOB
-#define IMU_INT2_Pin GPIO_PIN_10
-#define IMU_INT2_GPIO_Port GPIOB
-#define IMU_INT2_EXTI_IRQn EXTI15_10_IRQn
 #define IMU_INT1_Pin GPIO_PIN_8
 #define IMU_INT1_GPIO_Port GPIOA
 #define IMU_INT1_EXTI_IRQn EXTI9_5_IRQn
@@ -98,6 +95,9 @@ void Error_Handler(void);
 #define IMU_MOSI_GPIO_Port GPIOC
 #define IMU_NSS_Pin GPIO_PIN_2
 #define IMU_NSS_GPIO_Port GPIOD
+#define IMU_INT2_Pin GPIO_PIN_5
+#define IMU_INT2_GPIO_Port GPIOB
+#define IMU_INT2_EXTI_IRQn EXTI9_5_IRQn
 #define PWM_MS_Pin GPIO_PIN_8
 #define PWM_MS_GPIO_Port GPIOB
 

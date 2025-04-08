@@ -2,6 +2,7 @@
     "files.associations": {
         "can.h": "c",
         "spi.h": "c",
-        "sys.h": "c"
+        "sys.h": "c",
+        "stm32f4xx.h": "c"
     }
 }

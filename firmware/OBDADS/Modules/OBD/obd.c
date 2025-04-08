@@ -71,12 +71,12 @@ ObdError_t ObdInit(CAN_HandleTypeDef *hcan) {
   ObdCan = hcan;
 
   // Configure the CAN filter
-  ObdFilter.FilterActivation = ENABLE;
+  ObdFilter.FilterActivation = CAN_FILTER_ENABLE;
   ObdFilter.FilterMode = CAN_FILTERMODE_IDMASK;
-  ObdFilter.FilterScale = CAN_FILTERSCALE_16BIT;
-  ObdFilter.FilterIdHigh = (OBD_CAN_RSP_ID_1 << 5u);
+  ObdFilter.FilterScale = CAN_FILTERSCALE_32BIT;
+  ObdFilter.FilterIdHigh = (0x7E8 << 5u);
+  ObdFilter.FilterMaskIdHigh = (0x7F8 << 5u);
   ObdFilter.FilterIdLow = 0u;
-  ObdFilter.FilterMaskIdHigh = (0xFF << 5u);
   ObdFilter.FilterMaskIdLow = 0u;
   ObdFilter.FilterFIFOAssignment = CAN_RX_FIFO0;
   ObdFilter.FilterBank = 0u;
@@ -141,7 +141,7 @@ ObdError_t ObdSend(uint8_t index, ObdService_0x01_PID_t PID) {
   ObdReqBuffer[index][2] = PID;   // OBD PID
 
   // Add the OBD request
-  if (HAL_CAN_AddTxMessage(ObdCan, &ObdTxHeader, ObdReqBuffer[index], &mailbox) != HAL_OK) {
+  if (HAL_CAN_AddTxMessage(ObdCan, &ObdTxHeader, (uint8_t *) ObdReqBuffer[index], &mailbox) != HAL_OK) {
     return OBD_ERR_CAN_TX | OBD_ERR_BUFFER;
   }
 
@@ -174,7 +174,7 @@ ObdError_t ObdRecv(uint8_t index) {
   } while (HAL_CAN_GetRxFifoFillLevel(ObdCan, CAN_RX_FIFO0) == !SET);
 
   // Get the OBD response
-  if (HAL_CAN_GetRxMessage(ObdCan, CAN_RX_FIFO0, &ObdRxHeader, ObdRspBuffer[index]) != HAL_OK) {
+  if (HAL_CAN_GetRxMessage(ObdCan, CAN_RX_FIFO0, &ObdRxHeader, (uint8_t *) ObdRspBuffer[index]) != HAL_OK) {
     return OBD_ERR_CAN_RX | OBD_ERR_BUFFER;
   }
 
