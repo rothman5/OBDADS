@@ -20,8 +20,8 @@ extern "C"
 #define IMU_BUFFER_SIZE     8u
 #define IMU_TIMEOUT_MS      1000u
 #define IMU_SENSOR_ID       0x6Bu
-#define IMU_MAX_ID_ATTEMPTS 10u
-#define IMU_POLL_DELAY_MS   10u
+#define IMU_MAX_ID_ATTEMPTS 100u
+#define IMU_POLL_DELAY_MS   100u
 
 #define IMU_XL_SENS_2G      0.061f // mg/LSB
 #define IMU_XL_SENS_4G      0.122f // mg/LSB

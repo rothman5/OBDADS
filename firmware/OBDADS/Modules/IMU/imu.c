@@ -154,6 +154,12 @@ ImuError_t ImuInit(SPI_HandleTypeDef *hspi) {
     return err;
   }
 
+  HAL_Delay(IMU_POLL_DELAY_MS);
+
+  ImuReadXlBlocking();
+  ImuReadGyBlocking();
+  ImuReadTempBlocking();
+
   return err;
 }
 

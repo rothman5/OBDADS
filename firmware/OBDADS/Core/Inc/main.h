@@ -64,6 +64,12 @@ void Error_Handler(void);
 #define LED_ERR_GPIO_Port GPIOC
 #define LED_DBG_Pin GPIO_PIN_1
 #define LED_DBG_GPIO_Port GPIOC
+#define IMU_INT1_Pin GPIO_PIN_2
+#define IMU_INT1_GPIO_Port GPIOC
+#define IMU_INT1_EXTI_IRQn EXTI2_IRQn
+#define IMU_INT2_Pin GPIO_PIN_3
+#define IMU_INT2_GPIO_Port GPIOC
+#define IMU_INT2_EXTI_IRQn EXTI3_IRQn
 #define VCP_TX_Pin GPIO_PIN_0
 #define VCP_TX_GPIO_Port GPIOA
 #define VCP_RX_Pin GPIO_PIN_1
@@ -76,9 +82,6 @@ void Error_Handler(void);
 #define LED_GREEN_GPIO_Port GPIOA
 #define LED_RUN_Pin GPIO_PIN_0
 #define LED_RUN_GPIO_Port GPIOB
-#define IMU_INT1_Pin GPIO_PIN_8
-#define IMU_INT1_GPIO_Port GPIOA
-#define IMU_INT1_EXTI_IRQn EXTI9_5_IRQn
 #define OBD_RX_Pin GPIO_PIN_11
 #define OBD_RX_GPIO_Port GPIOA
 #define OBD_TX_Pin GPIO_PIN_12
@@ -95,9 +98,6 @@ void Error_Handler(void);
 #define IMU_MOSI_GPIO_Port GPIOC
 #define IMU_NSS_Pin GPIO_PIN_2
 #define IMU_NSS_GPIO_Port GPIOD
-#define IMU_INT2_Pin GPIO_PIN_5
-#define IMU_INT2_GPIO_Port GPIOB
-#define IMU_INT2_EXTI_IRQn EXTI9_5_IRQn
 #define PWM_MS_Pin GPIO_PIN_8
 #define PWM_MS_GPIO_Port GPIOB
 
